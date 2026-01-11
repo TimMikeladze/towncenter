@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
+import { getEntityImagePath } from "@/lib/utils/images"
 
 export default async function TechnologyDetailPage({
   params,
@@ -33,7 +34,7 @@ export default async function TechnologyDetailPage({
         <div className="border-2 p-6 bg-card">
           <div className="flex items-start gap-6">
             <Image
-              src={`/.jpg?height=120&width=120&query=${tech.name}`}
+              src={getEntityImagePath(tech.image_path)}
               alt={tech.name}
               width={120}
               height={120}

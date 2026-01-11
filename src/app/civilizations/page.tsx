@@ -4,6 +4,7 @@ import type { DataViewerConfig } from "@/components/data-viewer"
 import { getAllCivilizations } from "@/lib/data"
 import type { Civilization } from "@/lib/types"
 import { Users, Crown, Swords } from "lucide-react"
+import { getEntityImagePath } from "@/lib/utils/images"
 
 const civTypes = ["all", "Archer", "Cavalry", "Infantry", "Defensive", "Naval", "Monk"] as const
 
@@ -57,7 +58,7 @@ export default async function CivilizationsPage({
     cardHeader: (civ) => (
       <div className="relative h-32 bg-muted flex items-center justify-center border-b">
         <img
-          src={`/.jpg?height=128&width=300&query=${encodeURIComponent(civ.name + " civilization flag banner")}`}
+          src={getEntityImagePath(civ.image_path)}
           alt={civ.name}
           className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
         />

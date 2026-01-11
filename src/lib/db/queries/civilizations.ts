@@ -41,7 +41,8 @@ export async function getAllCivilizations(): Promise<Civilization[]> {
     techTree: {
       missingUnits: [],
       missingTechs: []
-    }
+    },
+    image_path: row.image_path
   }))
 }
 

@@ -5,7 +5,7 @@ export async function getAllTechnologies(): Promise<Technology[]> {
   const conn = await getConnection()
 
   const reader = await conn.runAndReadAll(`
-    SELECT t.*
+    SELECT t.*, t.image_path
     FROM techs t
     ORDER BY t.id
   `)
@@ -28,6 +28,7 @@ export async function getAllTechnologies(): Promise<Technology[]> {
     effects: [],
     affectedUnits: [],
     affectedBuildings: [],
+    image_path: row.image_path,
   }))
 }
 

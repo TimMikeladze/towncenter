@@ -6,7 +6,8 @@ export async function getAllBuildings(): Promise<Building[]> {
 
   const reader = await conn.runAndReadAll(`
     SELECT
-      b.*
+      b.*,
+      b.image_path
     FROM buildings b
     ORDER BY b.id
   `)
@@ -34,6 +35,7 @@ export async function getAllBuildings(): Promise<Building[]> {
     trainsUnits: [],
     researchesTechs: [],
     upgrades: [],
+    image_path: row.image_path,
   }))
 }
 

@@ -54,6 +54,7 @@ export interface Unit {
   goodAgainst: string[] // Unit IDs this unit is good against
   upgrades?: string[] // Upgrade IDs
   civSpecific?: string // Civ ID if unique unit
+  image_path?: string | null // Path to unit image
 }
 
 export interface CivBonus {
@@ -82,6 +83,7 @@ export interface Civilization {
     missingUnits: string[]
     missingTechs: string[]
   }
+  image_path?: string | null // Path to civilization image
 }
 
 export interface BuildOrder {
@@ -124,6 +126,7 @@ export interface Building {
   trainsUnits?: string[] // Unit IDs
   researchesTechs?: string[] // Tech IDs
   upgrades?: string[]
+  image_path?: string | null // Path to building image
 }
 
 export interface Technology {
@@ -152,6 +155,7 @@ export interface Technology {
   affectedUnits?: string[]
   affectedBuildings?: string[]
   civSpecific?: string
+  image_path?: string | null // Path to technology image
 }
 
 export interface Map {

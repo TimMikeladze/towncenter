@@ -52,6 +52,7 @@ export async function getAllUnits(): Promise<Unit[]> {
     counters: [],
     goodAgainst: [],
     upgrades: [],
+    image_path: row.image_path,
   }))
 }
 

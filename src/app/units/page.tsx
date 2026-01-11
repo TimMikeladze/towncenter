@@ -4,6 +4,7 @@ import type { DataViewerConfig } from "@/components/data-viewer"
 import { getAllUnits } from "@/lib/data"
 import type { Unit, UnitType } from "@/lib/types"
 import { Swords, Heart, Shield, Target, Zap } from "lucide-react"
+import { getEntityImagePath } from "@/lib/utils/images"
 
 const unitTypes: (UnitType | "all")[] = ["all", "Infantry", "Archer", "Cavalry", "Siege", "Monk", "Unique"]
 
@@ -78,7 +79,7 @@ export default async function UnitsPage({
       <>
         <div className="relative h-24 bg-muted flex items-center justify-center border-b">
           <img
-            src={`/.jpg?height=96&width=200&query=${encodeURIComponent(unit.name + " medieval unit")}`}
+            src={getEntityImagePath(unit.image_path)}
             alt={unit.name}
             className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
           />
