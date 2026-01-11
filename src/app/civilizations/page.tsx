@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import { SecondaryNav } from "@/components/secondary-nav"
 import { DataViewer } from "@/components/data-viewer"
 import type { DataViewerConfig } from "@/components/data-viewer"
@@ -20,9 +17,14 @@ const secondaryNavItems = [
   { label: "Monk", value: "Monk" },
 ]
 
-export default function CivilizationsPage() {
-  const [activeTab, setActiveTab] = useState("all")
-  const allCivs = getAllCivilizations()
+export default async function CivilizationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
+  const params = await searchParams
+  const activeTab = params.type || "all"
+  const allCivs = await getAllCivilizations()
 
   const filteredCivs = activeTab === "all" ? allCivs : allCivs.filter((civ) => civ.type === activeTab)
 
@@ -146,7 +148,7 @@ export default function CivilizationsPage() {
 
   return (
     <>
-      <SecondaryNav items={secondaryNavItems} defaultValue="all" onValueChange={setActiveTab} />
+      <SecondaryNav items={secondaryNavItems} defaultValue="all" currentValue={activeTab} />
 
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-6">
