@@ -1,0 +1,45 @@
+import type React from "react"
+import Link from "next/link"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import type { DataViewerConfig, DataItem } from "./types"
+
+interface DataCardProps<T extends DataItem> {
+  item: T
+  config: DataViewerConfig<T>
+}
+
+export function DataCard<T extends DataItem>({ item, config }: DataCardProps<T>) {
+  const CardWrapper = config.itemLink
+    ? ({ children }: { children: React.ReactNode }) => (
+        <Link href={config.itemLink!(item)} className="group block">
+          {children}
+        </Link>
+      )
+    : ({ children }: { children: React.ReactNode }) => <>{children}</>
+
+  return (
+    <CardWrapper>
+      <Card className="border-2 card-minimal h-full overflow-hidden bg-card">
+        {/* Header Image/Color Bar */}
+        {config.cardHeader && config.cardHeader(item)}
+
+        <CardHeader className="space-y-1.5 py-3 px-4">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <CardTitle className="text-sm font-mono font-bold tracking-tight uppercase">
+                {config.cardTitle(item)}
+              </CardTitle>
+              {config.cardDescription && (
+                <CardDescription className="mt-1 text-[10px] font-mono uppercase tracking-wider">
+                  {config.cardDescription(item)}
+                </CardDescription>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-2 text-xs font-mono py-3 px-4">{config.cardContent(item)}</CardContent>
+      </Card>
+    </CardWrapper>
+  )
+}
