@@ -6,8 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
 
-export default function BuildingDetailPage({ params }: { params: { id: string } }) {
-  const building = getBuildingById(params.id)
+export default async function BuildingDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const building = await getBuildingById(id)
 
   if (!building) {
     notFound()

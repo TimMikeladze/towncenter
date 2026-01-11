@@ -6,8 +6,13 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { getCivilizationById, getUnitById, getAllUnits } from "@/lib/data"
 
-export default function CivilizationDetailPage({ params }: { params: { id: string } }) {
-  const civ = getCivilizationById(params.id)
+export default async function CivilizationDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const civ = await getCivilizationById(id)
 
   if (!civ) {
     notFound()

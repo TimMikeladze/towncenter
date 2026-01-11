@@ -5,8 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { getUnitById, getCivilizationById } from "@/lib/data"
 
-export default function UnitDetailPage({ params }: { params: { id: string } }) {
-  const unit = getUnitById(params.id)
+export default async function UnitDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const unit = await getUnitById(id)
 
   if (!unit) {
     notFound()

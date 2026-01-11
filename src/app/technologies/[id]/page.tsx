@@ -6,8 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
 
-export default function TechnologyDetailPage({ params }: { params: { id: string } }) {
-  const tech = getTechnologyById(params.id)
+export default async function TechnologyDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const tech = await getTechnologyById(id)
 
   if (!tech) {
     notFound()
