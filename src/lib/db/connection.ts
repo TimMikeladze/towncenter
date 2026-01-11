@@ -3,112 +3,75 @@ import path from 'path'
 
 let instance: DuckDBInstance | null = null
 let connection: DuckDBConnection | null = null
+let isInitializing = false
 
 const PARQUET_DIR = path.join(process.cwd(), 'export', 'parquet')
 const IMG_DIR = path.join(process.cwd(), 'export', 'img')
 
 export async function getConnection(): Promise<DuckDBConnection> {
+  // Return cached connection if available
   if (connection) {
     return connection
   }
 
-  // Create in-memory DuckDB instance
-  instance = await DuckDBInstance.create(':memory:')
-  connection = await instance.connect()
+  // Prevent race conditions - wait if already initializing
+  if (isInitializing) {
+    // Wait and retry
+    await new Promise(resolve => setTimeout(resolve, 100))
+    return getConnection()
+  }
 
-  // Load all parquet files into tables
-  await connection.run(`
-    CREATE TABLE age_names AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/age_names.parquet')
-  `)
+  isInitializing = true
 
-  await connection.run(`
-    CREATE TABLE buildings AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/buildings.parquet')
-  `)
+  try {
+    // Create in-memory DuckDB instance
+    instance = await DuckDBInstance.create(':memory:')
+    connection = await instance.connect()
 
-  await connection.run(`
-    CREATE TABLE building_armours AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/building_armours.parquet')
-  `)
+    // Load all parquet files into tables
+    const tables = [
+      'age_names', 'buildings', 'building_armours', 'building_attacks',
+      'civilizations', 'civ_buildings', 'civ_names', 'civ_techs',
+      'civ_uniques', 'civ_units', 'node_types', 'techs', 'units',
+      'unit_armours', 'unit_attacks', 'unit_upgrades'
+    ]
 
-  await connection.run(`
-    CREATE TABLE building_attacks AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/building_attacks.parquet')
-  `)
+    for (const table of tables) {
+      await connection.run(`
+        CREATE TABLE ${table} AS
+        SELECT * FROM read_parquet('${PARQUET_DIR}/${table}.parquet')
+      `)
+    }
 
-  await connection.run(`
-    CREATE TABLE civilizations AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/civilizations.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE civ_buildings AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/civ_buildings.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE civ_names AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/civ_names.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE civ_techs AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/civ_techs.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE civ_uniques AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/civ_uniques.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE civ_units AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/civ_units.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE node_types AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/node_types.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE techs AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/techs.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE units AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/units.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE unit_armours AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/unit_armours.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE unit_attacks AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/unit_attacks.parquet')
-  `)
-
-  await connection.run(`
-    CREATE TABLE unit_upgrades AS
-    SELECT * FROM read_parquet('${PARQUET_DIR}/unit_upgrades.parquet')
-  `)
-
-  return connection
+    console.log('[DuckDB] Connection initialized successfully')
+    return connection
+  } catch (error) {
+    console.error('[DuckDB] Failed to initialize connection:', error)
+    // Clean up on failure
+    connection = null
+    instance = null
+    throw new Error(`Failed to initialize DuckDB: ${error}`)
+  } finally {
+    isInitializing = false
+  }
 }
 
 export function getImagePath(relativePath: string): string {
-  // Return path for Next.js public folder access
   return `/${relativePath}`
 }
 
 export async function closeConnection(): Promise<void> {
-  if (connection) {
-    connection.closeSync()
+  try {
+    if (connection) {
+      connection.closeSync()
+      connection = null
+    }
+    instance = null
+    console.log('[DuckDB] Connection closed successfully')
+  } catch (error) {
+    console.error('[DuckDB] Error closing connection:', error)
+    // Force cleanup even if close fails
     connection = null
+    instance = null
   }
-  instance = null
 }
