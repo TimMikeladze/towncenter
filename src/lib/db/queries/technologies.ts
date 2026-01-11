@@ -1,7 +1,8 @@
+import { cache } from 'react'
 import { getConnection } from '../connection'
 import type { Technology, Age } from '@/lib/types'
 
-export async function getAllTechnologies(): Promise<Technology[]> {
+export const getAllTechnologies = cache(async (): Promise<Technology[]> => {
   const conn = await getConnection()
 
   const reader = await conn.runAndReadAll(`
@@ -30,15 +31,15 @@ export async function getAllTechnologies(): Promise<Technology[]> {
     affectedBuildings: [],
     image_path: row.image_path,
   }))
-}
+})
 
-export async function getTechnologyById(id: string): Promise<Technology | null> {
+export const getTechnologyById = cache(async (id: string): Promise<Technology | null> => {
   const techs = await getAllTechnologies()
   return techs.find(t => t.id === id) || null
-}
+})
 
-export async function getTechnologiesByCategory(category: string): Promise<Technology[]> {
+export const getTechnologiesByCategory = cache(async (category: string): Promise<Technology[]> => {
   if (category === 'all') return getAllTechnologies()
   const techs = await getAllTechnologies()
   return techs.filter(t => t.category === category)
-}
+})

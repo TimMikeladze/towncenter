@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import { getAllMaps } from "@/lib/data"
 import { DataViewer } from "@/components/data-viewer"
 import type { DataViewerConfig } from "@/components/data-viewer"
@@ -15,8 +12,13 @@ const secondaryNavItems = [
   { label: "Hybrid", value: "Hybrid" },
 ]
 
-export default function MapsPage() {
-  const [activeTab, setActiveTab] = useState("all")
+export default async function MapsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
+  const params = await searchParams
+  const activeTab = params.type || "all"
   const allMaps = getAllMaps()
 
   const filteredMaps = activeTab === "all" ? allMaps : allMaps.filter((map) => map.type === activeTab)
@@ -125,7 +127,7 @@ export default function MapsPage() {
 
   return (
     <>
-      <SecondaryNav items={secondaryNavItems} defaultValue="all" onValueChange={setActiveTab} />
+      <SecondaryNav items={secondaryNavItems} defaultValue="all" currentValue={activeTab} />
 
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-6">

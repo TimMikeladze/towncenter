@@ -17,7 +17,11 @@ export default async function UnitDetailPage({
     notFound()
   }
 
-  const civ = unit.civSpecific ? getCivilizationById(unit.civSpecific) : null
+  const civ = unit.civSpecific ? await getCivilizationById(unit.civSpecific) : null
+
+  // Load counter units and good-against units
+  const goodAgainstUnits = (await Promise.all(unit.goodAgainst.map(id => getUnitById(id)))).filter((u): u is NonNullable<typeof u> => u !== undefined)
+  const counterUnits = (await Promise.all(unit.counters.map(id => getUnitById(id)))).filter((u): u is NonNullable<typeof u> => u !== undefined)
 
   return (
     <div className="min-h-screen bg-background">
@@ -167,16 +171,13 @@ export default async function UnitDetailPage({
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {unit.goodAgainst.map((counterId) => {
-                    const counterUnit = getUnitById(counterId)
-                    return counterUnit ? (
-                      <Link key={counterId} href={`/units/${counterId}`}>
-                        <Button variant="outline" size="sm">
-                          {counterUnit.name}
-                        </Button>
-                      </Link>
-                    ) : null
-                  })}
+                  {goodAgainstUnits.map((counterUnit) => (
+                    <Link key={counterUnit.id} href={`/units/${counterUnit.id}`}>
+                      <Button variant="outline" size="sm">
+                        {counterUnit.name}
+                      </Button>
+                    </Link>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -188,16 +189,13 @@ export default async function UnitDetailPage({
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {unit.counters.map((counterId) => {
-                    const counterUnit = getUnitById(counterId)
-                    return counterUnit ? (
-                      <Link key={counterId} href={`/units/${counterId}`}>
-                        <Button variant="outline" size="sm">
-                          {counterUnit.name}
-                        </Button>
-                      </Link>
-                    ) : null
-                  })}
+                  {counterUnits.map((counterUnit) => (
+                    <Link key={counterUnit.id} href={`/units/${counterUnit.id}`}>
+                      <Button variant="outline" size="sm">
+                        {counterUnit.name}
+                      </Button>
+                    </Link>
+                  ))}
                 </div>
               </CardContent>
             </Card>

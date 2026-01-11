@@ -1,7 +1,8 @@
+import { cache } from 'react'
 import { getConnection } from '../connection'
 import type { Building, Age } from '@/lib/types'
 
-export async function getAllBuildings(): Promise<Building[]> {
+export const getAllBuildings = cache(async (): Promise<Building[]> => {
   const conn = await getConnection()
 
   const reader = await conn.runAndReadAll(`
@@ -37,9 +38,9 @@ export async function getAllBuildings(): Promise<Building[]> {
     upgrades: [],
     image_path: row.image_path,
   }))
-}
+})
 
-function deriveBuildingType(internalName: string): string {
+function deriveBuildingType(internalName: string): Building['type'] {
   const name = internalName.toLowerCase()
   if (name.includes('barrack') || name.includes('stable') || name.includes('range')) return 'Military'
   if (name.includes('mill') || name.includes('farm') || name.includes('market')) return 'Eco'
@@ -50,13 +51,13 @@ function deriveBuildingType(internalName: string): string {
   return 'Special'
 }
 
-export async function getBuildingById(id: string): Promise<Building | null> {
+export const getBuildingById = cache(async (id: string): Promise<Building | null> => {
   const buildings = await getAllBuildings()
   return buildings.find(b => b.id === id) || null
-}
+})
 
-export async function getBuildingsByType(type: string): Promise<Building[]> {
+export const getBuildingsByType = cache(async (type: string): Promise<Building[]> => {
   if (type === 'all') return getAllBuildings()
   const buildings = await getAllBuildings()
   return buildings.filter(b => b.type === type)
-}
+})

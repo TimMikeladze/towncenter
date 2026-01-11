@@ -1,7 +1,8 @@
+import { cache } from 'react'
 import { getConnection } from '../connection'
 import type { Civilization } from '@/lib/types'
 
-export async function getAllCivilizations(): Promise<Civilization[]> {
+export const getAllCivilizations = cache(async (): Promise<Civilization[]> => {
   const conn = await getConnection()
 
   const reader = await conn.runAndReadAll(`
@@ -44,9 +45,9 @@ export async function getAllCivilizations(): Promise<Civilization[]> {
     },
     image_path: row.image_path
   }))
-}
+})
 
-export async function getCivilizationById(id: string): Promise<Civilization | null> {
+export const getCivilizationById = cache(async (id: string): Promise<Civilization | null> => {
   const civs = await getAllCivilizations()
   return civs.find(c => c.id === id) || null
-}
+})

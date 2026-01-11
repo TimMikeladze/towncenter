@@ -18,8 +18,8 @@ export default async function CivilizationDetailPage({
     notFound()
   }
 
-  const uniqueUnits = civ.uniqueUnits.map((id) => getUnitById(id)).filter((u): u is NonNullable<typeof u> => u !== undefined)
-  const allUnits = getAllUnits()
+  const uniqueUnits = (await Promise.all(civ.uniqueUnits.map((id) => getUnitById(id)))).filter((u): u is NonNullable<typeof u> => u !== null)
+  const allUnits = await getAllUnits()
   const availableUnits = allUnits.filter((u) => !u.civSpecific || u.civSpecific === civ.id)
 
   return (

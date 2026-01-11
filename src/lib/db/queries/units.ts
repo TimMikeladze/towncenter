@@ -1,12 +1,35 @@
+import { cache } from 'react'
 import { getConnection } from '../connection'
 import type { Unit, UnitType, Age } from '@/lib/types'
 
-export async function getAllUnits(): Promise<Unit[]> {
+export const getAllUnits = cache(async (): Promise<Unit[]> => {
   const conn = await getConnection()
 
   const reader = await conn.runAndReadAll(`
     SELECT
-      u.*,
+      u.id,
+      u.internal_name,
+      u.hp,
+      u.attack,
+      u.range,
+      u.min_range,
+      u.melee_armor,
+      u.pierce_armor,
+      u.garrison_capacity,
+      u.line_of_sight,
+      u.speed,
+      u.reload_time,
+      u.accuracy_percent,
+      u.frame_delay,
+      u.attack_delay_seconds,
+      u.train_time,
+      u.cost_food,
+      u.cost_wood,
+      u.cost_gold,
+      u.cost_stone,
+      u.language_name_id,
+      u.language_help_id,
+      u.image_path,
       GROUP_CONCAT(DISTINCT ua.attack_class || ':' || ua.amount) as attack_bonuses,
       GROUP_CONCAT(DISTINCT uar.armour_class || ':' || uar.amount) as armours
     FROM units u
@@ -54,7 +77,7 @@ export async function getAllUnits(): Promise<Unit[]> {
     upgrades: [],
     image_path: row.image_path,
   }))
-}
+})
 
 function deriveUnitType(internalName: string): string {
   const name = internalName.toLowerCase()
@@ -66,13 +89,13 @@ function deriveUnitType(internalName: string): string {
   return 'Unique'
 }
 
-export async function getUnitById(id: string): Promise<Unit | null> {
+export const getUnitById = cache(async (id: string): Promise<Unit | null> => {
   const units = await getAllUnits()
   return units.find(u => u.id === id) || null
-}
+})
 
-export async function getUnitsByType(type: string): Promise<Unit[]> {
+export const getUnitsByType = cache(async (type: string): Promise<Unit[]> => {
   if (type === 'all') return getAllUnits()
   const units = await getAllUnits()
   return units.filter(u => u.type === type)
-}
+})
