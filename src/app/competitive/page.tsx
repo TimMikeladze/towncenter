@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { getAllCivilizations, getAllMatchups, getAllBuildOrders, getMatchup } from "@/lib/data"
 import { Badge } from "@/components/ui/badge"
 
-export default function CompetitivePage() {
+function CompetitiveContent() {
   const searchParams = useSearchParams()
   const initialCiv = searchParams.get("civ") || "britons"
 
@@ -393,5 +393,13 @@ export default function CompetitivePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CompetitivePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <CompetitiveContent />
+    </Suspense>
   )
 }
