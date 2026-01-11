@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import { SecondaryNav } from "@/components/secondary-nav"
 import { getAllTechnologies } from "@/lib/data"
 import { Card } from "@/components/ui/card"
@@ -14,9 +11,14 @@ const secondaryNavItems = [
   { label: "Unique", value: "Unique" },
 ]
 
-export default function TechnologiesPage() {
-  const [activeTab, setActiveTab] = useState("all")
-  const technologies = getAllTechnologies()
+export default async function TechnologiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
+  const params = await searchParams
+  const activeTab = params.type || "all"
+  const technologies = await getAllTechnologies()
 
   const filteredTechs =
     activeTab === "all"
@@ -33,7 +35,7 @@ export default function TechnologiesPage() {
 
   return (
     <>
-      <SecondaryNav items={secondaryNavItems} defaultValue="all" onValueChange={setActiveTab} />
+      <SecondaryNav items={secondaryNavItems} defaultValue="all" currentValue={activeTab} />
 
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-6">

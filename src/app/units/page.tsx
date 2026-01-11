@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import { SecondaryNav } from "@/components/secondary-nav"
 import { DataViewer } from "@/components/data-viewer"
 import type { DataViewerConfig } from "@/components/data-viewer"
@@ -20,9 +17,14 @@ const secondaryNavItems = [
   { label: "Unique", value: "Unique" },
 ]
 
-export default function UnitsPage() {
-  const [activeTab, setActiveTab] = useState("all")
-  const allUnits = getAllUnits()
+export default async function UnitsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
+  const params = await searchParams
+  const activeTab = params.type || "all"
+  const allUnits = await getAllUnits()
 
   const filteredUnits = activeTab === "all" ? allUnits : allUnits.filter((unit) => unit.type === activeTab)
 
@@ -197,7 +199,7 @@ export default function UnitsPage() {
 
   return (
     <>
-      <SecondaryNav items={secondaryNavItems} defaultValue="all" onValueChange={setActiveTab} />
+      <SecondaryNav items={secondaryNavItems} defaultValue="all" currentValue={activeTab} />
 
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-6">
