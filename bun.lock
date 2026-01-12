@@ -6,6 +6,7 @@
       "name": "towncenter",
       "dependencies": {
         "@duckdb/node-api": "^1.4.3-r.3",
+        "@duckdb/node-bindings-darwin-x64": "^1.4.3-r.3",
         "@hookform/resolvers": "^5.2.2",
         "@radix-ui/react-accordion": "1.2.12",
         "@radix-ui/react-alert-dialog": "1.1.15",
