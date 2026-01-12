@@ -1,7 +1,10 @@
+"use client"
+
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { SecondaryNav } from "@/components/secondary-nav"
 import { DataViewer } from "@/components/data-viewer"
 import type { DataViewerConfig } from "@/components/data-viewer"
-import { getAllUnits } from "@/lib/data"
 import type { Unit, UnitType } from "@/lib/types"
 import { Swords, Heart, Shield, Target, Zap } from "lucide-react"
 import { getEntityImagePath } from "@/lib/utils/images"
@@ -18,14 +21,16 @@ const secondaryNavItems = [
   { label: "Unique", value: "Unique" },
 ]
 
-export default async function UnitsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
-  const params = await searchParams
-  const activeTab = params.type || "all"
-  const allUnits = await getAllUnits()
+function UnitsContent() {
+  const searchParams = useSearchParams()
+  const activeTab = searchParams.get("type") || "all"
+  const [allUnits, setAllUnits] = useState<Unit[]>([])
+
+  useEffect(() => {
+    import("@/lib/data").then(({ getAllUnits }) => {
+      getAllUnits().then(setAllUnits)
+    })
+  }, [])
 
   const filteredUnits = activeTab === "all" ? allUnits : allUnits.filter((unit) => unit.type === activeTab)
 
@@ -219,5 +224,13 @@ export default async function UnitsPage({
         </div>
       </div>
     </>
+  )
+}
+
+export default function UnitsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <UnitsContent />
+    </Suspense>
   )
 }

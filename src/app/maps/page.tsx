@@ -1,4 +1,8 @@
-import { getAllMaps } from "@/lib/data"
+"use client"
+
+import { Suspense } from "react"
+import { useSearchParams } from "next/navigation"
+import { getAllMaps } from "@/lib/data-client"
 import { DataViewer } from "@/components/data-viewer"
 import type { DataViewerConfig } from "@/components/data-viewer"
 import type { Map } from "@/lib/types"
@@ -12,13 +16,9 @@ const secondaryNavItems = [
   { label: "Hybrid", value: "Hybrid" },
 ]
 
-export default async function MapsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
-  const params = await searchParams
-  const activeTab = params.type || "all"
+function MapsContent() {
+  const searchParams = useSearchParams()
+  const activeTab = searchParams.get("type") || "all"
   const allMaps = getAllMaps()
 
   const filteredMaps = activeTab === "all" ? allMaps : allMaps.filter((map) => map.type === activeTab)
@@ -146,5 +146,13 @@ export default async function MapsPage({
         </div>
       </div>
     </>
+  )
+}
+
+export default function MapsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <MapsContent />
+    </Suspense>
   )
 }

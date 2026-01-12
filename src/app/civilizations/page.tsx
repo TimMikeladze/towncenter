@@ -1,7 +1,10 @@
+"use client"
+
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { SecondaryNav } from "@/components/secondary-nav"
 import { DataViewer } from "@/components/data-viewer"
 import type { DataViewerConfig } from "@/components/data-viewer"
-import { getAllCivilizations } from "@/lib/data"
 import type { Civilization } from "@/lib/types"
 import { Users, Crown, Swords } from "lucide-react"
 import { getEntityImagePath } from "@/lib/utils/images"
@@ -18,14 +21,16 @@ const secondaryNavItems = [
   { label: "Monk", value: "Monk" },
 ]
 
-export default async function CivilizationsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
-  const params = await searchParams
-  const activeTab = params.type || "all"
-  const allCivs = await getAllCivilizations()
+function CivilizationsContent() {
+  const searchParams = useSearchParams()
+  const activeTab = searchParams.get("type") || "all"
+  const [allCivs, setAllCivs] = useState<Civilization[]>([])
+
+  useEffect(() => {
+    import("@/lib/data").then(({ getAllCivilizations }) => {
+      getAllCivilizations().then(setAllCivs)
+    })
+  }, [])
 
   const filteredCivs = activeTab === "all" ? allCivs : allCivs.filter((civ) => civ.type === activeTab)
 
@@ -168,5 +173,13 @@ export default async function CivilizationsPage({
         </div>
       </div>
     </>
+  )
+}
+
+export default function CivilizationsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <CivilizationsContent />
+    </Suspense>
   )
 }
