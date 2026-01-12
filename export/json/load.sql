@@ -1,0 +1,17 @@
+COPY age_names FROM '/Users/tim/workspace/aoe2techtree/db/export/json/age_names.json' (FORMAT 'json');
+COPY buildings FROM '/Users/tim/workspace/aoe2techtree/db/export/json/buildings.json' (FORMAT 'json');
+COPY building_armours FROM '/Users/tim/workspace/aoe2techtree/db/export/json/building_armours.json' (FORMAT 'json');
+COPY building_attacks FROM '/Users/tim/workspace/aoe2techtree/db/export/json/building_attacks.json' (FORMAT 'json');
+COPY civilizations FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civilizations.json' (FORMAT 'json');
+COPY civ_buildings FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civ_buildings.json' (FORMAT 'json');
+COPY civ_helptexts FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civ_helptexts.json' (FORMAT 'json');
+COPY civ_names FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civ_names.json' (FORMAT 'json');
+COPY civ_techs FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civ_techs.json' (FORMAT 'json');
+COPY civ_uniques FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civ_uniques.json' (FORMAT 'json');
+COPY civ_units FROM '/Users/tim/workspace/aoe2techtree/db/export/json/civ_units.json' (FORMAT 'json');
+COPY node_types FROM '/Users/tim/workspace/aoe2techtree/db/export/json/node_types.json' (FORMAT 'json');
+COPY techs FROM '/Users/tim/workspace/aoe2techtree/db/export/json/techs.json' (FORMAT 'json');
+COPY units FROM '/Users/tim/workspace/aoe2techtree/db/export/json/units.json' (FORMAT 'json');
+COPY unit_armours FROM '/Users/tim/workspace/aoe2techtree/db/export/json/unit_armours.json' (FORMAT 'json');
+COPY unit_attacks FROM '/Users/tim/workspace/aoe2techtree/db/export/json/unit_attacks.json' (FORMAT 'json');
+COPY unit_upgrades FROM '/Users/tim/workspace/aoe2techtree/db/export/json/unit_upgrades.json' (FORMAT 'json');
