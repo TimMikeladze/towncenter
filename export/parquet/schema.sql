@@ -1,0 +1,18 @@
+CREATE TABLE age_names("name" VARCHAR, string_id INTEGER);;
+CREATE TABLE buildings(id INTEGER PRIMARY KEY, internal_name VARCHAR, hp INTEGER, attack INTEGER, "range" DOUBLE, min_range DOUBLE, melee_armor INTEGER, pierce_armor INTEGER, garrison_capacity INTEGER, line_of_sight DOUBLE, reload_time DOUBLE, accuracy_percent INTEGER, train_time INTEGER, cost_food INTEGER, cost_wood INTEGER, cost_gold INTEGER, cost_stone INTEGER, language_name_id INTEGER, language_help_id INTEGER, image_path VARCHAR);;
+CREATE TABLE building_armours(building_id INTEGER, armour_class INTEGER, amount INTEGER);;
+CREATE TABLE building_attacks(building_id INTEGER, attack_class INTEGER, amount INTEGER);;
+CREATE TABLE civilizations("name" VARCHAR PRIMARY KEY, monk_suffix VARCHAR, image_path VARCHAR);;
+CREATE TABLE civ_buildings(civ_name VARCHAR, building_id INTEGER, age INTEGER);;
+CREATE TABLE civ_helptexts("name" VARCHAR, string_id INTEGER);;
+CREATE TABLE civ_names("name" VARCHAR, string_id INTEGER);;
+CREATE TABLE civ_techs(civ_name VARCHAR, tech_id INTEGER, age INTEGER);;
+CREATE TABLE civ_uniques(civ_name VARCHAR PRIMARY KEY, castle_age_unique_unit INTEGER, imperial_age_unique_unit INTEGER, castle_age_unique_tech INTEGER, imperial_age_unique_tech INTEGER);;
+CREATE TABLE civ_units(civ_name VARCHAR, unit_id INTEGER, age INTEGER);;
+CREATE TABLE node_types(entity_type VARCHAR, entity_id INTEGER, node_type VARCHAR);;
+CREATE TABLE techs(id INTEGER PRIMARY KEY, internal_name VARCHAR, research_time INTEGER, "repeatable" BOOLEAN, cost_food INTEGER, cost_wood INTEGER, cost_gold INTEGER, cost_stone INTEGER, language_name_id INTEGER, language_help_id INTEGER, image_path VARCHAR);;
+CREATE TABLE units(id INTEGER PRIMARY KEY, internal_name VARCHAR, hp INTEGER, attack INTEGER, "range" DOUBLE, min_range DOUBLE, melee_armor INTEGER, pierce_armor INTEGER, garrison_capacity INTEGER, line_of_sight DOUBLE, speed DOUBLE, reload_time DOUBLE, accuracy_percent INTEGER, frame_delay INTEGER, attack_delay_seconds DOUBLE, train_time INTEGER, blast_width DOUBLE, max_charge DOUBLE, recharge_rate DOUBLE, recharge_duration DOUBLE, charge_event INTEGER, charge_type INTEGER, trait INTEGER, trait_piece INTEGER, cost_food INTEGER, cost_wood INTEGER, cost_gold INTEGER, cost_stone INTEGER, language_name_id INTEGER, language_help_id INTEGER, image_path VARCHAR);;
+CREATE TABLE unit_armours(unit_id INTEGER, armour_class INTEGER, amount INTEGER);;
+CREATE TABLE unit_attacks(unit_id INTEGER, attack_class INTEGER, amount INTEGER);;
+CREATE TABLE unit_upgrades(unit_id INTEGER PRIMARY KEY, tech_id INTEGER, internal_name VARCHAR, research_time INTEGER, cost_food INTEGER, cost_wood INTEGER, cost_gold INTEGER, cost_stone INTEGER);;
+
