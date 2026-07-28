@@ -19,7 +19,7 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
   const config: DataViewerConfig<Unit> = {
     itemName: "units",
     searchFields: ["name", "type", "age", "description"],
-    searchPlaceholder: "Search units by name, type or text…",
+    searchPlaceholder: "Search units…",
 
     filters: [
       {
@@ -52,10 +52,13 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
         {unit.civSpecific && unit.type !== "Unique" && <Chip tone="var(--type-unique)">Unique</Chip>}
       </>
     ),
-    cardHeader: (unit) => (
-      <div className="flex items-center justify-center border-b bg-muted/40 py-4">
-        <EntityIcon src={unit.image_path} alt={unit.name} size="lg" className="border-0 bg-transparent" />
-      </div>
+    cardMedia: (unit) => (
+      <EntityIcon
+        src={unit.image_path}
+        alt={unit.name}
+        size="lg"
+        className="border-0 bg-transparent max-md:h-14 max-md:w-14"
+      />
     ),
     cardContent: (unit) => (
       <>

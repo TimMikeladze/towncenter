@@ -26,7 +26,9 @@ export function DataTable<T extends DataItem>({ data, config, onSort, sortBy, so
   const gridTemplate = columns.map((column) => column.width || "1fr").join(" ")
 
   return (
-    <div className="overflow-x-auto">
+    // `scroll-contain` keeps a sideways swipe inside the table instead of
+    // handing it to the browser as a back-navigation gesture.
+    <div className="scroll-contain overflow-x-auto">
       <div className="min-w-[720px]">
         <div
           className="sticky top-0 z-10 grid border-b bg-muted/70 backdrop-blur"

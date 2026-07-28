@@ -53,7 +53,11 @@ export interface DataViewerConfig<T extends DataItem> {
   // Card View
   cardTitle: (item: T) => React.ReactNode
   cardDescription?: (item: T) => React.ReactNode
-  cardHeader?: (item: T) => React.ReactNode
+  /**
+   * Just the artwork — no frame. `DataCard` supplies the framing, because the
+   * frame changes shape between the phone row and the desktop card.
+   */
+  cardMedia?: (item: T) => React.ReactNode
   cardContent: (item: T) => React.ReactNode
   cardGridCols?: string // Tailwind grid classes
 

@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Standalone = launched from the home screen. Used to reclaim the browser
+   chrome the PWA no longer draws. */
+@custom-variant standalone (&:is([data-display-mode="standalone"] *));
+
 /*
  * Palette: parchment + bronze in light, iron night + gold in dark. The game's
  * own resource and age colours are first-class tokens so every page tints the
@@ -56,7 +60,22 @@
   --chart-5: #6f7d8a;
 
   --radius: 0.5rem;
-  --header-height: 3.5rem;
+
+  /*
+   * Layout metrics every fixed chrome element and every page shares. Nothing
+   * hard-codes a header or tab-bar height, so the two can never drift out of
+   * step with the padding that clears them.
+   */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  --header-height: 3.25rem;
+  --tab-bar-height: 3.5rem;
+  /* Total space the chrome occupies, safe areas included. */
+  --header-offset: calc(var(--header-height) + var(--safe-top));
+  --tab-bar-offset: calc(var(--tab-bar-height) + var(--safe-bottom));
 }
 
 .dark {
@@ -164,20 +183,78 @@
   }
 
   html {
+    /*
+     * The page is never allowed to grow sideways. `clip` rather than `hidden`
+     * so it does not turn the viewport into a scroll container and break the
+     * sticky header.
+     */
+    overflow-x: clip;
+    /* iOS resizes text in landscape unless this is pinned. */
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Kills the 300ms tap delay and double-tap-to-zoom. */
+    touch-action: manipulation;
+    /* No rubber-band past the top/bottom of the document — the giveaway that
+       a PWA is really a web page. */
+    overscroll-behavior-y: none;
+    height: 100%;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: clip;
     font-size: 0.9375rem;
     line-height: 1.5;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
     /* Parchment grain in light, quiet vignette in dark. No image assets. */
     background-image:
       radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 55%),
       radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--ring) 5%, transparent), transparent 45%);
     background-attachment: fixed;
-    /* Room for the mobile tab bar. */
-    padding-bottom: env(safe-area-inset-bottom);
+    /* Native apps do not flash a grey box under your thumb. */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*
+   * Safari zooms the page whenever a focused control renders below 16px, and a
+   * zoomed page throws every `position: fixed` element out of place. Touch
+   * layouts therefore get a 16px floor on every control, regardless of the
+   * utility classes on it. Desktop keeps the tighter type.
+   */
+  @media (pointer: coarse) {
+    input,
+    select,
+    textarea {
+      font-size: max(16px, 1em);
+    }
+  }
+
+  /*
+   * Chrome is chrome: labels, nav and buttons should not turn into a text
+   * selection when a tap is held. Real content stays selectable.
+   */
+  button,
+  a,
+  label,
+  [role="button"],
+  [role="tab"],
+  nav,
+  .label-caps {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  p,
+  code,
+  pre,
+  dd,
+  input,
+  textarea,
+  [data-selectable] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   h1,
@@ -185,11 +262,24 @@
   h3 {
     @apply font-display tracking-tight;
     font-weight: 600;
+    /* Long unit names must never widen the page. */
+    overflow-wrap: break-word;
   }
 
   /* Numbers line up in tables and stat blocks. */
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Anchored scrolling clears the fixed header instead of hiding under it. */
+  :target {
+    scroll-margin-top: calc(var(--header-offset) + 1rem);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 }
 
@@ -204,10 +294,14 @@
     box-shadow: var(--shadow-panel);
   }
 
-  .panel-interactive:hover {
-    border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
-    box-shadow: var(--shadow-raised);
-    transform: translateY(-1px);
+  /* Lift on hover is a mouse affordance. On touch it just leaves a stuck
+     highlight after the tap, so it is gated behind a real hover device. */
+  @media (hover: hover) and (pointer: fine) {
+    .panel-interactive:hover {
+      border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+      box-shadow: var(--shadow-raised);
+      transform: translateY(-1px);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -239,6 +333,49 @@
   .label-caps {
     @apply font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground;
   }
+
+  /*
+   * Horizontal rail: chips and tabs that scroll sideways *inside* their own
+   * box. `overscroll-contain` stops the swipe from turning into a browser
+   * back-gesture once the rail hits its end.
+   */
+  .rail {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
+   * No scroll snapping. Snap points on a chip rail fight the leading gutter —
+   * the first chip snaps flush to the scrollport and swallows the padding —
+   * and chips are not a carousel, so there is nothing to snap to anyway.
+   */
+  .rail > * {
+    flex-shrink: 0;
+  }
+
+  /*
+   * Edge fades are the only cue a touch user gets that a rail keeps going —
+   * there is no scrollbar on a phone. `Rail` sets the data attributes, so a
+   * fade appears only on a side that actually has more content behind it.
+   */
+  .rail-fade[data-fade-end] {
+    mask-image: linear-gradient(to right, black calc(100% - 2.5rem), transparent);
+  }
+
+  .rail-fade[data-fade-start] {
+    mask-image: linear-gradient(to left, black calc(100% - 2.5rem), transparent);
+  }
+
+  .rail-fade[data-fade-start][data-fade-end] {
+    mask-image: linear-gradient(to right, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
+  }
 }
 
 @layer utilities {
@@ -252,12 +389,49 @@
   }
 
   .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: var(--safe-bottom);
+  }
+
+  .pt-safe {
+    padding-top: var(--safe-top);
+  }
+
+  .px-safe {
+    padding-left: max(var(--safe-left), 0px);
+    padding-right: max(var(--safe-right), 0px);
   }
 
   /* Every interactive target on touch layouts clears 44px. */
   .touch-target {
     min-height: 2.75rem;
     min-width: 2.75rem;
+  }
+
+  /*
+   * Press feedback. Touch has no hover, so the only way an element can feel
+   * responsive is to react to the press itself.
+   */
+  .press {
+    transition:
+      transform 120ms ease,
+      background-color 120ms ease,
+      opacity 120ms ease;
+  }
+
+  .press:active {
+    transform: scale(0.97);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .press:active {
+      transform: none;
+      opacity: 0.7;
+    }
+  }
+
+  /* Scroll containers inside the page keep their gesture to themselves. */
+  .scroll-contain {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 }

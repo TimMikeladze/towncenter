@@ -48,10 +48,13 @@ export function TechnologiesClient({ allTechs, filteredTechs }: TechnologiesClie
         <AgeBadge age={tech.age} />
       </>
     ),
-    cardHeader: (tech) => (
-      <div className="flex items-center justify-center border-b bg-muted/40 py-4">
-        <EntityIcon src={tech.image_path} alt={tech.name} size="lg" className="border-0 bg-transparent" />
-      </div>
+    cardMedia: (tech) => (
+      <EntityIcon
+        src={tech.image_path}
+        alt={tech.name}
+        size="lg"
+        className="border-0 bg-transparent max-md:h-14 max-md:w-14"
+      />
     ),
     cardContent: (tech) => (
       <>

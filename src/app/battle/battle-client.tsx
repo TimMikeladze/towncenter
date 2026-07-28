@@ -74,7 +74,7 @@ function CountStepper({
       <Button
         variant="outline"
         size="icon"
-        className="h-10 w-10 shrink-0"
+        className="press h-11 w-11 shrink-0 sm:h-10 sm:w-10"
         onClick={() => onChange(value - 1)}
         aria-label={`One fewer ${label}`}
       >
@@ -88,13 +88,13 @@ function CountStepper({
         value={value}
         onChange={(event) => onChange(Number(event.target.value))}
         aria-label={`${label} count`}
-        className="tabular h-10 w-full min-w-0 rounded-md border bg-background/50 text-center font-mono text-lg font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+        className="tabular h-11 w-full min-w-0 rounded-md border bg-background/50 text-center font-mono text-lg font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:h-10"
         style={{ color: tone }}
       />
       <Button
         variant="outline"
         size="icon"
-        className="h-10 w-10 shrink-0"
+        className="press h-11 w-11 shrink-0 sm:h-10 sm:w-10"
         onClick={() => onChange(value + 1)}
         aria-label={`One more ${label}`}
       >
@@ -108,8 +108,10 @@ function UpgradeChips({ applied, missing }: { applied: UpgradeTech[]; missing: U
   if (applied.length === 0 && missing.length === 0) {
     return <p className="text-xs text-muted-foreground">No blacksmith line reaches this unit.</p>
   }
+  // Seven upgrade names wrap to three lines on a phone and push the fight
+  // controls off-screen; they scroll in one line instead.
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="rail -mx-1 gap-1 px-1 py-0.5 md:flex-wrap md:overflow-visible">
       {applied.map((tech) => (
         <Chip key={tech.id} tone="var(--success)" title={`${tech.building} · ${tech.age} Age`}>
           {tech.name}
@@ -482,7 +484,9 @@ export function BattleClient({ units, civs, civUpgrades, civUnitIds, initial }: 
                     </dd>
                   </div>
                   <div className="rounded-md border bg-background/40 px-2.5 py-2">
-                    <dt className="label-caps">DPS (accuracy-adjusted)</dt>
+                    <dt className="label-caps" title="Damage per second, accuracy-adjusted">
+                      DPS
+                    </dt>
                     <dd className="font-semibold">{entry.side.damagePerSecond}</dd>
                   </div>
                   <div className="rounded-md border bg-background/40 px-2.5 py-2">

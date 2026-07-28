@@ -17,7 +17,7 @@ export function CivilizationsClient({ allCivs, filteredCivs }: CivilizationsClie
   const config: DataViewerConfig<Civilization> = {
     itemName: "civilizations",
     searchFields: ["name", "type", "teamBonus"],
-    searchPlaceholder: "Search civilizations or team bonuses…",
+    searchPlaceholder: "Search civilizations…",
 
     sortOptions: [
       { key: "name", label: "Name", sortFn: (a, b) => a.name.localeCompare(b.name) },
@@ -32,10 +32,13 @@ export function CivilizationsClient({ allCivs, filteredCivs }: CivilizationsClie
           {type}
         </Chip>
       )),
-    cardHeader: (civ) => (
-      <div className="flex items-center justify-center border-b bg-muted/40 py-4">
-        <EntityIcon src={civ.image_path} alt={civ.name} size="lg" className="border-0 bg-transparent" />
-      </div>
+    cardMedia: (civ) => (
+      <EntityIcon
+        src={civ.image_path}
+        alt={civ.name}
+        size="lg"
+        className="border-0 bg-transparent max-md:h-14 max-md:w-14"
+      />
     ),
     cardContent: (civ) => (
       <>
