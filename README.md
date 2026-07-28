@@ -160,8 +160,17 @@ assets in the deployment bundle. It is duplication on disk, not in git.
 ## Derived features
 
 - **Counters** (`src/lib/game/combat.ts`) are computed, not curated: damage per hit is resolved
-  class-by-class against the defender's armour, turned into DPS via reload time, and weighted by
-  resource cost. Ships and land units are never matched against each other.
+  class-by-class against the defender's armour, turned into DPS via reload time and projectile
+  accuracy, and weighted by resource cost. Ships and land units are never matched against each other.
+- **Upgrades** (`src/lib/game/upgrades.ts`) fold the blacksmith, university, stable, barracks and dock
+  lines into a unit's stats. The export ships no numeric tech effects, so the deltas are the game's
+  published values keyed by real tech id; which lines reach a unit is decided by its armour classes,
+  the way the engine decides it. Per-civ availability comes from `civ_techs`
+  (`src/lib/db/queries/civ-upgrades.ts`), so `/battle` can show that Goths never get Plate Mail.
+- **Battle simulator** (`src/lib/game/battle.ts`, `/battle`) resolves stack-vs-stack fights on each
+  side's own reload clock: overkill is discarded per hit, accuracy is applied as an expected
+  fraction of connecting hits, and an out-ranged side eats free shots while it closes. Kiting after
+  contact, collision, blast radius, healing, conversion and terrain are out of scope.
 - **Civ bonuses, focus, team bonus and unique tech text** are parsed out of the in-game civ
   description string (`src/lib/game/text.ts`).
 - **Matchup win rates and build orders** under `/competitive` are illustrative placeholders from

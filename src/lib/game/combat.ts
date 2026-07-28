@@ -32,10 +32,38 @@ export function damagePerHit(attacker: Unit, defender: Unit): number {
   return Math.max(1, total)
 }
 
+/** Projectile hit chance as a 0-1 multiplier; melee attacks always connect. */
+export function accuracyFactor(attacker: Unit): number {
+  const accuracy = attacker.stats.accuracy ?? 100
+  return Math.min(100, Math.max(0, accuracy)) / 100
+}
+
+/** Sustained damage per second, discounted by projectile accuracy. */
 export function damagePerSecond(attacker: Unit, defender: Unit): number {
   const reload = attacker.stats.attackSpeed
   if (!reload || reload <= 0) return 0
-  return damagePerHit(attacker, defender) / reload
+  return (damagePerHit(attacker, defender) * accuracyFactor(attacker)) / reload
+}
+
+/** Landed hits needed to kill, ignoring misses. */
+export function hitsToKill(attacker: Unit, defender: Unit): number {
+  const damage = damagePerHit(attacker, defender)
+  if (damage <= 0) return Number.POSITIVE_INFINITY
+  return Math.ceil(defender.stats.hp / damage)
+}
+
+/**
+ * Seconds for one attacker to kill one defender: the first swing lands after
+ * the attack delay, every later one after a full reload, and misses cost a
+ * whole reload cycle.
+ */
+export function timeToKill(attacker: Unit, defender: Unit): number {
+  const hits = hitsToKill(attacker, defender)
+  if (!Number.isFinite(hits)) return Number.POSITIVE_INFINITY
+  const accuracy = accuracyFactor(attacker)
+  if (accuracy <= 0) return Number.POSITIVE_INFINITY
+  const swings = hits / accuracy
+  return (attacker.stats.attackDelay ?? 0) + (swings - 1) * attacker.stats.attackSpeed
 }
 
 function canAttack(unit: Unit): boolean {

@@ -16,10 +16,18 @@ export interface UnitStats {
   armorClasses: ArmorClassRef[]
   attackBonuses: { classId: number; class: string; bonus: number }[]
   range?: number
+  minRange?: number
   attackSpeed: number
   movementSpeed: number
   lineOfSight: number
   trainingTime: number
+  /** Projectile hit chance, 0-100. Melee units are always 100. */
+  accuracy: number
+  /** Seconds between the attack animation starting and damage landing. */
+  attackDelay: number
+  /** Splash radius in tiles; 0 for single-target attacks. */
+  blastWidth: number
+  garrisonCapacity: number
 }
 
 export interface UnitCost {
@@ -149,14 +157,4 @@ export interface GameMap {
   size: "Tiny" | "Small" | "Medium" | "Normal" | "Large" | "Giant" | "Ludikris"
   description: string
   recommendedCivs: string[]
-}
-
-export interface EnhancedUnitStats extends UnitStats {
-  frameDelay?: number
-  accuracy?: number
-  minRange?: number
-  maxRange?: number
-  reloadTime?: number
-  projectileSpeed?: number
-  blastRadius?: number
 }

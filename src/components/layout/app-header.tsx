@@ -38,7 +38,7 @@ export function AppHeader() {
         {/* Tablet and desktop: one scrollable rail keeps every route reachable
             without an overflow menu. */}
         <nav
-          className="no-scrollbar hidden min-w-0 flex-1 items-center gap-0.5 overflow-x-auto md:flex"
+          className="no-scrollbar nav-rail-fade hidden min-w-0 flex-1 items-center gap-0.5 overflow-x-auto md:flex"
           aria-label="Primary"
         >
           {NAV_ITEMS.map((item) => {

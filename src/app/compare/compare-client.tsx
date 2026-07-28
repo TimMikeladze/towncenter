@@ -1,12 +1,13 @@
 "use client"
 
-import { Plus, X } from "lucide-react"
+import { X } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { AgeBadge, TypeBadge } from "@/components/game/badges"
 import { CostChips } from "@/components/game/cost"
 import { EmptyState } from "@/components/game/empty-state"
 import { EntityIcon } from "@/components/game/entity-icon"
+import { UnitPicker } from "@/components/game/unit-picker"
 import { PageHeader, PageShell, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -29,6 +30,8 @@ export interface CompareUnit {
   movementSpeed: number
   lineOfSight: number
   trainingTime: number
+  accuracy: number
+  blastWidth: number
   cost: number
   costBreakdown: UnitCost
   efficiency: number
@@ -36,10 +39,19 @@ export interface CompareUnit {
 }
 
 interface CompareClientProps {
-  units: { id: string; name: string; type: string }[]
+  units: { id: string; name: string; type: string; image_path: string | null }[]
   selected: CompareUnit[]
   maxUnits: number
+  /** "none", or the age whose upgrades are folded into every stat. */
+  age: string
 }
+
+const AGE_OPTIONS = [
+  { value: "none", label: "Base stats" },
+  { value: "Feudal", label: "Feudal upgrades" },
+  { value: "Castle", label: "Castle upgrades" },
+  { value: "Imperial", label: "Imperial upgrades" },
+]
 
 type Row = {
   label: string
@@ -60,16 +72,24 @@ const ROWS: Row[] = [
   { label: "Line of sight", value: (unit) => unit.lineOfSight },
   { label: "Training time", value: (unit) => unit.trainingTime, lowerIsBetter: true, format: (v) => `${v}s` },
   { label: "Weighted cost", value: (unit) => unit.cost, lowerIsBetter: true },
+  { label: "Accuracy", value: (unit) => unit.accuracy, format: (v) => `${v}%` },
+  { label: "Blast radius", value: (unit) => unit.blastWidth },
   { label: "Cost efficiency", value: (unit) => unit.efficiency },
 ]
 
-export function CompareClient({ units, selected, maxUnits }: CompareClientProps) {
+export function CompareClient({ units, selected, maxUnits, age }: CompareClientProps) {
   const router = useRouter()
 
-  const setSelection = (ids: string[]) => {
-    const query = ids.filter(Boolean).join(",")
-    router.push(query ? `/compare?units=${query}` : "/compare")
+  const push = (ids: string[], nextAge: string) => {
+    const query = new URLSearchParams()
+    const list = ids.filter(Boolean).join(",")
+    if (list) query.set("units", list)
+    if (nextAge !== "none") query.set("age", nextAge)
+    const search = query.toString()
+    router.push(search ? `/compare?${search}` : "/compare")
   }
+
+  const setSelection = (ids: string[]) => push(ids, age)
 
   const add = (id: string) => {
     if (selected.some((unit) => unit.id === id) || selected.length >= maxUnits) return
@@ -83,7 +103,7 @@ export function CompareClient({ units, selected, maxUnits }: CompareClientProps)
       <PageHeader
         eyebrow="Analysis"
         title="Compare units"
-        description={`Up to ${maxUnits} units side by side, with deltas against the first pick.`}
+        description={`Up to ${maxUnits} units side by side, with deltas against the first pick. Switch to an age to compare them fully upgraded.`}
         actions={
           <Button asChild variant="outline">
             <Link href="/units">All units</Link>
@@ -102,25 +122,36 @@ export function CompareClient({ units, selected, maxUnits }: CompareClientProps)
               </Button>
             ))}
           </div>
-          {selected.length < maxUnits && (
-            <Select value="" onValueChange={add}>
-              <SelectTrigger className="h-10 w-full sm:w-64">
-                <span className="flex items-center gap-1.5 text-muted-foreground">
-                  <Plus className="h-3.5 w-3.5" />
-                  <SelectValue placeholder="Add a unit" />
-                </span>
+          <div className="flex flex-col gap-2 sm:w-72 sm:flex-row">
+            <Select
+              value={age}
+              onValueChange={(value) =>
+                push(
+                  selected.map((unit) => unit.id),
+                  value,
+                )
+              }
+            >
+              <SelectTrigger className="h-10 w-full sm:w-44" aria-label="Upgrade level">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {units
-                  .filter((unit) => !selected.some((entry) => entry.id === unit.id))
-                  .map((unit) => (
-                    <SelectItem key={unit.id} value={unit.id}>
-                      {unit.name} ({unit.type})
-                    </SelectItem>
-                  ))}
+                {AGE_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-          )}
+            {selected.length < maxUnits && (
+              <UnitPicker
+                units={units.filter((unit) => !selected.some((entry) => entry.id === unit.id))}
+                onChange={add}
+                label="Add a unit"
+                className="h-10 flex-1 py-1"
+              />
+            )}
+          </div>
         </div>
       </Section>
 
@@ -151,7 +182,8 @@ export function CompareClient({ units, selected, maxUnits }: CompareClientProps)
               ))}
             </div>
 
-            {ROWS.map((row) => {
+            {/* A row of nothing but zeroes (range on two melee units) is noise. */}
+            {ROWS.filter((row) => selected.some((unit) => row.value(unit) !== 0)).map((row) => {
               const values = selected.map(row.value)
               const best = row.lowerIsBetter ? Math.min(...values) : Math.max(...values)
               const baseline = values[0]

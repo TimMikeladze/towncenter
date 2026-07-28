@@ -1,6 +1,7 @@
 import {
   Building2,
   Castle,
+  Crosshair,
   GitCompareArrows,
   Map as MapIcon,
   Network,
@@ -39,6 +40,12 @@ export const NAV_ITEMS: NavItem[] = [
   },
   { href: "/tech-tree", label: "Tech Tree", description: "What a civ can train, build and research", icon: Network },
   { href: "/counters", label: "Counters", description: "Both sides of a unit's matchups", icon: Shield },
+  {
+    href: "/battle",
+    label: "Battle",
+    description: "Simulate any fight, with upgrades and unit counts",
+    icon: Crosshair,
+  },
   { href: "/compare", label: "Compare", description: "Up to four units side by side", icon: GitCompareArrows },
   { href: "/maps", label: "Maps", description: "Map types and recommended civs", icon: MapIcon },
   { href: "/changes", label: "Changes", description: "Stat differences from the last data export", icon: Sparkles },
@@ -51,4 +58,4 @@ export const NAV_ITEMS: NavItem[] = [
 ]
 
 /** The five destinations that earn a slot in the mobile tab bar. */
-export const MOBILE_TAB_HREFS = ["/units", "/civilizations", "/tech-tree", "/counters"]
+export const MOBILE_TAB_HREFS = ["/units", "/civilizations", "/tech-tree", "/battle"]

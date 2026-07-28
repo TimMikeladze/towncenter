@@ -25,6 +25,9 @@ interface MatchupRow {
   damageTaken: number
   dpsDealt: number
   dpsTaken: number
+  hitsToKill: number
+  hitsToDie: number
+  timeToKill: number
 }
 
 interface CountersClientProps {
@@ -97,12 +100,14 @@ function MatchupList({
               </dd>
             </div>
             <div>
-              <dt className="label-caps">HP</dt>
-              <dd>{row.hp}</dd>
+              <dt className="label-caps">Hits to kill</dt>
+              <dd>
+                {row.hitsToKill} <span className="text-muted-foreground">/ {row.hitsToDie} taken</span>
+              </dd>
             </div>
             <div>
-              <dt className="label-caps">Cost</dt>
-              <dd>{row.cost}</dd>
+              <dt className="label-caps">Kill time</dt>
+              <dd>{row.timeToKill}s</dd>
             </div>
           </dl>
         </Link>
@@ -121,9 +126,14 @@ export function CountersClient({ units, unit, goodAgainst, counteredBy }: Counte
         title="Unit counters"
         description="Computed from attack classes, armour and cost — not hand-written lists."
         actions={
-          <Button asChild variant="outline">
-            <Link href="/units">All units</Link>
-          </Button>
+          <>
+            <Button asChild variant="outline">
+              <Link href={`/battle?a=${unit.id}`}>Simulate a fight</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/units">All units</Link>
+            </Button>
+          </>
         }
       />
 

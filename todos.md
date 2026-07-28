@@ -192,6 +192,24 @@ Legend: **[bug]** verified broken · **[gap]** implemented as a stub · **[idea]
 
 ---
 
+## Shipped after the audit (2026-07-28)
+
+- **[idea] Upgrade engine.** `src/lib/game/upgrades.ts` models the blacksmith / university / stable /
+  barracks / dock lines by armour class and real tech id, with per-civ availability read out of
+  `civ_techs`. Wired into `/battle`, `/compare?age=` and the "Fully upgraded" card on unit pages.
+- **[idea] Battle simulator.** `/battle` resolves any stack-vs-stack fight — counts, ages, civs,
+  free shots while closing — and reports survivors, duration, the resource trade and the largest
+  enemy stack the attacker still beats. Sim lives in `src/lib/game/battle.ts`, covered by
+  `tests/battle.test.ts`.
+- **[bug] Combat maths ignored accuracy and the stats the export already carried.** `accuracy_percent`,
+  `attack_delay_seconds`, `blast_width`, `min_range` and `garrison_capacity` were selected out of the
+  parquet but never read, so a 75%-accuracy Hand Cannoneer was rated like a unit that never misses.
+  DPS is now accuracy-weighted and the extra stats show on unit pages.
+- **[gap] Unit choosers were native selects over 245 options.** Replaced with a searchable,
+  type-filtered picker (`src/components/game/unit-picker.tsx`) that is a full-screen sheet on phones.
+
+---
+
 ## Left open, deliberately
 
 - **Win-rate matchups** — no free, stable public source was wired up. The invented numbers in

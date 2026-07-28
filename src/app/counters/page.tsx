@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getAllUnits } from "@/lib/data"
-import { damagePerHit, damagePerSecond, resourceCost } from "@/lib/game/combat"
+import { damagePerHit, damagePerSecond, hitsToKill, resourceCost, timeToKill } from "@/lib/game/combat"
 import type { Unit } from "@/lib/types"
 import { CountersClient } from "./counters-client"
 
@@ -19,6 +19,9 @@ function matchupRow(subject: Unit, other: Unit) {
     damageTaken: damagePerHit(other, subject),
     dpsDealt: Number(damagePerSecond(subject, other).toFixed(2)),
     dpsTaken: Number(damagePerSecond(other, subject).toFixed(2)),
+    hitsToKill: hitsToKill(subject, other),
+    hitsToDie: hitsToKill(other, subject),
+    timeToKill: Number(timeToKill(subject, other).toFixed(1)),
   }
 }
 

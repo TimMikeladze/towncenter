@@ -14,6 +14,11 @@ interface UnitRow {
   hp: number
   attack: number
   range: number
+  min_range: number
+  accuracy_percent: number
+  attack_delay_seconds: number
+  blast_width: number
+  garrison_capacity: number
   melee_armor: number
   pierce_armor: number
   line_of_sight: number
@@ -49,7 +54,8 @@ const UNITS_SQL = `
     ) GROUP BY unit_id
   )
   SELECT
-    u.id, u.internal_name, u.hp, u.attack, u.range, u.melee_armor, u.pierce_armor,
+    u.id, u.internal_name, u.hp, u.attack, u.range, u.min_range, u.melee_armor, u.pierce_armor,
+    u.accuracy_percent, u.attack_delay_seconds, u.blast_width, u.garrison_capacity,
     u.line_of_sight, u.speed, u.reload_time, u.train_time,
     u.cost_food, u.cost_wood, u.cost_gold, u.cost_stone, u.image_path,
     n.name, s.text AS help_text,
@@ -111,10 +117,16 @@ function toUnit(row: UnitRow): Unit {
         bonus: a.amount,
       })),
       range: row.range > 0 ? row.range : undefined,
+      minRange: row.min_range > 0 ? row.min_range : undefined,
       attackSpeed: row.reload_time,
       movementSpeed: row.speed,
       lineOfSight: row.line_of_sight,
       trainingTime: row.train_time,
+      // Melee attacks never miss; the engine only rolls accuracy for projectiles.
+      accuracy: row.range > 0 ? (row.accuracy_percent ?? 100) : 100,
+      attackDelay: row.attack_delay_seconds ?? 0,
+      blastWidth: row.blast_width ?? 0,
+      garrisonCapacity: row.garrison_capacity ?? 0,
     },
     description: help.description,
     effects: help.effects,

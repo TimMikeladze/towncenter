@@ -10,6 +10,7 @@ import { BackLink, PageShell, Panel, Section } from "@/components/layout/page-sh
 import { Button } from "@/components/ui/button"
 import { getAllUnits, getCivilizationById, getUnitById } from "@/lib/data"
 import { BASE_MELEE_CLASS, BASE_PIERCE_CLASS } from "@/lib/game/classes"
+import { applyUpgrades, resolveUpgrades, upgradeCost } from "@/lib/game/upgrades"
 import type { Unit } from "@/lib/types"
 
 function MatchupGrid({ units, empty }: { units: Unit[]; empty: string }) {
@@ -57,6 +58,17 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
   const counterUnits = resolve(unit.counters)
   const upgradeChain = resolve([unit.upgradesFrom, unit.id, ...(unit.upgrades ?? [])].filter(Boolean) as string[])
 
+  // Blacksmith / university lines that reach this unit, all of them researched.
+  const imperialUpgrades = resolveUpgrades(unit, "Imperial").applied
+  const upgraded = applyUpgrades(unit, imperialUpgrades)
+  const upgradeRows = [
+    { label: "Attack", base: unit.stats.attack, next: upgraded.stats.attack },
+    { label: "Melee armor", base: unit.stats.meleeArmor, next: upgraded.stats.meleeArmor },
+    { label: "Pierce armor", base: unit.stats.pierceArmor, next: upgraded.stats.pierceArmor },
+    { label: "Range", base: unit.stats.range ?? 0, next: upgraded.stats.range ?? 0 },
+    { label: "Speed", base: unit.stats.movementSpeed, next: upgraded.stats.movementSpeed },
+  ].filter((row) => row.next !== row.base)
+
   // The full attack list includes base melee/pierce damage; only the
   // class-specific entries are bonuses worth showing.
   const attackBonuses = unit.stats.attackBonuses.filter(
@@ -88,6 +100,9 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
                 Counter analysis
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
+            </Button>
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/battle?a=${unit.id}`}>Simulate a fight</Link>
             </Button>
             <Button asChild size="sm" variant="outline">
               <Link href={`/compare?units=${unit.id}`}>Compare</Link>
@@ -134,6 +149,22 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
               {unit.stats.range ? <StatRow label="Range" value={unit.stats.range} /> : null}
               <StatRow label="Melee armor" value={unit.stats.meleeArmor} />
               <StatRow label="Pierce armor" value={unit.stats.pierceArmor} />
+              {unit.stats.minRange ? <StatRow label="Minimum range" value={unit.stats.minRange} /> : null}
+              {unit.stats.range && unit.stats.accuracy < 100 ? (
+                <StatRow label="Accuracy" value={`${unit.stats.accuracy}%`} />
+              ) : null}
+              {unit.stats.attackDelay > 0 ? (
+                <StatRow label="Attack delay" value={`${unit.stats.attackDelay.toFixed(2)}s`} />
+              ) : null}
+              {unit.stats.blastWidth > 0 ? (
+                <StatRow
+                  label="Blast radius"
+                  value={`${unit.stats.blastWidth} ${unit.stats.blastWidth === 1 ? "tile" : "tiles"}`}
+                />
+              ) : null}
+              {unit.stats.garrisonCapacity > 0 ? (
+                <StatRow label="Garrison" value={unit.stats.garrisonCapacity} />
+              ) : null}
             </div>
             {armorClasses.length > 0 && (
               <div className="mt-3 space-y-1.5 border-t pt-3">
@@ -151,6 +182,54 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
           </Panel>
         </Section>
       </div>
+
+      {upgradeRows.length > 0 && (
+        <Section
+          title="Fully upgraded"
+          description="Every blacksmith, university and dock upgrade that reaches this unit, researched."
+        >
+          <Panel className="space-y-3">
+            <div className="grid gap-x-6 sm:grid-cols-2">
+              {upgradeRows.map((row) => (
+                <StatRow
+                  key={row.label}
+                  label={row.label}
+                  value={
+                    <span className="flex items-baseline gap-1.5">
+                      <span className="text-muted-foreground">{row.base}</span>
+                      <ArrowRight className="h-3 w-3 self-center text-muted-foreground" aria-hidden />
+                      <span>{Number(row.next.toFixed(2))}</span>
+                      <span className="text-[11px]" style={{ color: "var(--success)" }}>
+                        +{Number((row.next - row.base).toFixed(2))}
+                      </span>
+                    </span>
+                  }
+                />
+              ))}
+            </div>
+            <div className="space-y-1.5 border-t pt-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="label-caps">Upgrade bill</p>
+                <CostChips cost={upgradeCost(imperialUpgrades)} />
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {imperialUpgrades.map((tech) => (
+                  <Chip key={tech.id} title={`${tech.building} · ${tech.age} Age`}>
+                    {tech.name}
+                  </Chip>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Civilization bonuses and unique techs are not included — pick a civ on the{" "}
+                <Link href={`/battle?a=${unit.id}`} className="underline underline-offset-2">
+                  battle simulator
+                </Link>{" "}
+                to see which of these it actually has.
+              </p>
+            </div>
+          </Panel>
+        </Section>
+      )}
 
       {unit.effects.length > 0 && (
         <Section title="Notes">

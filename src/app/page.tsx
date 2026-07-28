@@ -41,6 +41,9 @@ export default async function HomePage() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
+              <Link href="/battle">Simulate a battle</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
               <Link href="/civilizations">View civilizations</Link>
             </Button>
             <SearchTrigger className="hidden sm:block">

@@ -1,18 +1,32 @@
 import { getAllUnits } from "@/lib/data"
 import { BASE_MELEE_CLASS, BASE_PIERCE_CLASS } from "@/lib/game/classes"
 import { costEfficiency, resourceCost } from "@/lib/game/combat"
+import { applyUpgrades, resolveUpgrades } from "@/lib/game/upgrades"
+import type { Age } from "@/lib/types"
 import { CompareClient, type CompareUnit } from "./compare-client"
 
 const MAX_UNITS = 4
+const AGES: Age[] = ["Feudal", "Castle", "Imperial"]
 
-export default async function ComparePage({ searchParams }: { searchParams: Promise<{ units?: string }> }) {
+export default async function ComparePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ units?: string; age?: string }>
+}) {
   const params = await searchParams
   const allUnits = await getAllUnits()
+
+  const age = AGES.find((entry) => entry === params.age)
+  // With an age selected, every unit is shown as its fully upgraded self so
+  // the comparison is between what you would actually field.
+  const withUpgrades = (unit: (typeof allUnits)[number]) =>
+    age ? applyUpgrades(unit, resolveUpgrades(unit, age).applied) : unit
 
   const requested = (params.units ?? "").split(",").filter(Boolean).slice(0, MAX_UNITS)
   const selected = requested
     .map((id) => allUnits.find((unit) => unit.id === id))
     .filter((unit) => !!unit)
+    .map(withUpgrades)
     .map<CompareUnit>((unit) => ({
       id: unit.id,
       name: unit.name,
@@ -29,6 +43,8 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
       movementSpeed: unit.stats.movementSpeed,
       lineOfSight: unit.stats.lineOfSight,
       trainingTime: unit.stats.trainingTime,
+      accuracy: unit.stats.accuracy,
+      blastWidth: unit.stats.blastWidth,
       cost: Math.round(resourceCost(unit)),
       costBreakdown: unit.cost,
       efficiency: Number(costEfficiency(unit).toFixed(2)),
@@ -39,9 +55,15 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
   return (
     <CompareClient
-      units={allUnits.map((unit) => ({ id: unit.id, name: unit.name, type: unit.type }))}
+      units={allUnits.map((unit) => ({
+        id: unit.id,
+        name: unit.name,
+        type: unit.type,
+        image_path: unit.image_path ?? null,
+      }))}
       selected={selected}
       maxUnits={MAX_UNITS}
+      age={age ?? "none"}
     />
   )
 }

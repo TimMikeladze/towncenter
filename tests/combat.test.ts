@@ -12,6 +12,9 @@ function unit(overrides: {
   armorClasses?: { id: number; amount: number }[]
   attacks: { classId: number; bonus: number }[]
   reload?: number
+  accuracy?: number
+  range?: number
+  speed?: number
   cost?: { food?: number; wood?: number; gold?: number }
 }): Unit {
   return {
@@ -36,10 +39,15 @@ function unit(overrides: {
         class: `class-${attack.classId}`,
         bonus: attack.bonus,
       })),
+      range: overrides.range,
       attackSpeed: overrides.reload ?? 2,
-      movementSpeed: 1,
+      movementSpeed: overrides.speed ?? 1,
       lineOfSight: 4,
       trainingTime: 20,
+      accuracy: overrides.accuracy ?? 100,
+      attackDelay: 0,
+      blastWidth: 0,
+      garrisonCapacity: 0,
     },
     description: "",
     effects: [],
