@@ -8,56 +8,65 @@
 @custom-variant standalone (&:is([data-display-mode="standalone"] *));
 
 /*
- * Palette: parchment + bronze in light, iron night + gold in dark. The game's
- * own resource and age colours are first-class tokens so every page tints the
- * same numbers the same way.
+ * Palette: monochrome. Paper-white in light, ink-black in dark, and every
+ * piece of chrome — surfaces, buttons, borders, focus rings — is a pure
+ * neutral drawn from that one ramp.
+ *
+ * The game's own resource, age and unit-type colours stay hued, because they
+ * carry meaning no grey can: food is not wood, and a tech tree that ages
+ * from grey to grey is unreadable. They are held to a low chroma so they read
+ * as accents on a neutral page rather than a second, competing palette.
  */
 :root {
-  --background: #f2ebdd;
-  --foreground: #221a10;
-  --card: #fbf6ea;
-  --card-foreground: #221a10;
-  --popover: #fbf6ea;
-  --popover-foreground: #221a10;
-  --primary: #8a5a1a;
-  --primary-foreground: #fdf8ec;
-  --secondary: #e7dcc6;
-  --secondary-foreground: #3a2c19;
-  --muted: #e9e0cc;
-  --muted-foreground: #6b5b45;
-  --accent: #e2d4b4;
-  --accent-foreground: #2a2015;
-  --destructive: #9b2c2c;
-  --destructive-foreground: #fdf8ec;
-  --success: #4f7a3a;
-  --border: #d9cbae;
-  --input: #d9cbae;
-  --ring: #b8862f;
+  /* Scrollbars, native controls and the browser's own overscroll surface all
+     follow this. Without it a black page keeps light-mode scrollbars. */
+  color-scheme: light;
 
-  --resource-food: #c2452d;
-  --resource-wood: #4f7a3a;
-  --resource-gold: #b8862f;
-  --resource-stone: #6f7d8a;
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --secondary: #f1f1f1;
+  --secondary-foreground: #171717;
+  --muted: #f1f1f1;
+  --muted-foreground: #6e6e6e;
+  --accent: #e8e8e8;
+  --accent-foreground: #171717;
+  --destructive: #8f2620;
+  --destructive-foreground: #fafafa;
+  --success: #3f6b45;
+  --border: #e2e2e2;
+  --input: #e2e2e2;
+  --ring: #171717;
 
-  --age-dark: #6f6a63;
-  --age-feudal: #a9743a;
-  --age-castle: #6c8090;
-  --age-imperial: #b8862f;
+  --resource-food: #9c4a3c;
+  --resource-wood: #4e6b4a;
+  --resource-gold: #85662c;
+  --resource-stone: #566270;
 
-  --type-infantry: #a9552f;
-  --type-archer: #4f7a3a;
-  --type-cavalry: #96652a;
-  --type-siege: #64707c;
-  --type-monk: #3f6f8f;
-  --type-naval: #2c7382;
-  --type-economy: #7d7048;
-  --type-unique: #8a4f8f;
+  --age-dark: #6e6e6e;
+  --age-feudal: #7d6244;
+  --age-castle: #566270;
+  --age-imperial: #85662c;
 
-  --chart-1: #8a5a1a;
-  --chart-2: #4f7a3a;
-  --chart-3: #3f6f8f;
-  --chart-4: #a9552f;
-  --chart-5: #6f7d8a;
+  --type-infantry: #99503f;
+  --type-archer: #4e6b4a;
+  --type-cavalry: #7d6244;
+  --type-siege: #5c6670;
+  --type-monk: #476a80;
+  --type-naval: #3c6d72;
+  --type-economy: #6b6340;
+  --type-unique: #715179;
+
+  --chart-1: #171717;
+  --chart-2: #6e6e6e;
+  --chart-3: #476a80;
+  --chart-4: #99503f;
+  --chart-5: #a8a8a8;
 
   --radius: 0.5rem;
 
@@ -79,51 +88,53 @@
 }
 
 .dark {
-  --background: #12100c;
-  --foreground: #f0e7d6;
-  --card: #1a1610;
-  --card-foreground: #f0e7d6;
-  --popover: #1a1610;
-  --popover-foreground: #f0e7d6;
-  --primary: #d9a83c;
-  --primary-foreground: #1a1408;
-  --secondary: #241f18;
-  --secondary-foreground: #f0e7d6;
-  --muted: #221d16;
-  --muted-foreground: #a4917a;
-  --accent: #2b2318;
-  --accent-foreground: #f6eeda;
-  --destructive: #e07070;
-  --destructive-foreground: #1a1408;
-  --success: #86b56a;
-  --border: #322a20;
-  --input: #322a20;
-  --ring: #d9a83c;
+  color-scheme: dark;
 
-  --resource-food: #e0705c;
-  --resource-wood: #86b56a;
-  --resource-gold: #e0bd5c;
-  --resource-stone: #9fb0bd;
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #141414;
+  --card-foreground: #fafafa;
+  --popover: #141414;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #fafafa;
+  --muted: #1c1c1c;
+  --muted-foreground: #a1a1a1;
+  --accent: #272727;
+  --accent-foreground: #fafafa;
+  --destructive: #e58a84;
+  --destructive-foreground: #0a0a0a;
+  --success: #8bb890;
+  --border: #292929;
+  --input: #292929;
+  --ring: #d4d4d4;
 
-  --age-dark: #9c968c;
-  --age-feudal: #d09a5c;
-  --age-castle: #9fb0bd;
-  --age-imperial: #e0bd5c;
+  --resource-food: #d4907f;
+  --resource-wood: #94b98f;
+  --resource-gold: #c9ab73;
+  --resource-stone: #9aa7b4;
 
-  --type-infantry: #e08a63;
-  --type-archer: #8fc06f;
-  --type-cavalry: #dcae5f;
-  --type-siege: #9aa7b4;
-  --type-monk: #7cb4d6;
-  --type-naval: #5cb6c4;
-  --type-economy: #c4b177;
-  --type-unique: #c58fca;
+  --age-dark: #a1a1a1;
+  --age-feudal: #c2a17c;
+  --age-castle: #9aa7b4;
+  --age-imperial: #c9ab73;
 
-  --chart-1: #d9a83c;
-  --chart-2: #86b56a;
-  --chart-3: #7cb4d6;
-  --chart-4: #e08a63;
-  --chart-5: #9fb0bd;
+  --type-infantry: #d59a86;
+  --type-archer: #94b98f;
+  --type-cavalry: #c6ab80;
+  --type-siege: #a3adb8;
+  --type-monk: #8fb4cc;
+  --type-naval: #7fb6bd;
+  --type-economy: #bbb289;
+  --type-unique: #b896c1;
+
+  --chart-1: #fafafa;
+  --chart-2: #a1a1a1;
+  --chart-3: #8fb4cc;
+  --chart-4: #d59a86;
+  --chart-5: #6b6b6b;
 }
 
 @theme inline {
@@ -207,10 +218,13 @@
     line-height: 1.5;
     min-height: 100dvh;
     overscroll-behavior-y: none;
-    /* Parchment grain in light, quiet vignette in dark. No image assets. */
+    /*
+     * A single neutral wash off the top of the page so the flat monochrome
+     * canvas still has somewhere to fall away to. Tinted from the foreground,
+     * so it darkens paper in light and lifts ink in dark. No image assets.
+     */
     background-image:
-      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 55%),
-      radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--ring) 5%, transparent), transparent 45%);
+      radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--foreground) 4%, transparent), transparent 70%);
     background-attachment: fixed;
     /* Native apps do not flash a grey box under your thumb. */
     -webkit-tap-highlight-color: transparent;
@@ -310,7 +324,7 @@
     }
   }
 
-  /* Section rule with a bronze cap, used above every section title. */
+  /* Section rule in the ink colour, used above every section title. */
   .rule-accent::before {
     content: "";
     display: block;

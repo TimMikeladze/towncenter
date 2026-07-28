@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "Town Center",
-    // Translucent lets the parchment/iron background run under the status bar
-    // instead of leaving a white strip above the header.
+    // Translucent lets the page background run under the status bar instead
+    // of leaving a strip of the wrong shade above the header.
     statusBarStyle: "black-translucent",
   },
   formatDetection: {
@@ -54,8 +54,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f2ebdd" },
-    { media: "(prefers-color-scheme: dark)", color: "#12100c" },
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
   viewportFit: "cover",
   // The on-screen keyboard shrinks the layout viewport, so sheets and their

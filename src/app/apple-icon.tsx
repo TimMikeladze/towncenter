@@ -7,7 +7,7 @@ export const size = { width: 180, height: 180 }
 export const contentType = "image/png"
 
 export default function AppleIcon() {
-  const bar = { backgroundColor: "#d9a83c", borderRadius: 2 }
+  const bar = { backgroundColor: "#fafafa", borderRadius: 2 }
 
   return new ImageResponse(
     <div
@@ -19,7 +19,7 @@ export default function AppleIcon() {
         justifyContent: "center",
         gap: 9,
         // Opaque: iOS composites home-screen icons on white otherwise.
-        background: "linear-gradient(180deg, #1c1811 0%, #0e0c08 100%)",
+        background: "linear-gradient(180deg, #1c1c1c 0%, #050505 100%)",
       }}
     >
       {[0, 1].map((column) => (
