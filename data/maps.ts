@@ -1,6 +1,6 @@
-import type { Map } from "@/lib/types"
+import type { GameMap } from "@/lib/types"
 
-export const maps: Map[] = [
+export const maps: GameMap[] = [
   {
     id: "arabia",
     name: "Arabia",

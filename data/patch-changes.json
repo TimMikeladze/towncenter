@@ -1,0 +1,1210 @@
+{
+  "base": "HEAD",
+  "tables": {
+    "units": {
+      "added": [
+        {
+          "id": 759,
+          "name": "Huskarl"
+        },
+        {
+          "id": 761,
+          "name": "Elite Huskarl"
+        },
+        {
+          "id": 886,
+          "name": "Tarkan"
+        },
+        {
+          "id": 887,
+          "name": "Elite Tarkan"
+        },
+        {
+          "id": 1260,
+          "name": "Elite Kipchak"
+        },
+        {
+          "id": 2550,
+          "name": "Champi Scout"
+        },
+        {
+          "id": 2552,
+          "name": "Champi Warrior"
+        },
+        {
+          "id": 2554,
+          "name": "Elite Champi Warrior"
+        },
+        {
+          "id": 2562,
+          "name": "Guecha Warrior"
+        },
+        {
+          "id": 2564,
+          "name": "Elite Guecha Warrior"
+        },
+        {
+          "id": 2566,
+          "name": "Kona"
+        },
+        {
+          "id": 2568,
+          "name": "Elite Kona"
+        },
+        {
+          "id": 2569,
+          "name": "Bolas Rider"
+        },
+        {
+          "id": 2571,
+          "name": "Elite Bolas Rider"
+        },
+        {
+          "id": 2579,
+          "name": "Blackwood Archer"
+        },
+        {
+          "id": 2581,
+          "name": "Elite Blackwood Archer"
+        },
+        {
+          "id": 2582,
+          "name": "Ibirapema Warrior"
+        },
+        {
+          "id": 2584,
+          "name": "Elite Ibirapema Warrior"
+        },
+        {
+          "id": 2586,
+          "name": "Temple Guard"
+        },
+        {
+          "id": 2587,
+          "name": "Elite Temple Guard"
+        },
+        {
+          "id": 2588,
+          "name": "Champi Runner"
+        },
+        {
+          "id": 2626,
+          "name": "Hulk"
+        },
+        {
+          "id": 2627,
+          "name": "War Hulk"
+        },
+        {
+          "id": 2628,
+          "name": "Carrack"
+        },
+        {
+          "id": 2633,
+          "name": "Catapult Galleon"
+        }
+      ],
+      "removed": [
+        {
+          "id": 999440,
+          "name": "PETARD"
+        }
+      ],
+      "changed": [
+        {
+          "id": 13,
+          "name": "Fishing Ship",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 60,
+              "after": 50
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 1
+            },
+            {
+              "field": "pierce armor",
+              "before": 4,
+              "after": 1
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "name": "War Galley",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 135,
+              "after": 125
+            },
+            {
+              "field": "pierce armor",
+              "before": 6,
+              "after": 4
+            },
+            {
+              "field": "speed",
+              "before": 1.43,
+              "after": 1.36
+            },
+            {
+              "field": "train time",
+              "before": 36,
+              "after": 27
+            }
+          ]
+        },
+        {
+          "id": 185,
+          "name": "Slinger",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 40,
+              "after": 35
+            },
+            {
+              "field": "food cost",
+              "before": 40,
+              "after": 50
+            },
+            {
+              "field": "wood cost",
+              "before": 0,
+              "after": 25
+            },
+            {
+              "field": "gold cost",
+              "before": 40,
+              "after": 0
+            }
+          ]
+        },
+        {
+          "id": 250,
+          "name": "Longboat",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 130,
+              "after": 125
+            },
+            {
+              "field": "attack",
+              "before": 7,
+              "after": 5
+            },
+            {
+              "field": "pierce armor",
+              "before": 6,
+              "after": 3
+            },
+            {
+              "field": "speed",
+              "before": 1.54,
+              "after": 1.46
+            }
+          ]
+        },
+        {
+          "id": 420,
+          "name": "Cannon Galleon",
+          "fields": [
+            {
+              "field": "pierce armor",
+              "before": 6,
+              "after": 5
+            },
+            {
+              "field": "speed",
+              "before": 1.1,
+              "after": 1.05
+            }
+          ]
+        },
+        {
+          "id": 442,
+          "name": "Galleon",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 165,
+              "after": 155
+            },
+            {
+              "field": "attack",
+              "before": 8,
+              "after": 9
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 6
+            },
+            {
+              "field": "speed",
+              "before": 1.43,
+              "after": 1.36
+            },
+            {
+              "field": "train time",
+              "before": 36,
+              "after": 27
+            }
+          ]
+        },
+        {
+          "id": 527,
+          "name": "Demolition Ship",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 60,
+              "after": 50
+            },
+            {
+              "field": "attack",
+              "before": 110,
+              "after": 95
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 1
+            },
+            {
+              "field": "pierce armor",
+              "before": 3,
+              "after": 0
+            },
+            {
+              "field": "speed",
+              "before": 1.6,
+              "after": 1.52
+            },
+            {
+              "field": "wood cost",
+              "before": 70,
+              "after": 45
+            },
+            {
+              "field": "gold cost",
+              "before": 50,
+              "after": 80
+            }
+          ]
+        },
+        {
+          "id": 528,
+          "name": "Heavy Demolition Ship",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 140,
+              "after": 120
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 2
+            },
+            {
+              "field": "pierce armor",
+              "before": 5,
+              "after": 0
+            },
+            {
+              "field": "speed",
+              "before": 1.6,
+              "after": 1.52
+            },
+            {
+              "field": "wood cost",
+              "before": 70,
+              "after": 45
+            },
+            {
+              "field": "gold cost",
+              "before": 50,
+              "after": 80
+            }
+          ]
+        },
+        {
+          "id": 529,
+          "name": "Fire Ship",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 2,
+              "after": 3
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 2
+            },
+            {
+              "field": "pierce armor",
+              "before": 6,
+              "after": 4
+            },
+            {
+              "field": "speed",
+              "before": 1.35,
+              "after": 1.47
+            },
+            {
+              "field": "train time",
+              "before": 36,
+              "after": 27
+            }
+          ]
+        },
+        {
+          "id": 532,
+          "name": "Fast Fire Ship",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 3,
+              "after": 4
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 3
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 7
+            },
+            {
+              "field": "speed",
+              "before": 1.43,
+              "after": 1.56
+            },
+            {
+              "field": "train time",
+              "before": 36,
+              "after": 27
+            }
+          ]
+        },
+        {
+          "id": 533,
+          "name": "Elite Longboat",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 160,
+              "after": 130
+            },
+            {
+              "field": "attack",
+              "before": 8,
+              "after": 7
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 1
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 6
+            },
+            {
+              "field": "speed",
+              "before": 1.54,
+              "after": 1.46
+            }
+          ]
+        },
+        {
+          "id": 539,
+          "name": "Galley",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 120,
+              "after": 110
+            },
+            {
+              "field": "pierce armor",
+              "before": 6,
+              "after": 3
+            },
+            {
+              "field": "speed",
+              "before": 1.43,
+              "after": 1.36
+            },
+            {
+              "field": "train time",
+              "before": 60,
+              "after": 45
+            }
+          ]
+        },
+        {
+          "id": 545,
+          "name": "Transport Ship",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 100,
+              "after": 70
+            },
+            {
+              "field": "melee armor",
+              "before": 4,
+              "after": 0
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 2
+            }
+          ]
+        },
+        {
+          "id": 691,
+          "name": "Elite Cannon Galleon",
+          "fields": [
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 6
+            },
+            {
+              "field": "speed",
+              "before": 1.1,
+              "after": 1.05
+            }
+          ]
+        },
+        {
+          "id": 827,
+          "name": "War Wagon",
+          "fields": [
+            {
+              "field": "pierce armor",
+              "before": 3,
+              "after": 2
+            }
+          ]
+        },
+        {
+          "id": 831,
+          "name": "Turtle Ship",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 200,
+              "after": 275
+            },
+            {
+              "field": "attack",
+              "before": 4,
+              "after": 9
+            },
+            {
+              "field": "melee armor",
+              "before": 6,
+              "after": 2
+            },
+            {
+              "field": "speed",
+              "before": 1.05,
+              "after": 1
+            },
+            {
+              "field": "gold cost",
+              "before": 180,
+              "after": 130
+            }
+          ]
+        },
+        {
+          "id": 832,
+          "name": "Elite Turtle Ship",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 300,
+              "after": 350
+            },
+            {
+              "field": "attack",
+              "before": 4,
+              "after": 13
+            },
+            {
+              "field": "melee armor",
+              "before": 8,
+              "after": 3
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 12
+            },
+            {
+              "field": "speed",
+              "before": 1.05,
+              "after": 1
+            },
+            {
+              "field": "gold cost",
+              "before": 180,
+              "after": 130
+            }
+          ]
+        },
+        {
+          "id": 879,
+          "name": "Kamayuk",
+          "fields": [
+            {
+              "field": "food cost",
+              "before": 60,
+              "after": 70
+            }
+          ]
+        },
+        {
+          "id": 881,
+          "name": "Elite Kamayuk",
+          "fields": [
+            {
+              "field": "pierce armor",
+              "before": 0,
+              "after": 1
+            },
+            {
+              "field": "food cost",
+              "before": 60,
+              "after": 70
+            }
+          ]
+        },
+        {
+          "id": 1004,
+          "name": "Caravel",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 6,
+              "after": 4
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 5
+            },
+            {
+              "field": "speed",
+              "before": 1.43,
+              "after": 1.36
+            }
+          ]
+        },
+        {
+          "id": 1006,
+          "name": "Elite Caravel",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 8,
+              "after": 7
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 6
+            },
+            {
+              "field": "speed",
+              "before": 1.43,
+              "after": 1.36
+            }
+          ]
+        },
+        {
+          "id": 1103,
+          "name": "Fire Galley",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 100,
+              "after": 110
+            },
+            {
+              "field": "attack",
+              "before": 1,
+              "after": 2
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 1
+            },
+            {
+              "field": "speed",
+              "before": 1.3,
+              "after": 1.36
+            },
+            {
+              "field": "train time",
+              "before": 65,
+              "after": 49
+            }
+          ]
+        },
+        {
+          "id": 1104,
+          "name": "Demolition Raft",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 45,
+              "after": 40
+            },
+            {
+              "field": "attack",
+              "before": 90,
+              "after": 75
+            },
+            {
+              "field": "pierce armor",
+              "before": 2,
+              "after": 0
+            },
+            {
+              "field": "speed",
+              "before": 1.5,
+              "after": 1.42
+            },
+            {
+              "field": "wood cost",
+              "before": 70,
+              "after": 45
+            },
+            {
+              "field": "gold cost",
+              "before": 50,
+              "after": 80
+            }
+          ]
+        },
+        {
+          "id": 1105,
+          "name": "Siege Tower",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 220,
+              "after": 175
+            },
+            {
+              "field": "speed",
+              "before": 0.8,
+              "after": 0.96
+            }
+          ]
+        },
+        {
+          "id": 1302,
+          "name": "Dragon Ship",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 150,
+              "after": 135
+            },
+            {
+              "field": "attack",
+              "before": 4,
+              "after": 5
+            },
+            {
+              "field": "melee armor",
+              "before": 2,
+              "after": 3
+            },
+            {
+              "field": "pierce armor",
+              "before": 8,
+              "after": 7
+            },
+            {
+              "field": "speed",
+              "before": 1.4,
+              "after": 1.56
+            },
+            {
+              "field": "train time",
+              "before": 36,
+              "after": 27
+            }
+          ]
+        },
+        {
+          "id": 1699,
+          "name": "Flemish Militia",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 45,
+              "after": 40
+            }
+          ]
+        },
+        {
+          "id": 1738,
+          "name": "Ratha",
+          "fields": [
+            {
+              "field": "pierce armor",
+              "before": 2,
+              "after": 1
+            }
+          ]
+        },
+        {
+          "id": 1750,
+          "name": "Thirisadai",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 9,
+              "after": 10
+            },
+            {
+              "field": "pierce armor",
+              "before": 10,
+              "after": 11
+            },
+            {
+              "field": "speed",
+              "before": 1.3,
+              "after": 1.25
+            }
+          ]
+        },
+        {
+          "id": 1759,
+          "name": "Ratha",
+          "fields": [
+            {
+              "field": "pierce armor",
+              "before": 2,
+              "after": 1
+            }
+          ]
+        },
+        {
+          "id": 1795,
+          "name": "Dromon",
+          "fields": [
+            {
+              "field": "speed",
+              "before": 1.2,
+              "after": 1.15
+            }
+          ]
+        },
+        {
+          "id": 1802,
+          "name": "Elite Composite Bowman",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 45,
+              "after": 50
+            }
+          ]
+        },
+        {
+          "id": 1811,
+          "name": "Warrior Priest",
+          "fields": [
+            {
+              "field": "food cost",
+              "before": 30,
+              "after": 40
+            }
+          ]
+        },
+        {
+          "id": 1901,
+          "name": "Fire Lancer",
+          "fields": [
+            {
+              "field": "train time",
+              "before": 32,
+              "after": 35
+            },
+            {
+              "field": "wood cost",
+              "before": 40,
+              "after": 45
+            }
+          ]
+        },
+        {
+          "id": 1903,
+          "name": "Elite Fire Lancer",
+          "fields": [
+            {
+              "field": "wood cost",
+              "before": 40,
+              "after": 45
+            }
+          ]
+        },
+        {
+          "id": 1904,
+          "name": "Rocket Cart",
+          "fields": [
+            {
+              "field": "wood cost",
+              "before": 130,
+              "after": 135
+            }
+          ]
+        },
+        {
+          "id": 1907,
+          "name": "Heavy Rocket Cart",
+          "fields": [
+            {
+              "field": "wood cost",
+              "before": 130,
+              "after": 135
+            }
+          ]
+        },
+        {
+          "id": 1908,
+          "name": "Iron Pagoda",
+          "fields": [
+            {
+              "field": "reload time",
+              "before": 2.16,
+              "after": 2.15
+            }
+          ]
+        },
+        {
+          "id": 1910,
+          "name": "Elite Iron Pagoda",
+          "fields": [
+            {
+              "field": "reload time",
+              "before": 2.16,
+              "after": 2.15
+            }
+          ]
+        },
+        {
+          "id": 1948,
+          "name": "Lou Chuan",
+          "fields": [
+            {
+              "field": "speed",
+              "before": 1.15,
+              "after": 1.1
+            },
+            {
+              "field": "reload time",
+              "before": 5.0,
+              "after": 5.5
+            }
+          ]
+        },
+        {
+          "id": 1949,
+          "name": "Tiger Cavalry",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 115,
+              "after": 110
+            },
+            {
+              "field": "train time",
+              "before": 15,
+              "after": 18
+            }
+          ]
+        },
+        {
+          "id": 1951,
+          "name": "Elite Tiger Cavalry",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 130,
+              "after": 125
+            },
+            {
+              "field": "train time",
+              "before": 15,
+              "after": 18
+            }
+          ]
+        },
+        {
+          "id": 1952,
+          "name": "Xianbei Raider",
+          "fields": [
+            {
+              "field": "train time",
+              "before": 26,
+              "after": 29
+            },
+            {
+              "field": "wood cost",
+              "before": 60,
+              "after": 65
+            }
+          ]
+        },
+        {
+          "id": 1968,
+          "name": "Fire Archer",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 4,
+              "after": 5
+            }
+          ]
+        },
+        {
+          "id": 1970,
+          "name": "Elite Fire Archer",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 5,
+              "after": 6
+            }
+          ]
+        },
+        {
+          "id": 1974,
+          "name": "Jian Swordsman",
+          "fields": [
+            {
+              "field": "melee armor",
+              "before": 2,
+              "after": 0
+            }
+          ]
+        }
+      ]
+    },
+    "buildings": {
+      "added": [
+        {
+          "id": 2556,
+          "name": "Settlement"
+        }
+      ],
+      "removed": [],
+      "changed": [
+        {
+          "id": 45,
+          "name": "Dock",
+          "fields": [
+            {
+              "field": "attack",
+              "before": 0,
+              "after": 3
+            },
+            {
+              "field": "range",
+              "before": 0.0,
+              "after": 6
+            },
+            {
+              "field": "line of sight",
+              "before": 6.0,
+              "after": 8
+            },
+            {
+              "field": "garrison",
+              "before": 10,
+              "after": 5
+            }
+          ]
+        },
+        {
+          "id": 199,
+          "name": "Fish Trap",
+          "fields": [
+            {
+              "field": "HP",
+              "before": 50,
+              "after": 250
+            },
+            {
+              "field": "melee armor",
+              "before": 0,
+              "after": 1
+            },
+            {
+              "field": "pierce armor",
+              "before": 0,
+              "after": 1
+            }
+          ]
+        },
+        {
+          "id": 1806,
+          "name": "Fortified Church",
+          "fields": [
+            {
+              "field": "range",
+              "before": 6.0,
+              "after": 4
+            }
+          ]
+        }
+      ]
+    },
+    "techs": {
+      "added": [
+        {
+          "id": 34,
+          "name": "Warships"
+        },
+        {
+          "id": 35,
+          "name": "Heavy Warships"
+        },
+        {
+          "id": 906,
+          "name": "Fishing Lines"
+        },
+        {
+          "id": 907,
+          "name": "Carvel Hull"
+        },
+        {
+          "id": 908,
+          "name": "Clinker Construction"
+        },
+        {
+          "id": 909,
+          "name": "Siphons"
+        },
+        {
+          "id": 910,
+          "name": "Incendiaries"
+        },
+        {
+          "id": 1365,
+          "name": "Herbalism"
+        },
+        {
+          "id": 1366,
+          "name": "Fabric Shields"
+        },
+        {
+          "id": 1379,
+          "name": "Malon"
+        },
+        {
+          "id": 1380,
+          "name": "Butalmapu"
+        },
+        {
+          "id": 1392,
+          "name": "Caciques"
+        },
+        {
+          "id": 1393,
+          "name": "Curare"
+        },
+        {
+          "id": 1404,
+          "name": "Circumnavigation"
+        }
+      ],
+      "removed": [
+        {
+          "id": 572,
+          "name": "Portuguese UT"
+        }
+      ],
+      "changed": [
+        {
+          "id": 65,
+          "name": "Gillnets",
+          "fields": [
+            {
+              "field": "research time",
+              "before": 45,
+              "after": 30
+            },
+            {
+              "field": "food cost",
+              "before": 150,
+              "after": 100
+            },
+            {
+              "field": "wood cost",
+              "before": 200,
+              "after": 125
+            }
+          ]
+        },
+        {
+          "id": 374,
+          "name": "Careening",
+          "fields": [
+            {
+              "field": "food cost",
+              "before": 250,
+              "after": 100
+            },
+            {
+              "field": "gold cost",
+              "before": 150,
+              "after": 200
+            }
+          ]
+        },
+        {
+          "id": 375,
+          "name": "Dry Dock",
+          "fields": [
+            {
+              "field": "food cost",
+              "before": 600,
+              "after": 200
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "civilizations": {
+    "added": [
+      "Mapuche",
+      "Muisca",
+      "Tupi"
+    ],
+    "removed": []
+  }
+}

@@ -18,17 +18,20 @@ export function SecondaryNav({ items, defaultValue, currentValue }: SecondaryNav
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const activeValue = currentValue || searchParams.get('type') || defaultValue
+  const activeValue = currentValue || searchParams.get("type") || defaultValue
 
-  const handleValueChange = useCallback((value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    if (value === defaultValue) {
-      params.delete('type')
-    } else {
-      params.set('type', value)
-    }
-    router.push(`?${params.toString()}`)
-  }, [router, searchParams, defaultValue])
+  const handleValueChange = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (value === defaultValue) {
+        params.delete("type")
+      } else {
+        params.set("type", value)
+      }
+      router.push(`?${params.toString()}`)
+    },
+    [router, searchParams, defaultValue],
+  )
 
   return (
     <div className="border-b">
@@ -36,12 +39,13 @@ export function SecondaryNav({ items, defaultValue, currentValue }: SecondaryNav
         <div className="flex gap-4 overflow-x-auto">
           {items.map((item) => (
             <button
+              type="button"
               key={item.value}
               onClick={() => handleValueChange(item.value)}
               className={`px-4 py-2 text-sm font-mono uppercase tracking-wide transition-colors ${
                 activeValue === item.value
-                  ? 'border-b-2 border-foreground font-bold'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? "border-b-2 border-foreground font-bold"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {item.label}

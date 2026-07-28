@@ -1,7 +1,8 @@
+import { Castle, Home, Map as MapIcon, Network, Scroll, Search, Shield, Swords, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { SearchTrigger } from "@/components/search-trigger"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Swords, Castle, Network, Shield, TrendingUp, Search, Home, Scroll, Map } from "lucide-react"
 
 export default function HomePage() {
   return (
@@ -132,7 +133,7 @@ export default function HomePage() {
                 <CardHeader className="space-y-2 py-3 px-4">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 border">
-                      <Map className="h-4 w-4" />
+                      <MapIcon className="h-4 w-4" />
                     </div>
                     <CardTitle className="text-sm font-mono font-bold tracking-tight uppercase">Maps</CardTitle>
                   </div>
@@ -213,7 +214,7 @@ export default function HomePage() {
               </Card>
             </Link>
 
-            <Link href="/search" className="group">
+            <SearchTrigger className="group w-full text-left">
               <Card className="border-2 card-minimal cursor-pointer h-full overflow-hidden bg-card">
                 <CardHeader className="space-y-2 py-3 px-4">
                   <div className="flex items-center gap-2">
@@ -232,7 +233,7 @@ export default function HomePage() {
                   </p>
                 </CardContent>
               </Card>
-            </Link>
+            </SearchTrigger>
           </div>
 
           <div className="pt-8 border-t">

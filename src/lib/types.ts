@@ -1,18 +1,9 @@
-export type ArmorClass =
-  | "Infantry"
-  | "Archer"
-  | "Cavalry"
-  | "Siege"
-  | "Monk"
-  | "Eagle Warrior"
-  | "Camel"
-  | "Ship"
-  | "Building"
-  | "Castle"
-  | "Stone Defense"
-  | "Ram"
-  | "Unique Unit"
-  | "Spearman"
+/** Armour/attack class as carried by the game data, with its display name. */
+export interface ArmorClassRef {
+  id: number
+  name: string
+  amount: number
+}
 
 export type AttackType = "Melee" | "Pierce"
 
@@ -22,8 +13,8 @@ export interface UnitStats {
   attackType: AttackType
   meleeArmor: number
   pierceArmor: number
-  armorClasses: ArmorClass[]
-  attackBonuses: { class: ArmorClass; bonus: number }[]
+  armorClasses: ArmorClassRef[]
+  attackBonuses: { classId: number; class: string; bonus: number }[]
   range?: number
   attackSpeed: number
   movementSpeed: number
@@ -38,7 +29,7 @@ export interface UnitCost {
   stone?: number
 }
 
-export type UnitType = "Infantry" | "Archer" | "Cavalry" | "Siege" | "Monk" | "Naval" | "Unique"
+export type UnitType = "Infantry" | "Archer" | "Cavalry" | "Siege" | "Monk" | "Naval" | "Economy" | "Unique"
 
 export type Age = "Dark" | "Feudal" | "Castle" | "Imperial"
 
@@ -50,10 +41,13 @@ export interface Unit {
   cost: UnitCost
   stats: UnitStats
   description: string
+  effects: string[] // upgrade / behaviour notes from the game help text
   counters: string[] // Unit IDs that counter this unit
   goodAgainst: string[] // Unit IDs this unit is good against
-  upgrades?: string[] // Upgrade IDs
+  upgrades?: string[] // Unit IDs later in the upgrade line
+  upgradesFrom?: string // Unit ID this unit upgrades from
   civSpecific?: string // Civ ID if unique unit
+  availableToCivs?: string[] // Civ IDs that can train this unit
   image_path?: string | null // Path to unit image
 }
 
@@ -72,16 +66,18 @@ export interface TechTreeNode {
 export interface Civilization {
   id: string
   name: string
-  type: "Archer" | "Cavalry" | "Infantry" | "Defensive" | "Naval" | "Monk"
+  type: string // primary focus, e.g. "Infantry"
+  types: string[] // every focus listed by the game, e.g. ["Infantry", "Naval"]
   bonuses: CivBonus[]
   uniqueUnits: string[] // Unit IDs
   uniqueTechs: { castle: string; imperial: string }
   teamBonus: string
   strengths: string[]
-  weaknesses: string[]
+  uniqueTechDescriptions: string[]
   techTree: {
     missingUnits: string[]
     missingTechs: string[]
+    missingBuildings: string[]
   }
   image_path?: string | null // Path to civilization image
 }
@@ -126,27 +122,14 @@ export interface Building {
   trainsUnits?: string[] // Unit IDs
   researchesTechs?: string[] // Tech IDs
   upgrades?: string[]
+  availableToCivs?: string[] // Civ IDs that can build this
   image_path?: string | null // Path to building image
 }
 
 export interface Technology {
   id: string
   name: string
-  category:
-    | "Town Center"
-    | "Mill"
-    | "Lumber"
-    | "Mining"
-    | "Market"
-    | "Monastery"
-    | "Dock"
-    | "University"
-    | "Blacksmith"
-    | "Stable"
-    | "Archery"
-    | "Barracks"
-    | "Castle"
-    | "Unique"
+  category: string // the building it is researched at, or "Unique"
   age: Age
   cost: UnitCost
   researchTime: number // in seconds
@@ -155,10 +138,11 @@ export interface Technology {
   affectedUnits?: string[]
   affectedBuildings?: string[]
   civSpecific?: string
+  availableToCivs?: string[]
   image_path?: string | null // Path to technology image
 }
 
-export interface Map {
+export interface GameMap {
   id: string
   name: string
   type: "Land" | "Water" | "Hybrid"

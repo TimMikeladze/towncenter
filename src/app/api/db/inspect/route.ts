@@ -1,102 +1,70 @@
-import { NextResponse } from 'next/server'
-import { getConnection } from '@/lib/db/connection'
+import { NextResponse } from "next/server"
+import { getConnection } from "@/lib/db/connection"
+
+/** Tables live in an in-memory DuckDB built from the parquet export. */
+async function listTables(): Promise<string[]> {
+  const conn = await getConnection()
+  const reader = await conn.runAndReadAll(
+    `SELECT table_name FROM information_schema.tables WHERE table_schema = 'main' ORDER BY table_name`,
+  )
+  return reader.getRowObjects().map((row) => String(row.table_name))
+}
 
 export async function GET(request: Request) {
   // Only allow in development
-  if (process.env.NODE_ENV !== 'development') {
-    return NextResponse.json(
-      { error: 'Database inspection is only available in development' },
-      { status: 403 }
-    )
+  if (process.env.NODE_ENV !== "development") {
+    return NextResponse.json({ error: "Database inspection is only available in development" }, { status: 403 })
   }
 
   const { searchParams } = new URL(request.url)
-  const action = searchParams.get('action') || 'tables'
-  const table = searchParams.get('table')
-  const query = searchParams.get('query')
+  const action = searchParams.get("action") || "tables"
+  const table = searchParams.get("table")
 
   try {
     const conn = await getConnection()
+    // Every table name that reaches SQL is checked against this list, so the
+    // route can never interpolate arbitrary text even by accident.
+    const allowedTables = await listTables()
 
-    // List all tables
-    if (action === 'tables') {
+    if (action === "tables") {
       const reader = await conn.runAndReadAll(`
         SELECT table_name, column_name, data_type
         FROM information_schema.columns
         WHERE table_schema = 'main'
         ORDER BY table_name, ordinal_position
       `)
-      const columns = reader.getRowObjects()
 
-      // Group by table
-      const tables = columns.reduce((acc: any, col: any) => {
-        if (!acc[col.table_name]) {
-          acc[col.table_name] = []
-        }
-        acc[col.table_name].push({
-          name: col.column_name,
-          type: col.data_type
-        })
-        return acc
-      }, {})
+      const tables: Record<string, { name: string; type: string }[]> = {}
+      for (const column of reader.getRowObjects()) {
+        const name = String(column.table_name)
+        tables[name] ??= []
+        tables[name].push({ name: String(column.column_name), type: String(column.data_type) })
+      }
 
       return NextResponse.json({ tables })
     }
 
-    // Show sample data from a table
-    if (action === 'sample' && table) {
-      const reader = await conn.runAndReadAll(`
-        SELECT * FROM ${table} LIMIT 10
-      `)
-      const rows = reader.getRowObjects()
-
-      return NextResponse.json({
-        table,
-        count: rows.length,
-        rows
-      })
-    }
-
-    // Execute custom query
-    if (action === 'query' && query) {
-      const reader = await conn.runAndReadAll(query)
-      const rows = reader.getRowObjects()
-
-      return NextResponse.json({
-        query,
-        count: rows.length,
-        rows
-      })
-    }
-
-    // Table statistics
-    if (action === 'stats') {
-      const tableNames = [
-        'civilizations', 'units', 'buildings', 'techs',
-        'civ_buildings', 'civ_units', 'civ_techs', 'civ_uniques',
-        'unit_attacks', 'unit_armours', 'building_attacks', 'building_armours',
-        'unit_upgrades', 'node_types', 'age_names', 'civ_names', 'civ_helptexts'
-      ]
-
-      const stats: any = {}
-      for (const tableName of tableNames) {
-        const reader = await conn.runAndReadAll(`SELECT COUNT(*) as count FROM ${tableName}`)
-        const rows = reader.getRowObjects()
-        stats[tableName] = rows[0].count
+    if (action === "sample") {
+      if (!table || !allowedTables.includes(table)) {
+        return NextResponse.json({ error: `Unknown table. Available: ${allowedTables.join(", ")}` }, { status: 400 })
       }
+      const reader = await conn.runAndReadAll(`SELECT * FROM "${table}" LIMIT 10`)
+      const rows = reader.getRowObjects()
+      return NextResponse.json({ table, count: rows.length, rows })
+    }
 
+    if (action === "stats") {
+      const stats: Record<string, number> = {}
+      for (const tableName of allowedTables) {
+        const reader = await conn.runAndReadAll(`SELECT COUNT(*) AS count FROM "${tableName}"`)
+        stats[tableName] = Number(reader.getRowObjects()[0].count)
+      }
       return NextResponse.json({ stats })
     }
 
-    return NextResponse.json({
-      error: 'Invalid action. Use: tables, sample, query, or stats'
-    }, { status: 400 })
-
+    return NextResponse.json({ error: "Invalid action. Use: tables, sample, or stats" }, { status: 400 })
   } catch (error) {
-    console.error('[DB Inspect] Error:', error)
-    return NextResponse.json(
-      { error: String(error) },
-      { status: 500 }
-    )
+    console.error("[DB Inspect] Error:", error)
+    return NextResponse.json({ error: String(error) }, { status: 500 })
   }
 }

@@ -1,106 +1,115 @@
-{"unit_id":6,"tech_id":98,"internal_name":"Elite Skirmisher","research_time":50,"cost_food":0,"cost_wood":230,"cost_gold":130,"cost_stone":0}
-{"unit_id":21,"tech_id":34,"internal_name":"War Galley","research_time":50,"cost_food":230,"cost_wood":0,"cost_gold":100,"cost_stone":0}
-{"unit_id":24,"tech_id":100,"internal_name":"Crossbow","research_time":35,"cost_food":175,"cost_wood":0,"cost_gold":100,"cost_stone":0}
-{"unit_id":75,"tech_id":222,"internal_name":"Man-At-Arms","research_time":40,"cost_food":100,"cost_wood":0,"cost_gold":40,"cost_stone":0}
-{"unit_id":77,"tech_id":207,"internal_name":"Long Swordsman","research_time":40,"cost_food":150,"cost_wood":0,"cost_gold":65,"cost_stone":0}
-{"unit_id":207,"tech_id":521,"internal_name":"Heavy Camel","research_time":125,"cost_food":1000,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":283,"tech_id":209,"internal_name":"Cavalier","research_time":80,"cost_food":300,"cost_wood":0,"cost_gold":300,"cost_stone":0}
-{"unit_id":330,"tech_id":236,"internal_name":"Heavy Camel","research_time":105,"cost_food":325,"cost_wood":0,"cost_gold":360,"cost_stone":0}
-{"unit_id":358,"tech_id":197,"internal_name":"Pikeman","research_time":35,"cost_food":160,"cost_wood":0,"cost_gold":90,"cost_stone":0}
-{"unit_id":359,"tech_id":429,"internal_name":"Halberdier","research_time":50,"cost_food":300,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":422,"tech_id":96,"internal_name":"Capped Ram","research_time":50,"cost_food":300,"cost_wood":0,"cost_gold":0,"cost_stone":0}
-{"unit_id":441,"tech_id":428,"internal_name":"Hussar","research_time":50,"cost_food":500,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":442,"tech_id":35,"internal_name":"Galleon","research_time":65,"cost_food":400,"cost_wood":315,"cost_gold":0,"cost_stone":0}
-{"unit_id":473,"tech_id":217,"internal_name":"Two-Handed Swordsman","research_time":45,"cost_food":200,"cost_wood":0,"cost_gold":100,"cost_stone":0}
-{"unit_id":474,"tech_id":218,"internal_name":"Heavy Cavalry Archer","research_time":50,"cost_food":900,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":492,"tech_id":237,"internal_name":"Arbalest","research_time":50,"cost_food":450,"cost_wood":0,"cost_gold":350,"cost_stone":0}
-{"unit_id":527,"tech_id":34,"internal_name":"War Galley","research_time":50,"cost_food":230,"cost_wood":0,"cost_gold":100,"cost_stone":0}
-{"unit_id":528,"tech_id":244,"internal_name":"Heavy Demolition","research_time":50,"cost_food":0,"cost_wood":200,"cost_gold":300,"cost_stone":0}
-{"unit_id":529,"tech_id":34,"internal_name":"War Galley","research_time":50,"cost_food":230,"cost_wood":0,"cost_gold":100,"cost_stone":0}
-{"unit_id":530,"tech_id":360,"internal_name":"Elite Longbow","research_time":60,"cost_food":850,"cost_wood":0,"cost_gold":850,"cost_stone":0}
-{"unit_id":531,"tech_id":363,"internal_name":"Elite Throwing Axemen","research_time":45,"cost_food":850,"cost_wood":0,"cost_gold":550,"cost_stone":0}
-{"unit_id":532,"tech_id":246,"internal_name":"Fast Fire Ship","research_time":50,"cost_food":0,"cost_wood":280,"cost_gold":250,"cost_stone":0}
-{"unit_id":533,"tech_id":372,"internal_name":"Unique Heroic Viking LBT","research_time":60,"cost_food":750,"cost_wood":0,"cost_gold":475,"cost_stone":0}
-{"unit_id":534,"tech_id":370,"internal_name":"Elite Woad Raider","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":542,"tech_id":239,"internal_name":"Heavy Scorpion","research_time":50,"cost_food":800,"cost_wood":750,"cost_gold":0,"cost_stone":0}
-{"unit_id":546,"tech_id":254,"internal_name":"Light Cavalry","research_time":45,"cost_food":150,"cost_wood":0,"cost_gold":50,"cost_stone":0}
-{"unit_id":548,"tech_id":255,"internal_name":"Siege Ram","research_time":75,"cost_food":1000,"cost_wood":0,"cost_gold":0,"cost_stone":0}
-{"unit_id":550,"tech_id":257,"internal_name":"Onager","research_time":75,"cost_food":800,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":553,"tech_id":361,"internal_name":"Elite Cataphract","research_time":50,"cost_food":1200,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":554,"tech_id":364,"internal_name":"Elite Teutonic Knight","research_time":50,"cost_food":950,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":555,"tech_id":365,"internal_name":"Elite Huskarl","research_time":40,"cost_food":1200,"cost_wood":0,"cost_gold":550,"cost_stone":0}
-{"unit_id":556,"tech_id":368,"internal_name":"Elite Mameluke","research_time":50,"cost_food":600,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":557,"tech_id":369,"internal_name":"Elite Jannisary","research_time":55,"cost_food":850,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":558,"tech_id":367,"internal_name":"Elite War Elephant","research_time":75,"cost_food":1350,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":559,"tech_id":362,"internal_name":"Elite Chu Ko Nu","research_time":50,"cost_food":1300,"cost_wood":0,"cost_gold":1300,"cost_stone":0}
-{"unit_id":560,"tech_id":366,"internal_name":"Elite Samurai","research_time":60,"cost_food":750,"cost_wood":0,"cost_gold":650,"cost_stone":0}
-{"unit_id":561,"tech_id":371,"internal_name":"Elite Mangudai","research_time":50,"cost_food":1100,"cost_wood":0,"cost_gold":675,"cost_stone":0}
-{"unit_id":567,"tech_id":264,"internal_name":"Champion","research_time":70,"cost_food":650,"cost_wood":0,"cost_gold":350,"cost_stone":0}
-{"unit_id":569,"tech_id":265,"internal_name":"Paladin","research_time":170,"cost_food":1300,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":588,"tech_id":320,"internal_name":"Siege Onager","research_time":150,"cost_food":1450,"cost_wood":0,"cost_gold":1000,"cost_stone":0}
-{"unit_id":691,"tech_id":376,"internal_name":"Elite Cannon Galley","research_time":30,"cost_food":0,"cost_wood":525,"cost_gold":500,"cost_stone":0}
-{"unit_id":694,"tech_id":398,"internal_name":"Elite Berserk","research_time":45,"cost_food":1075,"cost_wood":0,"cost_gold":475,"cost_stone":0}
-{"unit_id":726,"tech_id":432,"internal_name":"Elite Jaguar Man","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":752,"tech_id":434,"internal_name":"Elite Eagle Warrior","research_time":50,"cost_food":800,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":753,"tech_id":384,"internal_name":"Heavy Eagle Warrior","research_time":50,"cost_food":200,"cost_wood":0,"cost_gold":200,"cost_stone":0}
-{"unit_id":757,"tech_id":2,"internal_name":"Elite Tarkan","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":761,"tech_id":365,"internal_name":"Elite Huskarl","research_time":40,"cost_food":1200,"cost_wood":0,"cost_gold":550,"cost_stone":0}
-{"unit_id":765,"tech_id":27,"internal_name":"Elite Plumed Archer","research_time":45,"cost_food":700,"cost_wood":1000,"cost_gold":0,"cost_stone":0}
-{"unit_id":773,"tech_id":60,"internal_name":"Elite Conquistador","research_time":60,"cost_food":900,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":829,"tech_id":450,"internal_name":"Elite War Wagon","research_time":75,"cost_food":0,"cost_wood":1000,"cost_gold":800,"cost_stone":0}
-{"unit_id":832,"tech_id":448,"internal_name":"Elite Turtle Ship","research_time":65,"cost_food":650,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":868,"tech_id":468,"internal_name":"Elite Genoese Bow","research_time":60,"cost_food":900,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":871,"tech_id":472,"internal_name":"Elite Magyar Huszar","research_time":60,"cost_food":800,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":875,"tech_id":481,"internal_name":"Elite Elephant Archer","research_time":80,"cost_food":900,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":878,"tech_id":504,"internal_name":"Elite Siege Tower","research_time":60,"cost_food":1000,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":881,"tech_id":509,"internal_name":"Elite Kamayuk","research_time":45,"cost_food":900,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":887,"tech_id":2,"internal_name":"Elite Tarkan","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":1003,"tech_id":563,"internal_name":"Elite Organ Gun","research_time":45,"cost_food":1200,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":1006,"tech_id":597,"internal_name":"Elite Caravel","research_time":60,"cost_food":700,"cost_wood":0,"cost_gold":525,"cost_stone":0}
-{"unit_id":1009,"tech_id":565,"internal_name":"Elite Camel Archer","research_time":45,"cost_food":0,"cost_wood":1000,"cost_gold":500,"cost_stone":0}
-{"unit_id":1012,"tech_id":599,"internal_name":"Elite Genitour","research_time":60,"cost_food":500,"cost_wood":450,"cost_gold":0,"cost_stone":0}
-{"unit_id":1015,"tech_id":567,"internal_name":"Elite Mali Unit","research_time":45,"cost_food":900,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":1018,"tech_id":569,"internal_name":"Elite Ethiopia Unit","research_time":45,"cost_food":900,"cost_wood":0,"cost_gold":450,"cost_stone":0}
-{"unit_id":1122,"tech_id":615,"internal_name":"Elite Ballista Elephant","research_time":70,"cost_food":1000,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":1125,"tech_id":617,"internal_name":"Elite Karambit Warrior","research_time":40,"cost_food":900,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":1128,"tech_id":619,"internal_name":"Elite Arambai","research_time":65,"cost_food":1000,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":1131,"tech_id":621,"internal_name":"Elite Rattan Archer","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":1132,"tech_id":630,"internal_name":"Battle Elephant (make avail)","research_time":0,"cost_food":0,"cost_wood":0,"cost_gold":0,"cost_stone":0}
-{"unit_id":1134,"tech_id":631,"internal_name":"Elite Battle Elephant","research_time":100,"cost_food":1100,"cost_wood":0,"cost_gold":700,"cost_stone":0}
-{"unit_id":1155,"tech_id":655,"internal_name":"Imperial Skirmisher","research_time":50,"cost_food":0,"cost_wood":300,"cost_gold":300,"cost_stone":0}
-{"unit_id":1227,"tech_id":678,"internal_name":"Elite Konnik","research_time":70,"cost_food":1000,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":1230,"tech_id":680,"internal_name":"Elite Keshik","research_time":40,"cost_food":700,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":1233,"tech_id":682,"internal_name":"Elite Kipchak","research_time":65,"cost_food":1100,"cost_wood":1000,"cost_gold":0,"cost_stone":0}
-{"unit_id":1236,"tech_id":684,"internal_name":"Elite Leitis","research_time":45,"cost_food":750,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":1255,"tech_id":678,"internal_name":"Elite Konnik","research_time":70,"cost_food":1000,"cost_wood":0,"cost_gold":750,"cost_stone":0}
-{"unit_id":1302,"tech_id":1010,"internal_name":"Dragon Ship","research_time":60,"cost_food":0,"cost_wood":350,"cost_gold":300,"cost_stone":0}
-{"unit_id":1372,"tech_id":715,"internal_name":"Elite Steppe Lancer","research_time":55,"cost_food":600,"cost_wood":0,"cost_gold":550,"cost_stone":0}
-{"unit_id":1657,"tech_id":751,"internal_name":"Elite Coustillier","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":1659,"tech_id":753,"internal_name":"Elite Serjeant","research_time":45,"cost_food":800,"cost_wood":0,"cost_gold":675,"cost_stone":0}
-{"unit_id":1661,"tech_id":753,"internal_name":"Elite Serjeant","research_time":45,"cost_food":800,"cost_wood":0,"cost_gold":675,"cost_stone":0}
-{"unit_id":1703,"tech_id":779,"internal_name":"Elite Obuch","research_time":45,"cost_food":800,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":1706,"tech_id":781,"internal_name":"Elite Hussite Wagon","research_time":45,"cost_food":0,"cost_wood":800,"cost_gold":600,"cost_stone":0}
-{"unit_id":1707,"tech_id":786,"internal_name":"Winged Hussar","research_time":60,"cost_food":600,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":1709,"tech_id":787,"internal_name":"Houfnice","research_time":140,"cost_food":1100,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":1737,"tech_id":826,"internal_name":"Elite Urumi Swordsman","research_time":45,"cost_food":900,"cost_wood":0,"cost_gold":450,"cost_stone":0}
-{"unit_id":1743,"tech_id":830,"internal_name":"Elite Chakram Thrower","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":650,"cost_stone":0}
-{"unit_id":1746,"tech_id":838,"internal_name":"Elite Armored Elephant","research_time":60,"cost_food":850,"cost_wood":0,"cost_gold":0,"cost_stone":0}
-{"unit_id":1749,"tech_id":840,"internal_name":"Elite Ghulam","research_time":45,"cost_food":950,"cost_wood":0,"cost_gold":575,"cost_stone":0}
-{"unit_id":1753,"tech_id":843,"internal_name":"Elite Shrivamsha Rider","research_time":45,"cost_food":850,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":1761,"tech_id":828,"internal_name":"Elite Ratha","research_time":45,"cost_food":800,"cost_wood":800,"cost_gold":0,"cost_stone":0}
-{"unit_id":1787,"tech_id":197,"internal_name":"Pikeman","research_time":35,"cost_food":160,"cost_wood":0,"cost_gold":90,"cost_stone":0}
-{"unit_id":1788,"tech_id":429,"internal_name":"Halberdier","research_time":50,"cost_food":300,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":1792,"tech_id":882,"internal_name":"Elite Centurion","research_time":60,"cost_food":1100,"cost_wood":0,"cost_gold":900,"cost_stone":0}
-{"unit_id":1793,"tech_id":885,"internal_name":"Legionary","research_time":100,"cost_food":800,"cost_wood":0,"cost_gold":400,"cost_stone":0}
-{"unit_id":1802,"tech_id":918,"internal_name":"Elite Composite Bowman","research_time":45,"cost_food":0,"cost_wood":600,"cost_gold":500,"cost_stone":0}
-{"unit_id":1805,"tech_id":920,"internal_name":"Elite Monaspa","research_time":45,"cost_food":1000,"cost_wood":0,"cost_gold":700,"cost_stone":0}
-{"unit_id":1813,"tech_id":526,"internal_name":"Savar","research_time":160,"cost_food":1200,"cost_wood":0,"cost_gold":600,"cost_stone":0}
-{"unit_id":1903,"tech_id":982,"internal_name":"Elite Fire Lancer","research_time":50,"cost_food":650,"cost_wood":0,"cost_gold":400,"cost_stone":0}
-{"unit_id":1907,"tech_id":980,"internal_name":"Heavy Rocket Cart","research_time":75,"cost_food":0,"cost_wood":800,"cost_gold":600,"cost_stone":0}
-{"unit_id":1910,"tech_id":991,"internal_name":"Elite Iron Pagoda","research_time":45,"cost_food":950,"cost_wood":0,"cost_gold":550,"cost_stone":0}
-{"unit_id":1922,"tech_id":1002,"internal_name":"Elite Liao Dao","research_time":45,"cost_food":800,"cost_wood":0,"cost_gold":650,"cost_stone":0}
-{"unit_id":1946,"tech_id":1033,"internal_name":"Heavy Hei-Kuang Cavalry","research_time":70,"cost_food":350,"cost_wood":0,"cost_gold":250,"cost_stone":0}
-{"unit_id":1951,"tech_id":1036,"internal_name":"Elite Tiger Cavalry","research_time":50,"cost_food":1000,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":1961,"tech_id":1064,"internal_name":"Elite White Feather Guard","research_time":45,"cost_food":900,"cost_wood":0,"cost_gold":500,"cost_stone":0}
-{"unit_id":1970,"tech_id":1074,"internal_name":"Elite Fire Archer","research_time":45,"cost_food":800,"cost_wood":0,"cost_gold":800,"cost_stone":0}
-{"unit_id":1974,"tech_id":1156,"internal_name":"","research_time":0,"cost_food":0,"cost_wood":0,"cost_gold":0,"cost_stone":0}
+{"unit_id": 6, "tech_id": 98, "internal_name": "Elite Skirmisher", "research_time": 50, "cost_food": 0, "cost_wood": 230, "cost_gold": 130, "cost_stone": 0}
+{"unit_id": 21, "tech_id": 34, "internal_name": "War Galley", "research_time": 50, "cost_food": 0, "cost_wood": 150, "cost_gold": 100, "cost_stone": 0}
+{"unit_id": 24, "tech_id": 100, "internal_name": "Crossbow", "research_time": 35, "cost_food": 175, "cost_wood": 0, "cost_gold": 100, "cost_stone": 0}
+{"unit_id": 75, "tech_id": 222, "internal_name": "Man-At-Arms", "research_time": 40, "cost_food": 100, "cost_wood": 0, "cost_gold": 40, "cost_stone": 0}
+{"unit_id": 77, "tech_id": 207, "internal_name": "Long Swordsman", "research_time": 40, "cost_food": 150, "cost_wood": 0, "cost_gold": 65, "cost_stone": 0}
+{"unit_id": 207, "tech_id": 521, "internal_name": "Heavy Camel", "research_time": 125, "cost_food": 1000, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 283, "tech_id": 209, "internal_name": "Cavalier", "research_time": 80, "cost_food": 300, "cost_wood": 0, "cost_gold": 300, "cost_stone": 0}
+{"unit_id": 330, "tech_id": 236, "internal_name": "Heavy Camel", "research_time": 105, "cost_food": 325, "cost_wood": 0, "cost_gold": 360, "cost_stone": 0}
+{"unit_id": 358, "tech_id": 197, "internal_name": "Pikeman", "research_time": 35, "cost_food": 160, "cost_wood": 0, "cost_gold": 90, "cost_stone": 0}
+{"unit_id": 359, "tech_id": 429, "internal_name": "Halberdier", "research_time": 50, "cost_food": 300, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 422, "tech_id": 96, "internal_name": "Capped Ram", "research_time": 50, "cost_food": 300, "cost_wood": 0, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 441, "tech_id": 428, "internal_name": "Hussar", "research_time": 50, "cost_food": 500, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 442, "tech_id": 35, "internal_name": "Galleon", "research_time": 65, "cost_food": 0, "cost_wood": 400, "cost_gold": 315, "cost_stone": 0}
+{"unit_id": 473, "tech_id": 217, "internal_name": "Two-Handed Swordsman", "research_time": 45, "cost_food": 200, "cost_wood": 0, "cost_gold": 100, "cost_stone": 0}
+{"unit_id": 474, "tech_id": 218, "internal_name": "Heavy Cavalry Archer", "research_time": 50, "cost_food": 900, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 492, "tech_id": 237, "internal_name": "Arbalest", "research_time": 50, "cost_food": 450, "cost_wood": 0, "cost_gold": 350, "cost_stone": 0}
+{"unit_id": 527, "tech_id": 905, "internal_name": "Demolition Ship", "research_time": 50, "cost_food": 0, "cost_wood": 50, "cost_gold": 100, "cost_stone": 0}
+{"unit_id": 528, "tech_id": 244, "internal_name": "Heavy Demolition", "research_time": 50, "cost_food": 0, "cost_wood": 250, "cost_gold": 300, "cost_stone": 0}
+{"unit_id": 529, "tech_id": 34, "internal_name": "War Galley", "research_time": 50, "cost_food": 0, "cost_wood": 150, "cost_gold": 100, "cost_stone": 0}
+{"unit_id": 530, "tech_id": 360, "internal_name": "Elite Longbow", "research_time": 60, "cost_food": 850, "cost_wood": 0, "cost_gold": 850, "cost_stone": 0}
+{"unit_id": 531, "tech_id": 363, "internal_name": "Elite Throwing Axemen", "research_time": 45, "cost_food": 850, "cost_wood": 0, "cost_gold": 550, "cost_stone": 0}
+{"unit_id": 532, "tech_id": 35, "internal_name": "Galleon", "research_time": 65, "cost_food": 0, "cost_wood": 400, "cost_gold": 315, "cost_stone": 0}
+{"unit_id": 533, "tech_id": 372, "internal_name": "Unique Heroic Viking LBT", "research_time": 60, "cost_food": 750, "cost_wood": 0, "cost_gold": 475, "cost_stone": 0}
+{"unit_id": 534, "tech_id": 370, "internal_name": "Elite Woad Raider", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 542, "tech_id": 239, "internal_name": "Heavy Scorpion", "research_time": 50, "cost_food": 800, "cost_wood": 750, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 546, "tech_id": 254, "internal_name": "Light Cavalry", "research_time": 45, "cost_food": 150, "cost_wood": 0, "cost_gold": 50, "cost_stone": 0}
+{"unit_id": 548, "tech_id": 255, "internal_name": "Siege Ram", "research_time": 75, "cost_food": 1000, "cost_wood": 0, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 550, "tech_id": 257, "internal_name": "Onager", "research_time": 75, "cost_food": 800, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 553, "tech_id": 361, "internal_name": "Elite Cataphract", "research_time": 50, "cost_food": 1200, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 554, "tech_id": 364, "internal_name": "Elite Teutonic Knight", "research_time": 50, "cost_food": 950, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 555, "tech_id": 365, "internal_name": "Elite Huskarl", "research_time": 40, "cost_food": 1200, "cost_wood": 0, "cost_gold": 550, "cost_stone": 0}
+{"unit_id": 556, "tech_id": 368, "internal_name": "Elite Mameluke", "research_time": 50, "cost_food": 600, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 557, "tech_id": 369, "internal_name": "Elite Jannisary", "research_time": 55, "cost_food": 850, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 558, "tech_id": 367, "internal_name": "Elite War Elephant", "research_time": 75, "cost_food": 1350, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 559, "tech_id": 362, "internal_name": "Elite Chu Ko Nu", "research_time": 50, "cost_food": 1300, "cost_wood": 0, "cost_gold": 1300, "cost_stone": 0}
+{"unit_id": 560, "tech_id": 366, "internal_name": "Elite Samurai", "research_time": 60, "cost_food": 750, "cost_wood": 0, "cost_gold": 650, "cost_stone": 0}
+{"unit_id": 561, "tech_id": 371, "internal_name": "Elite Mangudai", "research_time": 50, "cost_food": 1100, "cost_wood": 0, "cost_gold": 675, "cost_stone": 0}
+{"unit_id": 567, "tech_id": 264, "internal_name": "Champion", "research_time": 70, "cost_food": 650, "cost_wood": 0, "cost_gold": 350, "cost_stone": 0}
+{"unit_id": 569, "tech_id": 265, "internal_name": "Paladin", "research_time": 170, "cost_food": 1300, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 588, "tech_id": 320, "internal_name": "Siege Onager", "research_time": 150, "cost_food": 1450, "cost_wood": 0, "cost_gold": 1000, "cost_stone": 0}
+{"unit_id": 691, "tech_id": 376, "internal_name": "Elite Cannon Galley", "research_time": 30, "cost_food": 0, "cost_wood": 525, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 694, "tech_id": 398, "internal_name": "Elite Berserk", "research_time": 45, "cost_food": 1075, "cost_wood": 0, "cost_gold": 475, "cost_stone": 0}
+{"unit_id": 726, "tech_id": 432, "internal_name": "Elite Jaguar Man", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 752, "tech_id": 434, "internal_name": "Elite Eagle Warrior", "research_time": 50, "cost_food": 800, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 753, "tech_id": 384, "internal_name": "Heavy Eagle Warrior", "research_time": 50, "cost_food": 200, "cost_wood": 0, "cost_gold": 200, "cost_stone": 0}
+{"unit_id": 757, "tech_id": 2, "internal_name": "Elite Tarkan", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 761, "tech_id": 365, "internal_name": "Elite Huskarl", "research_time": 40, "cost_food": 1200, "cost_wood": 0, "cost_gold": 550, "cost_stone": 0}
+{"unit_id": 765, "tech_id": 27, "internal_name": "Elite Plumed Archer", "research_time": 45, "cost_food": 700, "cost_wood": 1000, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 773, "tech_id": 60, "internal_name": "Elite Conquistador", "research_time": 60, "cost_food": 900, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 829, "tech_id": 450, "internal_name": "Elite War Wagon", "research_time": 75, "cost_food": 0, "cost_wood": 1000, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 832, "tech_id": 448, "internal_name": "Elite Turtle Ship", "research_time": 65, "cost_food": 650, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 868, "tech_id": 468, "internal_name": "Elite Genoese Bow", "research_time": 60, "cost_food": 900, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 871, "tech_id": 472, "internal_name": "Elite Magyar Huszar", "research_time": 60, "cost_food": 800, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 875, "tech_id": 481, "internal_name": "Elite Elephant Archer", "research_time": 80, "cost_food": 900, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 878, "tech_id": 504, "internal_name": "Elite Siege Tower", "research_time": 60, "cost_food": 1000, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 881, "tech_id": 509, "internal_name": "Elite Kamayuk", "research_time": 45, "cost_food": 900, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 887, "tech_id": 2, "internal_name": "Elite Tarkan", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1003, "tech_id": 563, "internal_name": "Elite Organ Gun", "research_time": 45, "cost_food": 1200, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1006, "tech_id": 597, "internal_name": "Elite Caravel", "research_time": 60, "cost_food": 700, "cost_wood": 0, "cost_gold": 525, "cost_stone": 0}
+{"unit_id": 1009, "tech_id": 565, "internal_name": "Elite Camel Archer", "research_time": 45, "cost_food": 0, "cost_wood": 1000, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1012, "tech_id": 599, "internal_name": "Elite Genitour", "research_time": 60, "cost_food": 500, "cost_wood": 450, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 1015, "tech_id": 567, "internal_name": "Elite Mali Unit", "research_time": 45, "cost_food": 900, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1018, "tech_id": 569, "internal_name": "Elite Ethiopia Unit", "research_time": 45, "cost_food": 900, "cost_wood": 0, "cost_gold": 450, "cost_stone": 0}
+{"unit_id": 1122, "tech_id": 615, "internal_name": "Elite Ballista Elephant", "research_time": 70, "cost_food": 1000, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1125, "tech_id": 617, "internal_name": "Elite Karambit Warrior", "research_time": 40, "cost_food": 900, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1128, "tech_id": 619, "internal_name": "Elite Arambai", "research_time": 65, "cost_food": 1000, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 1131, "tech_id": 621, "internal_name": "Elite Rattan Archer", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 1134, "tech_id": 631, "internal_name": "Elite Battle Elephant", "research_time": 100, "cost_food": 1100, "cost_wood": 0, "cost_gold": 700, "cost_stone": 0}
+{"unit_id": 1155, "tech_id": 655, "internal_name": "Imperial Skirmisher", "research_time": 50, "cost_food": 0, "cost_wood": 300, "cost_gold": 300, "cost_stone": 0}
+{"unit_id": 1227, "tech_id": 678, "internal_name": "Elite Konnik", "research_time": 70, "cost_food": 1000, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 1230, "tech_id": 680, "internal_name": "Elite Keshik", "research_time": 40, "cost_food": 700, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1233, "tech_id": 682, "internal_name": "Elite Kipchak", "research_time": 65, "cost_food": 1100, "cost_wood": 1000, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 1236, "tech_id": 684, "internal_name": "Elite Leitis", "research_time": 45, "cost_food": 750, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 1255, "tech_id": 678, "internal_name": "Elite Konnik", "research_time": 70, "cost_food": 1000, "cost_wood": 0, "cost_gold": 750, "cost_stone": 0}
+{"unit_id": 1302, "tech_id": 35, "internal_name": "Galleon", "research_time": 65, "cost_food": 0, "cost_wood": 400, "cost_gold": 315, "cost_stone": 0}
+{"unit_id": 1372, "tech_id": 715, "internal_name": "Elite Steppe Lancer", "research_time": 55, "cost_food": 600, "cost_wood": 0, "cost_gold": 550, "cost_stone": 0}
+{"unit_id": 1657, "tech_id": 751, "internal_name": "Elite Coustillier", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 1659, "tech_id": 753, "internal_name": "Elite Serjeant", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 675, "cost_stone": 0}
+{"unit_id": 1661, "tech_id": 753, "internal_name": "Elite Serjeant", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 675, "cost_stone": 0}
+{"unit_id": 1703, "tech_id": 779, "internal_name": "Elite Obuch", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1706, "tech_id": 781, "internal_name": "Elite Hussite Wagon", "research_time": 45, "cost_food": 0, "cost_wood": 800, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1707, "tech_id": 786, "internal_name": "Winged Hussar", "research_time": 60, "cost_food": 600, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 1709, "tech_id": 787, "internal_name": "Houfnice", "research_time": 140, "cost_food": 1100, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 1737, "tech_id": 826, "internal_name": "Elite Urumi Swordsman", "research_time": 45, "cost_food": 900, "cost_wood": 0, "cost_gold": 450, "cost_stone": 0}
+{"unit_id": 1743, "tech_id": 830, "internal_name": "Elite Chakram Thrower", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 650, "cost_stone": 0}
+{"unit_id": 1746, "tech_id": 838, "internal_name": "Elite Armored Elephant", "research_time": 60, "cost_food": 850, "cost_wood": 0, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 1749, "tech_id": 840, "internal_name": "Elite Ghulam", "research_time": 45, "cost_food": 950, "cost_wood": 0, "cost_gold": 575, "cost_stone": 0}
+{"unit_id": 1753, "tech_id": 843, "internal_name": "Elite Shrivamsha Rider", "research_time": 45, "cost_food": 850, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1761, "tech_id": 828, "internal_name": "Elite Ratha", "research_time": 45, "cost_food": 800, "cost_wood": 800, "cost_gold": 0, "cost_stone": 0}
+{"unit_id": 1787, "tech_id": 197, "internal_name": "Pikeman", "research_time": 35, "cost_food": 160, "cost_wood": 0, "cost_gold": 90, "cost_stone": 0}
+{"unit_id": 1788, "tech_id": 429, "internal_name": "Halberdier", "research_time": 50, "cost_food": 300, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1792, "tech_id": 882, "internal_name": "Elite Centurion", "research_time": 60, "cost_food": 1100, "cost_wood": 0, "cost_gold": 900, "cost_stone": 0}
+{"unit_id": 1793, "tech_id": 885, "internal_name": "Legionary", "research_time": 100, "cost_food": 800, "cost_wood": 0, "cost_gold": 400, "cost_stone": 0}
+{"unit_id": 1802, "tech_id": 918, "internal_name": "Elite Composite Bowman", "research_time": 45, "cost_food": 0, "cost_wood": 600, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1805, "tech_id": 920, "internal_name": "Elite Monaspa", "research_time": 45, "cost_food": 1000, "cost_wood": 0, "cost_gold": 700, "cost_stone": 0}
+{"unit_id": 1813, "tech_id": 526, "internal_name": "Savar", "research_time": 160, "cost_food": 1200, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1903, "tech_id": 982, "internal_name": "Elite Fire Lancer", "research_time": 50, "cost_food": 750, "cost_wood": 0, "cost_gold": 400, "cost_stone": 0}
+{"unit_id": 1907, "tech_id": 980, "internal_name": "Heavy Rocket Cart", "research_time": 75, "cost_food": 0, "cost_wood": 800, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 1910, "tech_id": 991, "internal_name": "Elite Iron Pagoda", "research_time": 45, "cost_food": 950, "cost_wood": 0, "cost_gold": 550, "cost_stone": 0}
+{"unit_id": 1922, "tech_id": 1002, "internal_name": "Elite Liao Dao", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 650, "cost_stone": 0}
+{"unit_id": 1946, "tech_id": 1033, "internal_name": "Heavy Hei-Kuang Cavalry", "research_time": 70, "cost_food": 350, "cost_wood": 0, "cost_gold": 250, "cost_stone": 0}
+{"unit_id": 1951, "tech_id": 1036, "internal_name": "Elite Tiger Cavalry", "research_time": 50, "cost_food": 1000, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 1961, "tech_id": 1064, "internal_name": "Elite White Feather Guard", "research_time": 45, "cost_food": 900, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 1970, "tech_id": 1074, "internal_name": "Elite Fire Archer", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 2552, "tech_id": 1351, "internal_name": "Champi Warrior", "research_time": 50, "cost_food": 150, "cost_wood": 0, "cost_gold": 175, "cost_stone": 0}
+{"unit_id": 2554, "tech_id": 1352, "internal_name": "Elite Champi Warrior", "research_time": 50, "cost_food": 650, "cost_wood": 0, "cost_gold": 450, "cost_stone": 0}
+{"unit_id": 2564, "tech_id": 1364, "internal_name": "Guecha Warrior Pagoda", "research_time": 45, "cost_food": 0, "cost_wood": 750, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 2568, "tech_id": 1376, "internal_name": "Elite Kona", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 800, "cost_stone": 0}
+{"unit_id": 2571, "tech_id": 1378, "internal_name": "Elite Bolas Rider", "research_time": 45, "cost_food": 800, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 2581, "tech_id": 1389, "internal_name": "Elite Blackwood Archer", "research_time": 45, "cost_food": 600, "cost_wood": 0, "cost_gold": 500, "cost_stone": 0}
+{"unit_id": 2584, "tech_id": 1391, "internal_name": "Elite Ibirapema Warrior", "research_time": 60, "cost_food": 1000, "cost_wood": 0, "cost_gold": 600, "cost_stone": 0}
+{"unit_id": 2587, "tech_id": 1401, "internal_name": "Elite Temple Guard", "research_time": 60, "cost_food": 500, "cost_wood": 0, "cost_gold": 650, "cost_stone": 0}
+{"unit_id": 2588, "tech_id": 1402, "internal_name": "Champi Runner", "research_time": 40, "cost_food": 90, "cost_wood": 0, "cost_gold": 60, "cost_stone": 0}
+{"unit_id": 2627, "tech_id": 34, "internal_name": "War Galley", "research_time": 50, "cost_food": 0, "cost_wood": 150, "cost_gold": 100, "cost_stone": 0}
+{"unit_id": 2628, "tech_id": 35, "internal_name": "Galleon", "research_time": 65, "cost_food": 0, "cost_wood": 400, "cost_gold": 315, "cost_stone": 0}

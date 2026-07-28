@@ -1,11 +1,12 @@
 "use client"
 
+import { Menu, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { OPEN_PALETTE_EVENT } from "@/components/command-palette"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Search } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 const mainNavItems = [
   { href: "/units", label: "Units" },
@@ -15,6 +16,8 @@ const mainNavItems = [
   { href: "/tech-tree", label: "Tech Tree" },
   { href: "/maps", label: "Maps" },
   { href: "/counters", label: "Counters" },
+  { href: "/compare", label: "Compare" },
+  { href: "/changes", label: "Changes" },
   { href: "/competitive", label: "Competitive" },
 ]
 
@@ -51,11 +54,14 @@ export function AppNav() {
         <div className="flex items-center gap-1">
           <ThemeToggle />
 
-          <Button variant="ghost" size="icon" asChild className="hidden md:flex h-8 w-8">
-            <Link href="/search">
-              <Search className="h-3 w-3" />
-              <span className="sr-only">Search</span>
-            </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden md:flex h-8 w-8"
+            onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+          >
+            <Search className="h-3 w-3" />
+            <span className="sr-only">Search (⌘K)</span>
           </Button>
 
           {/* Mobile Menu */}

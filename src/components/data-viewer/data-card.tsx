@@ -1,7 +1,7 @@
-import type React from "react"
 import Link from "next/link"
+import type React from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import type { DataViewerConfig, DataItem } from "./types"
+import type { DataItem, DataViewerConfig } from "./types"
 
 interface DataCardProps<T extends DataItem> {
   item: T
@@ -9,9 +9,10 @@ interface DataCardProps<T extends DataItem> {
 }
 
 export function DataCard<T extends DataItem>({ item, config }: DataCardProps<T>) {
-  const CardWrapper = config.itemLink
+  const href = config.itemLink?.(item)
+  const CardWrapper = href
     ? ({ children }: { children: React.ReactNode }) => (
-        <Link href={config.itemLink!(item)} className="group block">
+        <Link href={href} className="group block">
           {children}
         </Link>
       )
@@ -21,7 +22,7 @@ export function DataCard<T extends DataItem>({ item, config }: DataCardProps<T>)
     <CardWrapper>
       <Card className="border-2 card-minimal h-full overflow-hidden bg-card">
         {/* Header Image/Color Bar */}
-        {config.cardHeader && config.cardHeader(item)}
+        {config.cardHeader?.(item)}
 
         <CardHeader className="space-y-1.5 py-3 px-4">
           <div className="flex items-start justify-between">

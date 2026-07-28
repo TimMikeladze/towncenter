@@ -42,3 +42,6 @@ next-env.d.ts
 
 # generated data (images only, parquet files are committed)
 /export/img/
+
+# aoe2techtree download cache
+/.aoe2-cache

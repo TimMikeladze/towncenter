@@ -1,16 +1,16 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
+import { useState } from "react"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import type { Civilization, BuildOrder, Matchup } from "@/lib/types"
-import { getAllMatchups, getAllBuildOrders } from "@/lib/data-client"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getAllBuildOrders, getAllMatchups } from "@/lib/data-client"
+import type { Civilization } from "@/lib/types"
 
 interface CompetitiveClientProps {
   allCivs: Civilization[]
@@ -19,8 +19,8 @@ interface CompetitiveClientProps {
 
 export function CompetitiveClient({ allCivs, initialCivId }: CompetitiveClientProps) {
   const [selectedCiv, setSelectedCiv] = useState(initialCivId)
-  const [matchupCivA, setMatchupCivA] = useState("britons")
-  const [matchupCivB, setMatchupCivB] = useState("franks")
+  const [matchupCivA, setMatchupCivA] = useState(allCivs[0]?.id ?? "")
+  const [matchupCivB, setMatchupCivB] = useState(allCivs[1]?.id ?? "")
   const allMatchups = getAllMatchups()
   const allBuildOrders = getAllBuildOrders()
 
@@ -33,9 +33,8 @@ export function CompetitiveClient({ allCivs, initialCivId }: CompetitiveClientPr
   const civMatchups = allMatchups.filter((m) => m.civA === selectedCiv || m.civB === selectedCiv)
   const civBuildOrders = allBuildOrders.filter((bo) => bo.civs.includes(selectedCiv))
 
-  const specificMatchup = allMatchups.find(m =>
-    (m.civA === matchupCivA && m.civB === matchupCivB) ||
-    (m.civA === matchupCivB && m.civB === matchupCivA)
+  const specificMatchup = allMatchups.find(
+    (m) => (m.civA === matchupCivA && m.civB === matchupCivB) || (m.civA === matchupCivB && m.civB === matchupCivA),
   )
 
   // Resource calculator
@@ -57,6 +56,12 @@ export function CompetitiveClient({ allCivs, initialCivId }: CompetitiveClientPr
             </Button>
           </div>
 
+          <div className="border-2 border-dashed rounded-lg p-3 text-xs text-muted-foreground">
+            <span className="font-bold uppercase tracking-wide">Heads up:</span> the matchup win rates and build orders
+            on this page are illustrative examples, not measured data. Unit, civ and tech pages elsewhere in the app
+            come straight from the game files.
+          </div>
+
           <Tabs defaultValue="matchups" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="matchups">Matchups</TabsTrigger>
@@ -68,7 +73,9 @@ export function CompetitiveClient({ allCivs, initialCivId }: CompetitiveClientPr
               <Card>
                 <CardHeader>
                   <CardTitle>Civilization Matchups</CardTitle>
-                  <CardDescription>Win rates and strategic notes for civ matchups</CardDescription>
+                  <CardDescription>
+                    Illustrative matchup notes — these win rates are hand-written examples, not measured results
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="mb-4">
@@ -253,9 +260,9 @@ export function CompetitiveClient({ allCivs, initialCivId }: CompetitiveClientPr
                               </div>
 
                               <div className="space-y-1.5">
-                                {bo.steps.map((step, idx) => (
+                                {bo.steps.map((step) => (
                                   <div
-                                    key={idx}
+                                    key={`${step.time}-${step.action}`}
                                     className="flex items-start gap-3 text-sm border-l-2 border-muted pl-3"
                                   >
                                     <span className="font-mono text-muted-foreground min-w-12">{step.time}</span>

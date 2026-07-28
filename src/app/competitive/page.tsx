@@ -1,25 +1,16 @@
 import { Suspense } from "react"
-import { CompetitiveClient } from "./competitive-client"
 import { getAllCivilizations } from "@/lib/data"
+import { CompetitiveClient } from "./competitive-client"
 
-async function CompetitiveContent({
-  searchParams,
-}: {
-  searchParams: Promise<{ civ?: string }>
-}) {
+async function CompetitiveContent({ searchParams }: { searchParams: Promise<{ civ?: string }> }) {
   const params = await searchParams
-  const initialCiv = params.civ || "britons"
-
   const allCivs = await getAllCivilizations()
+  const initialCiv = params.civ && allCivs.some((civ) => civ.id === params.civ) ? params.civ : (allCivs[0]?.id ?? "")
 
   return <CompetitiveClient allCivs={allCivs} initialCivId={initialCiv} />
 }
 
-export default async function CompetitivePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ civ?: string }>
-}) {
+export default async function CompetitivePage({ searchParams }: { searchParams: Promise<{ civ?: string }> }) {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
       <CompetitiveContent searchParams={searchParams} />

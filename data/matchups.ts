@@ -1,5 +1,12 @@
 import type { Matchup } from "@/lib/types"
 
+/**
+ * ILLUSTRATIVE ONLY. These win rates are hand-written examples, not measured
+ * results from played games. Nothing in the app should present them as fact;
+ * replace them with a real source (e.g. aoestats.io) before treating them as data.
+ */
+export const MATCHUPS_ARE_ILLUSTRATIVE = true
+
 export const matchups: Matchup[] = [
   {
     civA: "britons",

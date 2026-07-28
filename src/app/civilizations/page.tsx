@@ -1,29 +1,20 @@
 import { SecondaryNav } from "@/components/secondary-nav"
-import { getAllCivilizations } from "@/lib/data"
+import { getAllCivilizations, getCivilizationTypes } from "@/lib/data"
 import { CivilizationsClient } from "./civilizations-client"
 
-const civTypes = ["all", "Archer", "Cavalry", "Infantry", "Defensive", "Naval", "Monk"] as const
-
-const secondaryNavItems = [
-  { label: "All Civs", value: "all" },
-  { label: "Archer", value: "Archer" },
-  { label: "Cavalry", value: "Cavalry" },
-  { label: "Infantry", value: "Infantry" },
-  { label: "Defensive", value: "Defensive" },
-  { label: "Naval", value: "Naval" },
-  { label: "Monk", value: "Monk" },
-]
-
-export default async function CivilizationsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
+export default async function CivilizationsPage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const params = await searchParams
   const activeTab = params.type || "all"
-  const allCivs = await getAllCivilizations()
+  const [allCivs, types] = await Promise.all([getAllCivilizations(), getCivilizationTypes()])
 
-  const filteredCivs = activeTab === "all" ? allCivs : allCivs.filter((civ) => civ.type === activeTab)
+  // The focus list comes from the game's own civ descriptions, so every tab
+  // returns results.
+  const secondaryNavItems = [
+    { label: "All Civs", value: "all" },
+    ...types.map((type) => ({ label: type, value: type })),
+  ]
+
+  const filteredCivs = activeTab === "all" ? allCivs : allCivs.filter((civ) => civ.types.includes(activeTab))
 
   return (
     <>

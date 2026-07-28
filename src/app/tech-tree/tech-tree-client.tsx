@@ -1,45 +1,85 @@
 "use client"
 
-import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { Age, Civilization, Unit } from "@/lib/types"
+import { AGES } from "@/lib/game/classes"
+import type { Age, CivBonus } from "@/lib/types"
+import { getEntityImagePath } from "@/lib/utils/images"
 
-interface TechTreeClientProps {
-  allCivs: Civilization[]
-  allUnits: Unit[]
-  initialCivId: string
+interface TreeEntry {
+  id: string
+  name: string
+  kind: string
+  age: Age
+  image_path: string | null
+  unique?: boolean
+  hp?: number
+  attack?: number
 }
 
-export function TechTreeClient({ allCivs, allUnits, initialCivId }: TechTreeClientProps) {
-  const [selectedCiv, setSelectedCiv] = useState(initialCivId)
-  const [selectedAge, setSelectedAge] = useState<Age | "all">("all")
-
-  const currentCiv = allCivs.find(c => c.id === selectedCiv) || null
-
-  // Filter units based on civ and age
-  const availableUnits = allUnits.filter((unit) => {
-    // Check if unit is available to this civ
-    if (unit.civSpecific && unit.civSpecific !== selectedCiv) return false
-
-    // Check if unit is in the missing units list
-    if (currentCiv && currentCiv.techTree.missingUnits.includes(unit.id)) return false
-
-    // Filter by age if not "all"
-    if (selectedAge !== "all" && unit.age !== selectedAge) return false
-
-    return true
-  })
-
-  // Group units by age
-  const unitsByAge = {
-    Dark: availableUnits.filter((u) => u.age === "Dark"),
-    Feudal: availableUnits.filter((u) => u.age === "Feudal"),
-    Castle: availableUnits.filter((u) => u.age === "Castle"),
-    Imperial: availableUnits.filter((u) => u.age === "Imperial"),
+interface TechTreeClientProps {
+  civs: { id: string; name: string }[]
+  tree: {
+    civ: { id: string; name: string; types: string[]; teamBonus: string; bonuses: CivBonus[] }
+    units: TreeEntry[]
+    buildings: TreeEntry[]
+    techs: TreeEntry[]
   }
+  selectedAge: string
+}
+
+function EntryGrid({ entries, hrefBase }: { entries: TreeEntry[]; hrefBase: string }) {
+  if (entries.length === 0) {
+    return <p className="text-sm text-muted-foreground">Nothing in this age.</p>
+  }
+  return (
+    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {entries.map((entry) => (
+        <Link key={entry.id} href={`${hrefBase}/${entry.id}`}>
+          <div className="border rounded-lg p-2 hover:bg-accent transition-colors flex items-center gap-2 h-full">
+            <Image
+              src={getEntityImagePath(entry.image_path)}
+              alt=""
+              width={28}
+              height={28}
+              className="h-7 w-7 object-contain shrink-0"
+            />
+            <div className="min-w-0">
+              <div className="font-mono text-sm font-semibold truncate">
+                {entry.name}
+                {entry.unique && <span className="ml-2 text-[9px] uppercase border px-1 rounded">unique</span>}
+              </div>
+              <div className="text-[10px] text-muted-foreground truncate">
+                {entry.kind}
+                {entry.hp !== undefined && ` • ${entry.hp} HP • ${entry.attack} atk`}
+              </div>
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+export function TechTreeClient({ civs, tree, selectedAge }: TechTreeClientProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const navigate = (updates: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams.toString())
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === "all") params.delete(key)
+      else params.set(key, value)
+    }
+    const query = params.toString()
+    router.push(query ? `/tech-tree?${query}` : "/tech-tree")
+  }
+
+  const ages = selectedAge === "all" ? [...AGES] : [selectedAge as Age]
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,182 +88,103 @@ export function TechTreeClient({ allCivs, allUnits, initialCivId }: TechTreeClie
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-mono font-bold">Tech Tree</h1>
-              <p className="text-muted-foreground">View available units and technologies per civilization</p>
+              <p className="text-muted-foreground">
+                Exactly what {tree.civ.name} can train, build and research, by age
+              </p>
             </div>
             <Button variant="outline" asChild>
-              <Link href="/">Back to Home</Link>
+              <Link href={`/civilizations/${tree.civ.id}`}>{tree.civ.name} details</Link>
             </Button>
           </div>
 
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
-              <div className="w-full md:w-64">
-                <Select value={selectedCiv} onValueChange={setSelectedCiv}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select civilization" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {allCivs.map((civ) => (
-                      <SelectItem key={civ.id} value={civ.id}>
-                        {civ.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="w-full md:w-48">
-                <Select value={selectedAge} onValueChange={(value) => setSelectedAge(value as Age | "all")}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Filter by age" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Ages</SelectItem>
-                    <SelectItem value="Dark">Dark Age</SelectItem>
-                    <SelectItem value="Feudal">Feudal Age</SelectItem>
-                    <SelectItem value="Castle">Castle Age</SelectItem>
-                    <SelectItem value="Imperial">Imperial Age</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-4">
+            <div className="w-full md:w-64">
+              <Select value={tree.civ.id} onValueChange={(value) => navigate({ civ: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select civilization" />
+                </SelectTrigger>
+                <SelectContent>
+                  {civs.map((civ) => (
+                    <SelectItem key={civ.id} value={civ.id}>
+                      {civ.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
-            {currentCiv && (
-              <Button variant="outline" asChild>
-                <Link href={`/civilizations/${currentCiv.id}`}>View {currentCiv.name} Details</Link>
-              </Button>
-            )}
+            <div className="w-full md:w-48">
+              <Select value={selectedAge} onValueChange={(value) => navigate({ age: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Filter by age" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Ages</SelectItem>
+                  {AGES.map((age) => (
+                    <SelectItem key={age} value={age}>
+                      {age} Age
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button variant="outline" asChild>
+              <Link href={`/civilizations/compare?a=${tree.civ.id}`}>Compare civs</Link>
+            </Button>
           </div>
 
-          {currentCiv && (
-            <Card>
-              <CardHeader>
-                <CardTitle>{currentCiv.name} Overview</CardTitle>
-                <CardDescription>{currentCiv.type} Civilization</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-sm font-semibold mb-2">Key Bonuses</p>
-                  <div className="space-y-1">
-                    {currentCiv.bonuses.slice(0, 3).map((bonus) => (
-                      <p key={bonus.id} className="text-sm text-muted-foreground">
-                        • {bonus.description}
-                      </p>
-                    ))}
-                  </div>
-                </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>{tree.civ.name}</CardTitle>
+              <CardDescription>{tree.civ.types.join(" and ")} civilization</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {tree.civ.bonuses
+                .filter((bonus) => bonus.category !== "team")
+                .slice(0, 4)
+                .map((bonus) => (
+                  <p key={bonus.id} className="text-sm text-muted-foreground">
+                    • {bonus.description}
+                  </p>
+                ))}
+              {tree.civ.teamBonus && (
+                <p className="text-sm">
+                  <span className="font-semibold">Team bonus:</span> {tree.civ.teamBonus}
+                </p>
+              )}
+            </CardContent>
+          </Card>
 
-                {currentCiv.techTree.missingUnits.length > 0 && (
-                  <div>
-                    <p className="text-sm font-semibold mb-2 text-destructive">Missing Units</p>
-                    <div className="flex flex-wrap gap-2">
-                      {currentCiv.techTree.missingUnits.map((unitId) => (
-                        <span key={unitId} className="text-xs bg-destructive/10 text-destructive px-2 py-1 rounded">
-                          {unitId.replace(/-/g, " ")}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
+          {ages.map((age) => {
+            const units = tree.units.filter((entry) => entry.age === age)
+            const buildings = tree.buildings.filter((entry) => entry.age === age)
+            const techs = tree.techs.filter((entry) => entry.age === age)
+            if (units.length + buildings.length + techs.length === 0) return null
 
-          {selectedAge === "all" ? (
-            // Show all ages in separate sections
-            <div className="space-y-6">
-              {(["Dark", "Feudal", "Castle", "Imperial"] as Age[]).map((age) => {
-                const ageUnits = unitsByAge[age]
-                if (ageUnits.length === 0) return null
-
-                return (
-                  <Card key={age}>
-                    <CardHeader>
-                      <CardTitle>{age} Age</CardTitle>
-                      <CardDescription>{ageUnits.length} units available</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                        {ageUnits.map((unit) => (
-                          <Link key={unit.id} href={`/units/${unit.id}`}>
-                            <div className="border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
-                              <div className="flex items-start justify-between mb-2">
-                                <div>
-                                  <h3 className="font-mono font-semibold text-sm">{unit.name}</h3>
-                                  <p className="text-xs text-muted-foreground">{unit.type}</p>
-                                </div>
-                                {unit.civSpecific === selectedCiv && (
-                                  <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded">
-                                    Unique
-                                  </span>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-3 text-xs">
-                                <span>
-                                  <span className="text-muted-foreground">HP:</span> {unit.stats.hp}
-                                </span>
-                                <span>
-                                  <span className="text-muted-foreground">Atk:</span> {unit.stats.attack}
-                                </span>
-                                <span>
-                                  <span className="text-muted-foreground">Armor:</span> {unit.stats.meleeArmor}/
-                                  {unit.stats.pierceArmor}
-                                </span>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          ) : (
-            // Show only selected age
-            <Card>
-              <CardHeader>
-                <CardTitle>{selectedAge} Age Units</CardTitle>
-                <CardDescription>{availableUnits.length} units available</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {availableUnits.length > 0 ? (
-                  <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                    {availableUnits.map((unit) => (
-                      <Link key={unit.id} href={`/units/${unit.id}`}>
-                        <div className="border rounded-lg p-3 hover:bg-accent transition-colors cursor-pointer">
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <h3 className="font-mono font-semibold text-sm">{unit.name}</h3>
-                              <p className="text-xs text-muted-foreground">{unit.type}</p>
-                            </div>
-                            {unit.civSpecific === selectedCiv && (
-                              <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded">
-                                Unique
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-3 text-xs">
-                            <span>
-                              <span className="text-muted-foreground">HP:</span> {unit.stats.hp}
-                            </span>
-                            <span>
-                              <span className="text-muted-foreground">Atk:</span> {unit.stats.attack}
-                            </span>
-                            <span>
-                              <span className="text-muted-foreground">Armor:</span> {unit.stats.meleeArmor}/
-                              {unit.stats.pierceArmor}
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-muted-foreground text-center py-8">No units available in this age</p>
-                )}
-              </CardContent>
-            </Card>
-          )}
+            return (
+              <Card key={age}>
+                <CardHeader>
+                  <CardTitle>{age} Age</CardTitle>
+                  <CardDescription>
+                    {units.length} units • {buildings.length} buildings • {techs.length} technologies
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <section className="space-y-2">
+                    <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Units</h3>
+                    <EntryGrid entries={units} hrefBase="/units" />
+                  </section>
+                  <section className="space-y-2">
+                    <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Buildings</h3>
+                    <EntryGrid entries={buildings} hrefBase="/buildings" />
+                  </section>
+                  <section className="space-y-2">
+                    <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Technologies</h3>
+                    <EntryGrid entries={techs} hrefBase="/technologies" />
+                  </section>
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
       </div>
     </div>

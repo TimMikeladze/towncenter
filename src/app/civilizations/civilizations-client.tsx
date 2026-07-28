@@ -1,9 +1,10 @@
 "use client"
 
-import { DataViewer } from "@/components/data-viewer"
+import { Crown, Swords } from "lucide-react"
+import Image from "next/image"
 import type { DataViewerConfig } from "@/components/data-viewer"
+import { DataViewer } from "@/components/data-viewer"
 import type { Civilization } from "@/lib/types"
-import { Users, Crown, Swords } from "lucide-react"
 import { getEntityImagePath } from "@/lib/utils/images"
 
 interface CivilizationsClientProps {
@@ -14,60 +15,50 @@ interface CivilizationsClientProps {
 export function CivilizationsClient({ allCivs, filteredCivs }: CivilizationsClientProps) {
   const config: DataViewerConfig<Civilization> = {
     itemName: "civilizations",
-    searchFields: ["name", "type"],
+    searchFields: ["name", "type", "teamBonus"],
     searchPlaceholder: "Search civilizations...",
 
-    filters: [],
-
     sortOptions: [
-      {
-        key: "name",
-        label: "Name",
-        sortFn: (a, b) => a.name.localeCompare(b.name),
-      },
-      {
-        key: "bonuses",
-        label: "Bonus Count",
-        sortFn: (a, b) => b.bonuses.length - a.bonuses.length,
-      },
+      { key: "name", label: "Name", sortFn: (a, b) => a.name.localeCompare(b.name) },
+      { key: "focus", label: "Focus", sortFn: (a, b) => a.type.localeCompare(b.type) },
+      { key: "bonuses", label: "Bonus count", sortFn: (a, b) => b.bonuses.length - a.bonuses.length },
     ],
 
     cardTitle: (civ) => civ.name,
     cardDescription: (civ) => (
       <span className="px-2 py-0.5 text-[9px] font-bold border rounded uppercase tracking-wider">
-        {civ.type} Civilization
+        {civ.types.join(" / ")}
       </span>
     ),
     cardHeader: (civ) => (
-      <div className="relative h-32 bg-muted flex items-center justify-center border-b">
-        <img
+      <div className="relative h-24 bg-muted flex items-center justify-center border-b">
+        <Image
           src={getEntityImagePath(civ.image_path)}
           alt={civ.name}
-          className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+          width={64}
+          height={64}
+          className="h-16 w-16 object-contain"
         />
         <div className="absolute bottom-2 left-3">
-          <Crown className="h-6 w-6" />
+          <Crown className="h-4 w-4" />
         </div>
       </div>
     ),
     cardContent: (civ) => (
       <>
-        <div>
-          <p className="text-[9px] text-muted-foreground uppercase tracking-wide mb-1.5 font-bold flex items-center gap-1">
-            <Users className="h-3 w-3" />
-            Strengths
-          </p>
-          <div className="flex flex-wrap gap-1">
-            {civ.strengths.slice(0, 3).map((strength) => (
-              <span key={strength} className="px-2 py-0.5 text-[9px] font-bold border rounded uppercase tracking-wide">
-                {strength}
-              </span>
+        <div className="space-y-1">
+          {civ.bonuses
+            .filter((bonus) => bonus.category !== "team")
+            .slice(0, 3)
+            .map((bonus) => (
+              <p key={bonus.id} className="text-[10px] leading-tight text-muted-foreground">
+                • {bonus.description}
+              </p>
             ))}
-          </div>
         </div>
         <div className="p-2 border">
           <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wide mb-1">Team Bonus</p>
-          <p className="text-[10px] leading-tight line-clamp-2">{civ.teamBonus}</p>
+          <p className="text-[10px] leading-tight line-clamp-2">{civ.teamBonus || "—"}</p>
         </div>
       </>
     ),
@@ -76,48 +67,53 @@ export function CivilizationsClient({ allCivs, filteredCivs }: CivilizationsClie
       {
         key: "name",
         header: "CIVILIZATION",
-        sortable: true,
+        sortKey: "name",
+        width: "1.4fr",
         render: (civ) => (
-          <div>
-            <div className="font-bold flex items-center gap-2 uppercase">
-              <Crown className="h-3 w-3" />
-              {civ.name}
+          <div className="flex items-center gap-2">
+            <Image
+              src={getEntityImagePath(civ.image_path)}
+              alt=""
+              width={24}
+              height={24}
+              className="h-6 w-6 object-contain shrink-0"
+            />
+            <div>
+              <div className="font-bold uppercase">{civ.name}</div>
+              <div className="text-[10px] text-muted-foreground mt-0.5">
+                <span className="px-1.5 py-0.5 border rounded uppercase">{civ.types.join(" / ")}</span>
+              </div>
             </div>
-            <div className="text-[10px] text-muted-foreground mt-0.5">
-              <span className="px-1.5 py-0.5 border rounded uppercase">{civ.type}</span>
-            </div>
-          </div>
-        ),
-      },
-      {
-        key: "strengths",
-        header: "STRENGTHS",
-        render: (civ) => (
-          <div className="flex flex-wrap gap-1">
-            {civ.strengths.slice(0, 3).map((strength) => (
-              <span key={strength} className="px-1.5 py-0.5 text-[10px] border rounded uppercase tracking-wide">
-                {strength}
-              </span>
-            ))}
           </div>
         ),
       },
       {
         key: "bonuses",
         header: "KEY BONUSES",
+        width: "2.5fr",
         render: (civ) => (
-          <div className="text-[10px] space-y-0.5 font-mono">
-            {civ.bonuses.slice(0, 2).map((bonus) => (
-              <div key={bonus.id} className="text-muted-foreground">
-                • {bonus.description.substring(0, 50)}...
-              </div>
-            ))}
+          <div className="text-[10px] space-y-0.5">
+            {civ.bonuses
+              .filter((bonus) => bonus.category !== "team")
+              .slice(0, 2)
+              .map((bonus) => (
+                <div key={bonus.id} className="text-muted-foreground">
+                  • {bonus.description}
+                </div>
+              ))}
           </div>
         ),
       },
       {
+        key: "teamBonus",
+        header: "TEAM BONUS",
+        width: "1.6fr",
+        render: (civ) => <span className="text-[10px] text-muted-foreground">{civ.teamBonus || "—"}</span>,
+      },
+      {
         key: "unique",
-        header: "UNIQUE",
+        header: "UU",
+        width: "60px",
         render: (civ) => (
           <div className="flex items-center gap-1">
             <Swords className="h-3 w-3" />

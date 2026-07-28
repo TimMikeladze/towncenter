@@ -1,13 +1,13 @@
 "use client"
 
-import { Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import { getAllMaps } from "@/lib/data-client"
-import { DataViewer } from "@/components/data-viewer"
-import type { DataViewerConfig } from "@/components/data-viewer"
-import type { Map } from "@/lib/types"
-import { SecondaryNav } from "@/components/secondary-nav"
 import { MapPin, Users } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { Suspense } from "react"
+import type { DataViewerConfig } from "@/components/data-viewer"
+import { DataViewer } from "@/components/data-viewer"
+import { SecondaryNav } from "@/components/secondary-nav"
+import { getAllMaps } from "@/lib/data-client"
+import type { GameMap } from "@/lib/types"
 
 const secondaryNavItems = [
   { label: "All Maps", value: "all" },
@@ -23,7 +23,7 @@ function MapsContent() {
 
   const filteredMaps = activeTab === "all" ? allMaps : allMaps.filter((map) => map.type === activeTab)
 
-  const config: DataViewerConfig<Map> = {
+  const config: DataViewerConfig<GameMap> = {
     itemName: "maps",
     searchFields: ["name", "type", "description"],
     searchPlaceholder: "Search maps...",
@@ -34,36 +34,29 @@ function MapsContent() {
       {
         key: "name",
         label: "Name",
-        sortFn: (a: Map, b: Map) => a.name.localeCompare(b.name),
+        sortFn: (a: GameMap, b: GameMap) => a.name.localeCompare(b.name),
       },
       {
         key: "type",
         label: "Type",
-        sortFn: (a: Map, b: Map) => a.type.localeCompare(b.type),
+        sortFn: (a: GameMap, b: GameMap) => a.type.localeCompare(b.type),
       },
     ],
 
-    cardTitle: (map: Map) => map.name,
-    cardDescription: (map: Map) => (
+    cardTitle: (map: GameMap) => map.name,
+    cardDescription: (map: GameMap) => (
       <div className="flex items-center gap-2 flex-wrap">
         <span className="px-2 py-0.5 text-[9px] font-bold border rounded uppercase tracking-wider">{map.type}</span>
         <span className="text-[9px]">•</span>
         <span className="text-[9px] font-bold uppercase tracking-wider">{map.size}</span>
       </div>
     ),
-    cardHeader: (map: Map) => (
-      <div className="relative h-24 bg-muted flex items-center justify-center border-b">
-        <img
-          src={`/.jpg?height=96&width=200&query=${encodeURIComponent(map.name + " map terrain")}`}
-          alt={map.name}
-          className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-        />
-        <div className="absolute bottom-2 left-3">
-          <MapPin className="h-5 w-5" />
-        </div>
+    cardHeader: (_map: GameMap) => (
+      <div className="relative h-16 bg-muted flex items-center justify-center border-b">
+        <MapPin className="h-6 w-6 text-muted-foreground" />
       </div>
     ),
-    cardContent: (map: Map) => (
+    cardContent: (map: GameMap) => (
       <>
         <p className="text-[10px] text-muted-foreground leading-tight line-clamp-2">{map.description}</p>
         {map.recommendedCivs.length > 0 && (
@@ -88,8 +81,8 @@ function MapsContent() {
       {
         key: "name",
         header: "MAP",
-        sortable: true,
-        render: (map: Map) => (
+        sortKey: "name",
+        render: (map: GameMap) => (
           <div>
             <div className="font-bold uppercase flex items-center gap-2">
               <MapPin className="h-3 w-3" />
@@ -105,14 +98,14 @@ function MapsContent() {
       {
         key: "description",
         header: "DESCRIPTION",
-        render: (map: Map) => (
+        render: (map: GameMap) => (
           <p className="text-[10px] text-muted-foreground line-clamp-2 max-w-xs">{map.description}</p>
         ),
       },
       {
         key: "recommended",
         header: "RECOMMENDED CIVS",
-        render: (map: Map) => (
+        render: (map: GameMap) => (
           <div className="flex flex-wrap gap-1">
             {map.recommendedCivs.slice(0, 3).map((civId) => (
               <span key={civId} className="px-1.5 py-0.5 text-[10px] border rounded capitalize">
@@ -134,7 +127,7 @@ function MapsContent() {
           <div className="max-w-7xl mx-auto space-y-4">
             <div className="flex items-center justify-between pb-4 border-b">
               <div>
-                <h1 className="text-xl font-mono font-bold uppercase tracking-tight">Map Database</h1>
+                <h1 className="text-xl font-mono font-bold uppercase tracking-tight">GameMap Database</h1>
                 <p className="text-muted-foreground text-[10px] mt-0.5 uppercase tracking-wide">
                   Showing {filteredMaps.length} of {allMaps.length} maps
                 </p>

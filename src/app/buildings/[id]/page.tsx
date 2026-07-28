@@ -1,17 +1,13 @@
-import { getBuildingById } from "@/lib/data"
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getBuildingById } from "@/lib/data"
 import { getEntityImagePath } from "@/lib/utils/images"
 
-export default async function BuildingDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function BuildingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const building = await getBuildingById(id)
 

@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
-import { LayoutGrid, TableIcon, Search, Filter, SlidersHorizontal, X } from "lucide-react"
+import { Filter, LayoutGrid, Search, TableIcon, X } from "lucide-react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useCallback, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { DataCard } from "./data-card"
 import { DataTable } from "./data-table"
-import type { DataViewerConfig, ViewMode, DataItem } from "./types"
+import type { DataItem, DataViewerConfig, ViewMode } from "./types"
 
 interface DataViewerProps<T extends DataItem> {
   config: DataViewerConfig<T>
@@ -18,7 +19,15 @@ interface DataViewerProps<T extends DataItem> {
   showFilters?: boolean
 }
 
-export function DataViewer<T extends DataItem>({
+export function DataViewer<T extends DataItem>(props: DataViewerProps<T>) {
+  return (
+    <Suspense fallback={null}>
+      <DataViewerInner {...props} />
+    </Suspense>
+  )
+}
+
+function DataViewerInner<T extends DataItem>({
   config,
   data,
   defaultView = "cards",
@@ -26,72 +35,76 @@ export function DataViewer<T extends DataItem>({
   showSearch = true,
   showFilters = true,
 }: DataViewerProps<T>) {
-  const [viewMode, setViewMode] = useState<ViewMode>(defaultView)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [activeFilters, setActiveFilters] = useState<Record<string, string>>({})
-  const [sortBy, setSortBy] = useState<string | null>(config.sortOptions?.[0]?.key || null)
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
-  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // Every control lives in the URL, so any view is shareable and the back
+  // button works.
+  const setParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      const next = new URLSearchParams(searchParams.toString())
+      for (const [key, value] of Object.entries(updates)) {
+        if (value === null || value === "" || value === "all") next.delete(key)
+        else next.set(key, value)
+      }
+      const query = next.toString()
+      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
+    },
+    [pathname, router, searchParams],
+  )
+
+  const searchQuery = searchParams.get("q") ?? ""
+  const viewMode = (searchParams.get("view") as ViewMode | null) ?? defaultView
+  const sortBy = searchParams.get("sort") ?? config.sortOptions?.[0]?.key ?? null
+  const sortDirection = searchParams.get("dir") === "desc" ? "desc" : "asc"
+
+  const activeFilters = useMemo(() => {
+    const values: Record<string, string> = {}
+    for (const filter of config.filters ?? []) {
+      values[filter.key] = searchParams.get(filter.key) ?? "all"
+    }
+    return values
+  }, [config.filters, searchParams])
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Cmd/Ctrl + K for search focus
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault()
-        document.getElementById("data-search")?.focus()
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "t") {
+        event.preventDefault()
+        setParams({ view: "table" })
       }
-      // Cmd/Ctrl + T for table view
-      if ((e.metaKey || e.ctrlKey) && e.key === "t") {
-        e.preventDefault()
-        setViewMode("table")
+      if ((event.metaKey || event.ctrlKey) && event.key === "g") {
+        event.preventDefault()
+        setParams({ view: "cards" })
       }
-      // Cmd/Ctrl + G for card/grid view
-      if ((e.metaKey || e.ctrlKey) && e.key === "g") {
-        e.preventDefault()
-        setViewMode("cards")
-      }
-      // Cmd/Ctrl + / for keyboard shortcuts help
-      if ((e.metaKey || e.ctrlKey) && e.key === "/") {
-        e.preventDefault()
-        setShowKeyboardHelp(!showKeyboardHelp)
-      }
-      // Escape to clear search
-      if (e.key === "Escape" && searchQuery) {
-        setSearchQuery("")
+      if (event.key === "Escape" && searchQuery) {
+        setParams({ q: null })
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [searchQuery, showKeyboardHelp])
+  }, [searchQuery, setParams])
 
-  // Filter data based on search and active filters
   const filteredData = useMemo(() => {
     let result = [...data]
 
-    // Apply search
     if (searchQuery && config.searchFields) {
+      const needle = searchQuery.toLowerCase()
       result = result.filter((item) =>
-        config.searchFields!.some((field) => {
-          const value = item[field]
-          return String(value).toLowerCase().includes(searchQuery.toLowerCase())
-        }),
+        (config.searchFields ?? []).some((field) => String(item[field]).toLowerCase().includes(needle)),
       )
     }
 
-    // Apply filters
-    if (config.filters) {
-      config.filters.forEach((filter) => {
-        const activeValue = activeFilters[filter.key]
-        if (activeValue && activeValue !== "all") {
-          result = result.filter((item) => filter.filterFn(item, activeValue))
-        }
-      })
+    for (const filter of config.filters ?? []) {
+      const value = activeFilters[filter.key]
+      if (value && value !== "all") {
+        result = result.filter((item) => filter.filterFn(item, value))
+      }
     }
 
-    // Apply sorting
     if (sortBy && config.sortOptions) {
-      const sortOption = config.sortOptions.find((opt) => opt.key === sortBy)
+      const sortOption = config.sortOptions.find((option) => option.key === sortBy)
       if (sortOption) {
         result.sort((a, b) => {
           const comparison = sortOption.sortFn(a, b)
@@ -103,34 +116,18 @@ export function DataViewer<T extends DataItem>({
     return result
   }, [data, searchQuery, activeFilters, sortBy, sortDirection, config])
 
-  const handleFilterChange = (key: string, value: string) => {
-    setActiveFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }))
-  }
-
   const toggleSort = (key: string) => {
     if (sortBy === key) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+      setParams({ dir: sortDirection === "asc" ? "desc" : "asc" })
     } else {
-      setSortBy(key)
-      setSortDirection("asc")
+      setParams({ sort: key, dir: "asc" })
     }
   }
-
-  const clearAllFilters = () => {
-    setActiveFilters({})
-    setSearchQuery("")
-  }
-
-  const activeFilterCount = Object.values(activeFilters).filter((v) => v && v !== "all").length + (searchQuery ? 1 : 0)
 
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex flex-col gap-3 flex-1 md:flex-row md:items-center">
-          {/* Search */}
           {showSearch && config.searchFields && (
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -138,65 +135,56 @@ export function DataViewer<T extends DataItem>({
                 id="data-search"
                 placeholder={config.searchPlaceholder || "Search..."}
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(event) => setParams({ q: event.target.value })}
                 className="pl-9 border-2"
               />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                {searchQuery && (
-                  <Button variant="ghost" size="sm" onClick={() => setSearchQuery("")} className="h-5 w-5 p-0">
-                    <X className="h-3 w-3" />
-                  </Button>
-                )}
-                <kbd className="kbd-shortcut">⌘K</kbd>
-              </div>
-            </div>
-          )}
-
-          {/* Sort Controls */}
-          {config.sortOptions && config.sortOptions.length > 0 && (
-            <div className="flex items-center gap-2">
-              <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-              <select
-                value={sortBy || ""}
-                onChange={(e) => {
-                  const value = e.target.value
-                  if (value) {
-                    setSortBy(value)
-                  } else {
-                    setSortBy(null)
-                  }
-                }}
-                className="text-sm border-2 rounded-md px-3 py-1.5 bg-background"
-              >
-                <option value="">Sort by...</option>
-                {config.sortOptions.map((option) => (
-                  <option key={option.key} value={option.key}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {sortBy && (
+              {searchQuery && (
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
-                  onClick={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
-                  className="border-2"
+                  onClick={() => setParams({ q: null })}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 p-0"
+                  aria-label="Clear search"
                 >
-                  {sortDirection === "asc" ? "↑" : "↓"}
+                  <X className="h-3 w-3" />
                 </Button>
               )}
             </div>
           )}
+
+          {config.sortOptions && config.sortOptions.length > 0 && (
+            <div className="flex items-center gap-2">
+              <select
+                value={sortBy ?? ""}
+                onChange={(event) => setParams({ sort: event.target.value || null })}
+                className="text-sm border-2 rounded-md px-3 py-1.5 bg-background"
+                aria-label="Sort by"
+              >
+                {config.sortOptions.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    Sort: {option.label}
+                  </option>
+                ))}
+              </select>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setParams({ dir: sortDirection === "asc" ? "desc" : "asc" })}
+                className="border-2"
+                aria-label="Toggle sort direction"
+              >
+                {sortDirection === "asc" ? "↑" : "↓"}
+              </Button>
+            </div>
+          )}
         </div>
 
-        {/* View Toggle */}
         {showViewToggle && (
           <div className="flex items-center gap-2 border-2 rounded-lg p-1 bg-muted/30">
             <Button
               variant={viewMode === "cards" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode("cards")}
-              className={viewMode === "cards" ? "" : "hover:bg-muted"}
+              onClick={() => setParams({ view: "cards" })}
             >
               <LayoutGrid className="h-4 w-4 mr-2" />
               Cards
@@ -205,37 +193,13 @@ export function DataViewer<T extends DataItem>({
             <Button
               variant={viewMode === "table" ? "default" : "ghost"}
               size="sm"
-              onClick={() => setViewMode("table")}
-              className={viewMode === "table" ? "" : "hover:bg-muted"}
+              onClick={() => setParams({ view: "table" })}
             >
               <TableIcon className="h-4 w-4 mr-2" />
               Table
               <kbd className="kbd-shortcut ml-1">⌘T</kbd>
             </Button>
           </div>
-        )}
-
-        {showKeyboardHelp && (
-          <Card className="p-3 border text-xs">
-            <div className="font-bold mb-2">KEYBOARD SHORTCUTS</div>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-              <div>
-                <kbd className="kbd-shortcut">⌘K</kbd> Focus search
-              </div>
-              <div>
-                <kbd className="kbd-shortcut">⌘T</kbd> Table view
-              </div>
-              <div>
-                <kbd className="kbd-shortcut">⌘G</kbd> Grid view
-              </div>
-              <div>
-                <kbd className="kbd-shortcut">ESC</kbd> Clear search
-              </div>
-              <div>
-                <kbd className="kbd-shortcut">⌘/</kbd> Toggle help
-              </div>
-            </div>
-          </Card>
         )}
       </div>
 
@@ -249,7 +213,7 @@ export function DataViewer<T extends DataItem>({
                   key={option.value}
                   variant={activeFilters[filter.key] === option.value ? "default" : "outline"}
                   size="sm"
-                  onClick={() => handleFilterChange(filter.key, option.value)}
+                  onClick={() => setParams({ [filter.key]: option.value })}
                   className="h-6 px-2 text-[10px] font-mono uppercase"
                 >
                   {option.label}
@@ -266,12 +230,12 @@ export function DataViewer<T extends DataItem>({
         </span>
         {sortBy && (
           <span>
-            Sorted by {config.sortOptions?.find((o) => o.key === sortBy)?.label} {sortDirection === "asc" ? "↑" : "↓"}
+            Sorted by {config.sortOptions?.find((option) => option.key === sortBy)?.label}{" "}
+            {sortDirection === "asc" ? "↑" : "↓"}
           </span>
         )}
       </div>
 
-      {/* Data Display */}
       {filteredData.length > 0 ? (
         viewMode === "cards" ? (
           <div className={`grid gap-4 ${config.cardGridCols || "md:grid-cols-2 lg:grid-cols-3"}`}>

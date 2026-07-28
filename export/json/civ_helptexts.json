@@ -1,50 +1,53 @@
-{"name":"Armenians","string_id":120193}
-{"name":"Aztecs","string_id":120164}
-{"name":"Bengalis","string_id":120190}
-{"name":"Berbers","string_id":120176}
-{"name":"Bohemians","string_id":120188}
-{"name":"Britons","string_id":120150}
-{"name":"Bulgarians","string_id":120181}
-{"name":"Burgundians","string_id":120185}
-{"name":"Burmese","string_id":120179}
-{"name":"Byzantines","string_id":120156}
-{"name":"Celts","string_id":120162}
-{"name":"Chinese","string_id":120155}
-{"name":"Cumans","string_id":120183}
-{"name":"Dravidians","string_id":120189}
-{"name":"Ethiopians","string_id":120174}
-{"name":"Franks","string_id":120151}
-{"name":"Georgians","string_id":120194}
-{"name":"Goths","string_id":120152}
-{"name":"Gurjaras","string_id":120191}
-{"name":"Hindustanis","string_id":120169}
-{"name":"Huns","string_id":120166}
-{"name":"Incas","string_id":120170}
-{"name":"Italians","string_id":120168}
-{"name":"Japanese","string_id":120154}
-{"name":"Jurchens","string_id":120201}
-{"name":"Khitans","string_id":120202}
-{"name":"Khmer","string_id":120177}
-{"name":"Koreans","string_id":120167}
-{"name":"Lithuanians","string_id":120184}
-{"name":"Magyars","string_id":120171}
-{"name":"Malay","string_id":120178}
-{"name":"Malians","string_id":120175}
-{"name":"Mayans","string_id":120165}
-{"name":"Mongols","string_id":120161}
-{"name":"Persians","string_id":120157}
-{"name":"Poles","string_id":120187}
-{"name":"Portuguese","string_id":120173}
-{"name":"Romans","string_id":120192}
-{"name":"Saracens","string_id":120158}
-{"name":"Shu","string_id":120198}
-{"name":"Sicilians","string_id":120186}
-{"name":"Slavs","string_id":120172}
-{"name":"Spanish","string_id":120163}
-{"name":"Tatars","string_id":120182}
-{"name":"Teutons","string_id":120153}
-{"name":"Turks","string_id":120159}
-{"name":"Vietnamese","string_id":120180}
-{"name":"Vikings","string_id":120160}
-{"name":"Wei","string_id":120200}
-{"name":"Wu","string_id":120199}
+{"name": "Armenians", "string_id": 120193}
+{"name": "Aztecs", "string_id": 120164}
+{"name": "Bengalis", "string_id": 120190}
+{"name": "Berbers", "string_id": 120176}
+{"name": "Bohemians", "string_id": 120188}
+{"name": "Britons", "string_id": 120150}
+{"name": "Bulgarians", "string_id": 120181}
+{"name": "Burgundians", "string_id": 120185}
+{"name": "Burmese", "string_id": 120179}
+{"name": "Byzantines", "string_id": 120156}
+{"name": "Celts", "string_id": 120162}
+{"name": "Chinese", "string_id": 120155}
+{"name": "Cumans", "string_id": 120183}
+{"name": "Dravidians", "string_id": 120189}
+{"name": "Ethiopians", "string_id": 120174}
+{"name": "Franks", "string_id": 120151}
+{"name": "Georgians", "string_id": 120194}
+{"name": "Goths", "string_id": 120152}
+{"name": "Gurjaras", "string_id": 120191}
+{"name": "Hindustanis", "string_id": 120169}
+{"name": "Huns", "string_id": 120166}
+{"name": "Incas", "string_id": 120170}
+{"name": "Italians", "string_id": 120168}
+{"name": "Japanese", "string_id": 120154}
+{"name": "Jurchens", "string_id": 120201}
+{"name": "Khitans", "string_id": 120202}
+{"name": "Khmer", "string_id": 120177}
+{"name": "Koreans", "string_id": 120167}
+{"name": "Lithuanians", "string_id": 120184}
+{"name": "Magyars", "string_id": 120171}
+{"name": "Malay", "string_id": 120178}
+{"name": "Malians", "string_id": 120175}
+{"name": "Mapuche", "string_id": 120207}
+{"name": "Mayans", "string_id": 120165}
+{"name": "Mongols", "string_id": 120161}
+{"name": "Muisca", "string_id": 120206}
+{"name": "Persians", "string_id": 120157}
+{"name": "Poles", "string_id": 120187}
+{"name": "Portuguese", "string_id": 120173}
+{"name": "Romans", "string_id": 120192}
+{"name": "Saracens", "string_id": 120158}
+{"name": "Shu", "string_id": 120198}
+{"name": "Sicilians", "string_id": 120186}
+{"name": "Slavs", "string_id": 120172}
+{"name": "Spanish", "string_id": 120163}
+{"name": "Tatars", "string_id": 120182}
+{"name": "Teutons", "string_id": 120153}
+{"name": "Tupi", "string_id": 120208}
+{"name": "Turks", "string_id": 120159}
+{"name": "Vietnamese", "string_id": 120180}
+{"name": "Vikings", "string_id": 120160}
+{"name": "Wei", "string_id": 120200}
+{"name": "Wu", "string_id": 120199}

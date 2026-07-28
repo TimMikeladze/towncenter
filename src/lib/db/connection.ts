@@ -1,77 +1,58 @@
-import { DuckDBInstance, DuckDBConnection } from '@duckdb/node-api'
-import path from 'path'
+import fs from "node:fs"
+import path from "node:path"
+import { type DuckDBConnection, DuckDBInstance } from "@duckdb/node-api"
 
-let instance: DuckDBInstance | null = null
-let connection: DuckDBConnection | null = null
-let isInitializing = false
+const PARQUET_DIR = path.join(process.cwd(), "export", "parquet")
 
-const PARQUET_DIR = path.join(process.cwd(), 'export', 'parquet')
-const IMG_DIR = path.join(process.cwd(), 'export', 'img')
+let initPromise: Promise<DuckDBConnection> | null = null
 
-export async function getConnection(): Promise<DuckDBConnection> {
-  // Return cached connection if available
-  if (connection) {
-    return connection
+async function initialize(): Promise<DuckDBConnection> {
+  const instance = await DuckDBInstance.create(":memory:")
+  const connection = await instance.connect()
+
+  const tables = fs
+    .readdirSync(PARQUET_DIR)
+    .filter((file) => file.endsWith(".parquet"))
+    .map((file) => path.basename(file, ".parquet"))
+    .sort()
+
+  for (const table of tables) {
+    await connection.run(`
+      CREATE TABLE "${table}" AS
+      SELECT * FROM read_parquet('${PARQUET_DIR}/${table}.parquet')
+    `)
   }
 
-  // Prevent race conditions - wait if already initializing
-  if (isInitializing) {
-    // Wait and retry
-    await new Promise(resolve => setTimeout(resolve, 100))
-    return getConnection()
-  }
-
-  isInitializing = true
-
-  try {
-    // Create in-memory DuckDB instance
-    instance = await DuckDBInstance.create(':memory:')
-    connection = await instance.connect()
-
-    // Load all parquet files into tables
-    const tables = [
-      'age_names', 'buildings', 'building_armours', 'building_attacks',
-      'civilizations', 'civ_buildings', 'civ_names', 'civ_techs',
-      'civ_uniques', 'civ_units', 'node_types', 'techs', 'units',
-      'unit_armours', 'unit_attacks', 'unit_upgrades'
-    ]
-
-    for (const table of tables) {
-      await connection.run(`
-        CREATE TABLE ${table} AS
-        SELECT * FROM read_parquet('${PARQUET_DIR}/${table}.parquet')
-      `)
-    }
-
-    console.log('[DuckDB] Connection initialized successfully')
-    return connection
-  } catch (error) {
-    console.error('[DuckDB] Failed to initialize connection:', error)
-    // Clean up on failure
-    connection = null
-    instance = null
-    throw new Error(`Failed to initialize DuckDB: ${error}`)
-  } finally {
-    isInitializing = false
-  }
+  console.log(`[DuckDB] Loaded ${tables.length} tables`)
+  return connection
 }
 
-export function getImagePath(relativePath: string): string {
-  return `/${relativePath}`
+export function getConnection(): Promise<DuckDBConnection> {
+  if (!initPromise) {
+    initPromise = initialize().catch((error) => {
+      // Allow a later request to retry instead of caching the failure forever.
+      initPromise = null
+      throw new Error(`Failed to initialize DuckDB: ${error}`)
+    })
+  }
+  return initPromise
+}
+
+/** Run a query and return its rows, typed by the caller's row interface. */
+export async function queryRows<T>(sql: string): Promise<T[]> {
+  const conn = await getConnection()
+  const reader = await conn.runAndReadAll(sql)
+  return reader.getRowObjects() as T[]
 }
 
 export async function closeConnection(): Promise<void> {
+  if (!initPromise) return
+  const pending = initPromise
+  initPromise = null
   try {
-    if (connection) {
-      connection.closeSync()
-      connection = null
-    }
-    instance = null
-    console.log('[DuckDB] Connection closed successfully')
+    const connection = await pending
+    connection.closeSync()
   } catch (error) {
-    console.error('[DuckDB] Error closing connection:', error)
-    // Force cleanup even if close fails
-    connection = null
-    instance = null
+    console.error("[DuckDB] Error closing connection:", error)
   }
 }

@@ -1,8 +1,9 @@
-import { SecondaryNav } from "@/components/secondary-nav"
-import { getAllTechnologies } from "@/lib/data"
-import { Card } from "@/components/ui/card"
-import { Sparkles, Clock } from "lucide-react"
+import { Clock, Sparkles } from "lucide-react"
 import Link from "next/link"
+import { SecondaryNav } from "@/components/secondary-nav"
+import { Card } from "@/components/ui/card"
+import { getAllTechnologies } from "@/lib/data"
+import { ECO_TECH_CATEGORIES, MILITARY_TECH_CATEGORIES } from "@/lib/game/classes"
 
 const secondaryNavItems = [
   { label: "All", value: "all" },
@@ -11,11 +12,7 @@ const secondaryNavItems = [
   { label: "Unique", value: "Unique" },
 ]
 
-export default async function TechnologiesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
+export default async function TechnologiesPage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const params = await searchParams
   const activeTab = params.type || "all"
   const technologies = await getAllTechnologies()
@@ -24,13 +21,9 @@ export default async function TechnologiesPage({
     activeTab === "all"
       ? technologies
       : activeTab === "eco"
-        ? technologies.filter((t) => ["Town Center", "Mill", "Lumber", "Mining", "Market"].includes(t.category))
+        ? technologies.filter((t) => ECO_TECH_CATEGORIES.includes(t.category))
         : activeTab === "military"
-          ? technologies.filter((t) =>
-              ["Blacksmith", "Barracks", "Archery", "Stable", "Monastery", "Dock", "University", "Castle"].includes(
-                t.category,
-              ),
-            )
+          ? technologies.filter((t) => MILITARY_TECH_CATEGORIES.includes(t.category))
           : technologies.filter((t) => t.category === activeTab)
 
   return (

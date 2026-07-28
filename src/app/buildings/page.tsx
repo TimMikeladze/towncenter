@@ -1,8 +1,8 @@
-import { SecondaryNav } from "@/components/secondary-nav"
-import { getAllBuildings } from "@/lib/data"
-import { Card } from "@/components/ui/card"
-import { Building2, Shield, Eye, Clock } from "lucide-react"
+import { Building2, Clock, Eye, Shield } from "lucide-react"
 import Link from "next/link"
+import { SecondaryNav } from "@/components/secondary-nav"
+import { Card } from "@/components/ui/card"
+import { getAllBuildings } from "@/lib/data"
 
 const secondaryNavItems = [
   { label: "All", value: "all" },
@@ -12,11 +12,7 @@ const secondaryNavItems = [
   { label: "Defense", value: "Tower" },
 ]
 
-export default async function BuildingsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
+export default async function BuildingsPage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const params = await searchParams
   const activeTab = params.type || "all"
   const buildings = await getAllBuildings()

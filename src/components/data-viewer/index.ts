@@ -1,2 +1,2 @@
 export { DataViewer } from "./data-viewer"
-export type { DataViewerConfig, DataItem, ViewMode } from "./types"
+export type { DataItem, DataViewerConfig, ViewMode } from "./types"

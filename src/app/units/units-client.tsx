@@ -1,9 +1,11 @@
 "use client"
 
-import { DataViewer } from "@/components/data-viewer"
+import { Heart, Shield, Swords, Target, Zap } from "lucide-react"
+import Image from "next/image"
 import type { DataViewerConfig } from "@/components/data-viewer"
+import { DataViewer } from "@/components/data-viewer"
+import { costEfficiency, resourceCost } from "@/lib/game/combat"
 import type { Unit } from "@/lib/types"
-import { Swords, Heart, Shield, Target, Zap } from "lucide-react"
 import { getEntityImagePath } from "@/lib/utils/images"
 
 interface UnitsClientProps {
@@ -14,7 +16,7 @@ interface UnitsClientProps {
 export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
   const config: DataViewerConfig<Unit> = {
     itemName: "units",
-    searchFields: ["name", "type", "age"],
+    searchFields: ["name", "type", "age", "description"],
     searchPlaceholder: "Search units...",
 
     filters: [
@@ -33,20 +35,14 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
     ],
 
     sortOptions: [
+      { key: "name", label: "Name", sortFn: (a, b) => a.name.localeCompare(b.name) },
+      { key: "hp", label: "HP", sortFn: (a, b) => b.stats.hp - a.stats.hp },
+      { key: "attack", label: "Attack", sortFn: (a, b) => b.stats.attack - a.stats.attack },
+      { key: "cost", label: "Cost", sortFn: (a, b) => resourceCost(a) - resourceCost(b) },
       {
-        key: "name",
-        label: "Name",
-        sortFn: (a, b) => a.name.localeCompare(b.name),
-      },
-      {
-        key: "hp",
-        label: "HP",
-        sortFn: (a, b) => b.stats.hp - a.stats.hp,
-      },
-      {
-        key: "attack",
-        label: "Attack",
-        sortFn: (a, b) => b.stats.attack - a.stats.attack,
+        key: "efficiency",
+        label: "Cost efficiency",
+        sortFn: (a, b) => costEfficiency(b) - costEfficiency(a),
       },
     ],
 
@@ -59,22 +55,22 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       </div>
     ),
     cardHeader: (unit) => (
-      <>
-        <div className="relative h-24 bg-muted flex items-center justify-center border-b">
-          <img
-            src={getEntityImagePath(unit.image_path)}
-            alt={unit.name}
-            className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-          />
-          {unit.civSpecific && (
-            <div className="absolute top-1 right-1">
-              <span className="px-2 py-0.5 text-[9px] font-bold rounded border-2 bg-background uppercase tracking-wider">
-                UNIQUE
-              </span>
-            </div>
-          )}
-        </div>
-      </>
+      <div className="relative h-24 bg-muted flex items-center justify-center border-b">
+        <Image
+          src={getEntityImagePath(unit.image_path)}
+          alt={unit.name}
+          width={64}
+          height={64}
+          className="h-16 w-16 object-contain"
+        />
+        {unit.civSpecific && (
+          <div className="absolute top-1 right-1">
+            <span className="px-2 py-0.5 text-[9px] font-bold rounded border-2 bg-background uppercase tracking-wider">
+              UNIQUE
+            </span>
+          </div>
+        )}
+      </div>
     ),
     cardContent: (unit) => (
       <>
@@ -115,13 +111,23 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       {
         key: "name",
         header: "UNIT",
-        sortable: true,
+        sortKey: "name",
+        width: "2fr",
         render: (unit) => (
-          <div>
-            <div className="font-bold uppercase">{unit.name}</div>
-            <div className="text-[10px] text-muted-foreground flex items-center gap-2 mt-0.5">
-              <span className="px-1.5 py-0.5 border rounded uppercase">{unit.type}</span>
-              <span className="uppercase">{unit.age} Age</span>
+          <div className="flex items-center gap-2">
+            <Image
+              src={getEntityImagePath(unit.image_path)}
+              alt=""
+              width={24}
+              height={24}
+              className="h-6 w-6 object-contain shrink-0"
+            />
+            <div>
+              <div className="font-bold uppercase">{unit.name}</div>
+              <div className="text-[10px] text-muted-foreground flex items-center gap-2 mt-0.5">
+                <span className="px-1.5 py-0.5 border rounded uppercase">{unit.type}</span>
+                <span className="uppercase">{unit.age} Age</span>
+              </div>
             </div>
           </div>
         ),
@@ -129,6 +135,7 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       {
         key: "stats",
         header: "COMBAT STATS",
+        sortKey: "hp",
         render: (unit) => (
           <div className="flex items-center gap-3 text-[10px] font-mono">
             <span className="flex items-center gap-1">
@@ -149,12 +156,13 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       {
         key: "cost",
         header: "COST",
-        sortable: true,
+        sortKey: "cost",
         render: (unit) => (
           <span className="font-mono text-[10px]">
             {unit.cost.food && `${unit.cost.food}F `}
             {unit.cost.wood && `${unit.cost.wood}W `}
-            {unit.cost.gold && `${unit.cost.gold}G`}
+            {unit.cost.gold && `${unit.cost.gold}G `}
+            {unit.cost.stone && `${unit.cost.stone}S`}
           </span>
         ),
       },

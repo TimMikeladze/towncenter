@@ -1,0 +1,479 @@
+{"entity_type": "unit", "entity_id": 4, "name": "Archer"}
+{"entity_type": "unit", "entity_id": 5, "name": "Hand Cannoneer"}
+{"entity_type": "unit", "entity_id": 6, "name": "Elite Skirmisher"}
+{"entity_type": "unit", "entity_id": 7, "name": "Skirmisher"}
+{"entity_type": "unit", "entity_id": 8, "name": "Longbowman"}
+{"entity_type": "unit", "entity_id": 11, "name": "Mangudai"}
+{"entity_type": "unit", "entity_id": 13, "name": "Fishing Ship"}
+{"entity_type": "unit", "entity_id": 17, "name": "Trade Cog"}
+{"entity_type": "unit", "entity_id": 21, "name": "War Galley"}
+{"entity_type": "unit", "entity_id": 24, "name": "Crossbowman"}
+{"entity_type": "unit", "entity_id": 25, "name": "Teutonic Knight"}
+{"entity_type": "unit", "entity_id": 36, "name": "Bombard Cannon"}
+{"entity_type": "unit", "entity_id": 38, "name": "Knight"}
+{"entity_type": "unit", "entity_id": 39, "name": "Cavalry Archer"}
+{"entity_type": "unit", "entity_id": 40, "name": "Cataphract"}
+{"entity_type": "unit", "entity_id": 41, "name": "Huskarl"}
+{"entity_type": "unit", "entity_id": 42, "name": "Trebuchet"}
+{"entity_type": "unit", "entity_id": 46, "name": "Janissary"}
+{"entity_type": "unit", "entity_id": 73, "name": "Chu Ko Nu"}
+{"entity_type": "unit", "entity_id": 74, "name": "Militia"}
+{"entity_type": "unit", "entity_id": 75, "name": "Man-at-Arms"}
+{"entity_type": "unit", "entity_id": 77, "name": "Long Swordsman"}
+{"entity_type": "unit", "entity_id": 83, "name": "Villager"}
+{"entity_type": "unit", "entity_id": 93, "name": "Spearman"}
+{"entity_type": "unit", "entity_id": 125, "name": "Monk"}
+{"entity_type": "unit", "entity_id": 128, "name": "Trade Cart"}
+{"entity_type": "unit", "entity_id": 185, "name": "Slinger"}
+{"entity_type": "unit", "entity_id": 207, "name": "Imperial Camel Rider"}
+{"entity_type": "unit", "entity_id": 232, "name": "Woad Raider"}
+{"entity_type": "unit", "entity_id": 239, "name": "War Elephant"}
+{"entity_type": "unit", "entity_id": 250, "name": "Longboat"}
+{"entity_type": "unit", "entity_id": 279, "name": "Scorpion"}
+{"entity_type": "unit", "entity_id": 280, "name": "Mangonel"}
+{"entity_type": "unit", "entity_id": 281, "name": "Throwing Axeman"}
+{"entity_type": "unit", "entity_id": 282, "name": "Mameluke"}
+{"entity_type": "unit", "entity_id": 283, "name": "Cavalier"}
+{"entity_type": "unit", "entity_id": 291, "name": "Samurai"}
+{"entity_type": "unit", "entity_id": 329, "name": "Camel Rider"}
+{"entity_type": "unit", "entity_id": 330, "name": "Heavy Camel Rider"}
+{"entity_type": "unit", "entity_id": 331, "name": "Trebuchet (Packed)"}
+{"entity_type": "unit", "entity_id": 358, "name": "Pikeman"}
+{"entity_type": "unit", "entity_id": 359, "name": "Halberdier"}
+{"entity_type": "unit", "entity_id": 420, "name": "Cannon Galleon"}
+{"entity_type": "unit", "entity_id": 422, "name": "Capped Ram"}
+{"entity_type": "unit", "entity_id": 440, "name": "Petard"}
+{"entity_type": "unit", "entity_id": 441, "name": "Hussar"}
+{"entity_type": "unit", "entity_id": 442, "name": "Galleon"}
+{"entity_type": "unit", "entity_id": 448, "name": "Scout Cavalry"}
+{"entity_type": "unit", "entity_id": 473, "name": "Two-Handed Swordsman"}
+{"entity_type": "unit", "entity_id": 474, "name": "Heavy Cavalry Archer"}
+{"entity_type": "unit", "entity_id": 492, "name": "Arbalester"}
+{"entity_type": "unit", "entity_id": 527, "name": "Demolition Ship"}
+{"entity_type": "unit", "entity_id": 528, "name": "Heavy Demolition Ship"}
+{"entity_type": "unit", "entity_id": 529, "name": "Fire Ship"}
+{"entity_type": "unit", "entity_id": 530, "name": "Elite Longbowman"}
+{"entity_type": "unit", "entity_id": 531, "name": "Elite Throwing Axeman"}
+{"entity_type": "unit", "entity_id": 532, "name": "Fast Fire Ship"}
+{"entity_type": "unit", "entity_id": 533, "name": "Elite Longboat"}
+{"entity_type": "unit", "entity_id": 534, "name": "Elite Woad Raider"}
+{"entity_type": "unit", "entity_id": 539, "name": "Galley"}
+{"entity_type": "unit", "entity_id": 542, "name": "Heavy Scorpion"}
+{"entity_type": "unit", "entity_id": 545, "name": "Transport Ship"}
+{"entity_type": "unit", "entity_id": 546, "name": "Light Cavalry"}
+{"entity_type": "unit", "entity_id": 548, "name": "Siege Ram"}
+{"entity_type": "unit", "entity_id": 550, "name": "Onager"}
+{"entity_type": "unit", "entity_id": 553, "name": "Elite Cataphract"}
+{"entity_type": "unit", "entity_id": 554, "name": "Elite Teutonic Knight"}
+{"entity_type": "unit", "entity_id": 555, "name": "Elite Huskarl"}
+{"entity_type": "unit", "entity_id": 556, "name": "Elite Mameluke"}
+{"entity_type": "unit", "entity_id": 557, "name": "Elite Janissary"}
+{"entity_type": "unit", "entity_id": 558, "name": "Elite War Elephant"}
+{"entity_type": "unit", "entity_id": 559, "name": "Elite Chu Ko Nu"}
+{"entity_type": "unit", "entity_id": 560, "name": "Elite Samurai"}
+{"entity_type": "unit", "entity_id": 561, "name": "Elite Mangudai"}
+{"entity_type": "unit", "entity_id": 567, "name": "Champion"}
+{"entity_type": "unit", "entity_id": 569, "name": "Paladin"}
+{"entity_type": "unit", "entity_id": 588, "name": "Siege Onager"}
+{"entity_type": "unit", "entity_id": 691, "name": "Elite Cannon Galleon"}
+{"entity_type": "unit", "entity_id": 692, "name": "Berserk"}
+{"entity_type": "unit", "entity_id": 694, "name": "Elite Berserk"}
+{"entity_type": "unit", "entity_id": 725, "name": "Jaguar Warrior"}
+{"entity_type": "unit", "entity_id": 726, "name": "Elite Jaguar Warrior"}
+{"entity_type": "unit", "entity_id": 751, "name": "Eagle Scout"}
+{"entity_type": "unit", "entity_id": 752, "name": "Elite Eagle Warrior"}
+{"entity_type": "unit", "entity_id": 753, "name": "Eagle Warrior"}
+{"entity_type": "unit", "entity_id": 755, "name": "Tarkan"}
+{"entity_type": "unit", "entity_id": 757, "name": "Elite Tarkan"}
+{"entity_type": "unit", "entity_id": 759, "name": "Huskarl"}
+{"entity_type": "unit", "entity_id": 761, "name": "Elite Huskarl"}
+{"entity_type": "unit", "entity_id": 763, "name": "Plumed Archer"}
+{"entity_type": "unit", "entity_id": 765, "name": "Elite Plumed Archer"}
+{"entity_type": "unit", "entity_id": 771, "name": "Conquistador"}
+{"entity_type": "unit", "entity_id": 773, "name": "Elite Conquistador"}
+{"entity_type": "unit", "entity_id": 775, "name": "Missionary"}
+{"entity_type": "unit", "entity_id": 827, "name": "War Wagon"}
+{"entity_type": "unit", "entity_id": 829, "name": "Elite War Wagon"}
+{"entity_type": "unit", "entity_id": 831, "name": "Turtle Ship"}
+{"entity_type": "unit", "entity_id": 832, "name": "Elite Turtle Ship"}
+{"entity_type": "unit", "entity_id": 866, "name": "Genoese Crossbowman"}
+{"entity_type": "unit", "entity_id": 868, "name": "Elite Genoese Crossbowman"}
+{"entity_type": "unit", "entity_id": 869, "name": "Magyar Huszar"}
+{"entity_type": "unit", "entity_id": 871, "name": "Elite Magyar Huszar"}
+{"entity_type": "unit", "entity_id": 873, "name": "Elephant Archer"}
+{"entity_type": "unit", "entity_id": 875, "name": "Elite Elephant Archer"}
+{"entity_type": "unit", "entity_id": 876, "name": "Boyar"}
+{"entity_type": "unit", "entity_id": 878, "name": "Elite Boyar"}
+{"entity_type": "unit", "entity_id": 879, "name": "Kamayuk"}
+{"entity_type": "unit", "entity_id": 881, "name": "Elite Kamayuk"}
+{"entity_type": "unit", "entity_id": 882, "name": "Condottiero"}
+{"entity_type": "unit", "entity_id": 886, "name": "Tarkan"}
+{"entity_type": "unit", "entity_id": 887, "name": "Elite Tarkan"}
+{"entity_type": "unit", "entity_id": 1001, "name": "Organ Gun"}
+{"entity_type": "unit", "entity_id": 1003, "name": "Elite Organ Gun"}
+{"entity_type": "unit", "entity_id": 1004, "name": "Caravel"}
+{"entity_type": "unit", "entity_id": 1006, "name": "Elite Caravel"}
+{"entity_type": "unit", "entity_id": 1007, "name": "Camel Archer"}
+{"entity_type": "unit", "entity_id": 1009, "name": "Elite Camel Archer"}
+{"entity_type": "unit", "entity_id": 1010, "name": "Genitour"}
+{"entity_type": "unit", "entity_id": 1012, "name": "Elite Genitour"}
+{"entity_type": "unit", "entity_id": 1013, "name": "Gbeto"}
+{"entity_type": "unit", "entity_id": 1015, "name": "Elite Gbeto"}
+{"entity_type": "unit", "entity_id": 1016, "name": "Shotel Warrior"}
+{"entity_type": "unit", "entity_id": 1018, "name": "Elite Shotel Warrior"}
+{"entity_type": "unit", "entity_id": 1103, "name": "Fire Galley"}
+{"entity_type": "unit", "entity_id": 1104, "name": "Demolition Raft"}
+{"entity_type": "unit", "entity_id": 1105, "name": "Siege Tower"}
+{"entity_type": "unit", "entity_id": 1120, "name": "Ballista Elephant"}
+{"entity_type": "unit", "entity_id": 1122, "name": "Elite Ballista Elephant"}
+{"entity_type": "unit", "entity_id": 1123, "name": "Karambit Warrior"}
+{"entity_type": "unit", "entity_id": 1125, "name": "Elite Karambit Warrior"}
+{"entity_type": "unit", "entity_id": 1126, "name": "Arambai"}
+{"entity_type": "unit", "entity_id": 1128, "name": "Elite Arambai"}
+{"entity_type": "unit", "entity_id": 1129, "name": "Rattan Archer"}
+{"entity_type": "unit", "entity_id": 1131, "name": "Elite Rattan Archer"}
+{"entity_type": "unit", "entity_id": 1132, "name": "Battle Elephant"}
+{"entity_type": "unit", "entity_id": 1134, "name": "Elite Battle Elephant"}
+{"entity_type": "unit", "entity_id": 1155, "name": "Imperial Skirmisher"}
+{"entity_type": "unit", "entity_id": 1225, "name": "Konnik"}
+{"entity_type": "unit", "entity_id": 1227, "name": "Elite Konnik"}
+{"entity_type": "unit", "entity_id": 1228, "name": "Keshik"}
+{"entity_type": "unit", "entity_id": 1230, "name": "Elite Keshik"}
+{"entity_type": "unit", "entity_id": 1231, "name": "Kipchak"}
+{"entity_type": "unit", "entity_id": 1233, "name": "Elite Kipchak"}
+{"entity_type": "unit", "entity_id": 1234, "name": "Leitis"}
+{"entity_type": "unit", "entity_id": 1236, "name": "Elite Leitis"}
+{"entity_type": "unit", "entity_id": 1252, "name": "Konnik (Dismounted)"}
+{"entity_type": "unit", "entity_id": 1253, "name": "Elite Konnik (Dismounted)"}
+{"entity_type": "unit", "entity_id": 1254, "name": "Konnik"}
+{"entity_type": "unit", "entity_id": 1255, "name": "Elite Konnik"}
+{"entity_type": "unit", "entity_id": 1258, "name": "Battering Ram"}
+{"entity_type": "unit", "entity_id": 1260, "name": "Elite Kipchak"}
+{"entity_type": "unit", "entity_id": 1263, "name": "Flaming Camel"}
+{"entity_type": "unit", "entity_id": 1302, "name": "Dragon Ship"}
+{"entity_type": "unit", "entity_id": 1370, "name": "Steppe Lancer"}
+{"entity_type": "unit", "entity_id": 1372, "name": "Elite Steppe Lancer"}
+{"entity_type": "unit", "entity_id": 1570, "name": "Aztec Raider"}
+{"entity_type": "unit", "entity_id": 1655, "name": "Coustillier"}
+{"entity_type": "unit", "entity_id": 1657, "name": "Elite Coustillier"}
+{"entity_type": "unit", "entity_id": 1658, "name": "Serjeant"}
+{"entity_type": "unit", "entity_id": 1659, "name": "Elite Serjeant"}
+{"entity_type": "unit", "entity_id": 1660, "name": "Serjeant"}
+{"entity_type": "unit", "entity_id": 1661, "name": "Elite Serjeant"}
+{"entity_type": "unit", "entity_id": 1699, "name": "Flemish Militia"}
+{"entity_type": "unit", "entity_id": 1701, "name": "Obuch"}
+{"entity_type": "unit", "entity_id": 1703, "name": "Elite Obuch"}
+{"entity_type": "unit", "entity_id": 1704, "name": "Hussite Wagon"}
+{"entity_type": "unit", "entity_id": 1706, "name": "Elite Hussite Wagon"}
+{"entity_type": "unit", "entity_id": 1707, "name": "Winged Hussar"}
+{"entity_type": "unit", "entity_id": 1709, "name": "Houfnice"}
+{"entity_type": "unit", "entity_id": 1735, "name": "Urumi Swordsman"}
+{"entity_type": "unit", "entity_id": 1737, "name": "Elite Urumi Swordsman"}
+{"entity_type": "unit", "entity_id": 1738, "name": "Ratha"}
+{"entity_type": "unit", "entity_id": 1740, "name": "Elite Ratha"}
+{"entity_type": "unit", "entity_id": 1741, "name": "Chakram Thrower"}
+{"entity_type": "unit", "entity_id": 1743, "name": "Elite Chakram Thrower"}
+{"entity_type": "unit", "entity_id": 1744, "name": "Armored Elephant"}
+{"entity_type": "unit", "entity_id": 1746, "name": "Siege Elephant"}
+{"entity_type": "unit", "entity_id": 1747, "name": "Ghulam"}
+{"entity_type": "unit", "entity_id": 1749, "name": "Elite Ghulam"}
+{"entity_type": "unit", "entity_id": 1750, "name": "Thirisadai"}
+{"entity_type": "unit", "entity_id": 1751, "name": "Shrivamsha Rider"}
+{"entity_type": "unit", "entity_id": 1753, "name": "Elite Shrivamsha Rider"}
+{"entity_type": "unit", "entity_id": 1755, "name": "Camel Scout"}
+{"entity_type": "unit", "entity_id": 1759, "name": "Ratha"}
+{"entity_type": "unit", "entity_id": 1761, "name": "Elite Ratha"}
+{"entity_type": "unit", "entity_id": 1786, "name": "Spearman"}
+{"entity_type": "unit", "entity_id": 1787, "name": "Pikeman"}
+{"entity_type": "unit", "entity_id": 1788, "name": "Halberdier"}
+{"entity_type": "unit", "entity_id": 1790, "name": "Centurion"}
+{"entity_type": "unit", "entity_id": 1792, "name": "Elite Centurion"}
+{"entity_type": "unit", "entity_id": 1793, "name": "Legionary"}
+{"entity_type": "unit", "entity_id": 1795, "name": "Dromon"}
+{"entity_type": "unit", "entity_id": 1800, "name": "Composite Bowman"}
+{"entity_type": "unit", "entity_id": 1802, "name": "Elite Composite Bowman"}
+{"entity_type": "unit", "entity_id": 1803, "name": "Monaspa"}
+{"entity_type": "unit", "entity_id": 1805, "name": "Elite Monaspa"}
+{"entity_type": "unit", "entity_id": 1811, "name": "Warrior Priest"}
+{"entity_type": "unit", "entity_id": 1813, "name": "Savar"}
+{"entity_type": "unit", "entity_id": 1901, "name": "Fire Lancer"}
+{"entity_type": "unit", "entity_id": 1903, "name": "Elite Fire Lancer"}
+{"entity_type": "unit", "entity_id": 1904, "name": "Rocket Cart"}
+{"entity_type": "unit", "entity_id": 1907, "name": "Heavy Rocket Cart"}
+{"entity_type": "unit", "entity_id": 1908, "name": "Iron Pagoda"}
+{"entity_type": "unit", "entity_id": 1910, "name": "Elite Iron Pagoda"}
+{"entity_type": "unit", "entity_id": 1911, "name": "Grenadier"}
+{"entity_type": "unit", "entity_id": 1920, "name": "Liao Dao"}
+{"entity_type": "unit", "entity_id": 1922, "name": "Elite Liao Dao"}
+{"entity_type": "unit", "entity_id": 1923, "name": "Mounted Trebuchet"}
+{"entity_type": "unit", "entity_id": 1942, "name": "Traction Trebuchet"}
+{"entity_type": "unit", "entity_id": 1944, "name": "Hei Guang Cavalry"}
+{"entity_type": "unit", "entity_id": 1946, "name": "Heavy Hei Guang Cavalry"}
+{"entity_type": "unit", "entity_id": 1948, "name": "Lou Chuan"}
+{"entity_type": "unit", "entity_id": 1949, "name": "Tiger Cavalry"}
+{"entity_type": "unit", "entity_id": 1951, "name": "Elite Tiger Cavalry"}
+{"entity_type": "unit", "entity_id": 1952, "name": "Xianbei Raider"}
+{"entity_type": "unit", "entity_id": 1954, "name": "Cao Cao"}
+{"entity_type": "unit", "entity_id": 1959, "name": "White Feather Guard"}
+{"entity_type": "unit", "entity_id": 1961, "name": "Elite White Feather Guard"}
+{"entity_type": "unit", "entity_id": 1962, "name": "War Chariot"}
+{"entity_type": "unit", "entity_id": 1966, "name": "Liu Bei"}
+{"entity_type": "unit", "entity_id": 1968, "name": "Fire Archer"}
+{"entity_type": "unit", "entity_id": 1970, "name": "Elite Fire Archer"}
+{"entity_type": "unit", "entity_id": 1974, "name": "Jian Swordsman"}
+{"entity_type": "unit", "entity_id": 1978, "name": "Sun Jian"}
+{"entity_type": "unit", "entity_id": 1980, "name": "War Chariot"}
+{"entity_type": "unit", "entity_id": 2550, "name": "Champi Scout"}
+{"entity_type": "unit", "entity_id": 2552, "name": "Champi Warrior"}
+{"entity_type": "unit", "entity_id": 2554, "name": "Elite Champi Warrior"}
+{"entity_type": "unit", "entity_id": 2562, "name": "Guecha Warrior"}
+{"entity_type": "unit", "entity_id": 2564, "name": "Elite Guecha Warrior"}
+{"entity_type": "unit", "entity_id": 2566, "name": "Kona"}
+{"entity_type": "unit", "entity_id": 2568, "name": "Elite Kona"}
+{"entity_type": "unit", "entity_id": 2569, "name": "Bolas Rider"}
+{"entity_type": "unit", "entity_id": 2571, "name": "Elite Bolas Rider"}
+{"entity_type": "unit", "entity_id": 2579, "name": "Blackwood Archer"}
+{"entity_type": "unit", "entity_id": 2581, "name": "Elite Blackwood Archer"}
+{"entity_type": "unit", "entity_id": 2582, "name": "Ibirapema Warrior"}
+{"entity_type": "unit", "entity_id": 2584, "name": "Elite Ibirapema Warrior"}
+{"entity_type": "unit", "entity_id": 2586, "name": "Temple Guard"}
+{"entity_type": "unit", "entity_id": 2587, "name": "Elite Temple Guard"}
+{"entity_type": "unit", "entity_id": 2588, "name": "Champi Runner"}
+{"entity_type": "unit", "entity_id": 2626, "name": "Hulk"}
+{"entity_type": "unit", "entity_id": 2627, "name": "War Hulk"}
+{"entity_type": "unit", "entity_id": 2628, "name": "Carrack"}
+{"entity_type": "unit", "entity_id": 2633, "name": "Catapult Galleon"}
+{"entity_type": "building", "entity_id": 12, "name": "Barracks"}
+{"entity_type": "building", "entity_id": 45, "name": "Dock"}
+{"entity_type": "building", "entity_id": 49, "name": "Siege Workshop"}
+{"entity_type": "building", "entity_id": 50, "name": "Farm"}
+{"entity_type": "building", "entity_id": 68, "name": "Mill"}
+{"entity_type": "building", "entity_id": 70, "name": "House"}
+{"entity_type": "building", "entity_id": 71, "name": "Town Center"}
+{"entity_type": "building", "entity_id": 72, "name": "Palisade Wall"}
+{"entity_type": "building", "entity_id": 79, "name": "Watch Tower"}
+{"entity_type": "building", "entity_id": 82, "name": "Castle"}
+{"entity_type": "building", "entity_id": 84, "name": "Market"}
+{"entity_type": "building", "entity_id": 87, "name": "Archery Range"}
+{"entity_type": "building", "entity_id": 101, "name": "Stable"}
+{"entity_type": "building", "entity_id": 103, "name": "Blacksmith"}
+{"entity_type": "building", "entity_id": 104, "name": "Monastery"}
+{"entity_type": "building", "entity_id": 109, "name": "Town Center"}
+{"entity_type": "building", "entity_id": 117, "name": "Stone Wall"}
+{"entity_type": "building", "entity_id": 155, "name": "Fortified Wall"}
+{"entity_type": "building", "entity_id": 199, "name": "Fish Trap"}
+{"entity_type": "building", "entity_id": 209, "name": "University"}
+{"entity_type": "building", "entity_id": 234, "name": "Guard Tower"}
+{"entity_type": "building", "entity_id": 235, "name": "Keep"}
+{"entity_type": "building", "entity_id": 236, "name": "Bombard Tower"}
+{"entity_type": "building", "entity_id": 276, "name": "Wonder"}
+{"entity_type": "building", "entity_id": 487, "name": "Gate"}
+{"entity_type": "building", "entity_id": 562, "name": "Lumber Camp"}
+{"entity_type": "building", "entity_id": 584, "name": "Mining Camp"}
+{"entity_type": "building", "entity_id": 598, "name": "Outpost"}
+{"entity_type": "building", "entity_id": 621, "name": "Town Center"}
+{"entity_type": "building", "entity_id": 792, "name": "Palisade Gate"}
+{"entity_type": "building", "entity_id": 1021, "name": "Feitoria"}
+{"entity_type": "building", "entity_id": 1189, "name": "Harbor"}
+{"entity_type": "building", "entity_id": 1251, "name": "Krepost"}
+{"entity_type": "building", "entity_id": 1665, "name": "Donjon"}
+{"entity_type": "building", "entity_id": 1734, "name": "Folwark"}
+{"entity_type": "building", "entity_id": 1754, "name": "Caravanserai"}
+{"entity_type": "building", "entity_id": 1806, "name": "Fortified Church"}
+{"entity_type": "building", "entity_id": 1808, "name": "Mule Cart"}
+{"entity_type": "building", "entity_id": 1889, "name": "Pasture"}
+{"entity_type": "building", "entity_id": 2556, "name": "Settlement"}
+{"entity_type": "tech", "entity_id": 3, "name": "Yeomen"}
+{"entity_type": "tech", "entity_id": 4, "name": "Cotton Armors"}
+{"entity_type": "tech", "entity_id": 5, "name": "Furor Celtica"}
+{"entity_type": "tech", "entity_id": 6, "name": "Drill"}
+{"entity_type": "tech", "entity_id": 7, "name": "Citadels"}
+{"entity_type": "tech", "entity_id": 8, "name": "Town Watch"}
+{"entity_type": "tech", "entity_id": 10, "name": "Artillery"}
+{"entity_type": "tech", "entity_id": 11, "name": "Crenellations"}
+{"entity_type": "tech", "entity_id": 12, "name": "Crop Rotation"}
+{"entity_type": "tech", "entity_id": 13, "name": "Heavy Plow"}
+{"entity_type": "tech", "entity_id": 14, "name": "Horse Collar"}
+{"entity_type": "tech", "entity_id": 15, "name": "Guilds"}
+{"entity_type": "tech", "entity_id": 16, "name": "Anarchy"}
+{"entity_type": "tech", "entity_id": 17, "name": "Banking"}
+{"entity_type": "tech", "entity_id": 19, "name": "Cartography"}
+{"entity_type": "tech", "entity_id": 21, "name": "Atheism"}
+{"entity_type": "tech", "entity_id": 22, "name": "Loom"}
+{"entity_type": "tech", "entity_id": 23, "name": "Coinage"}
+{"entity_type": "tech", "entity_id": 24, "name": "Garland Wars"}
+{"entity_type": "tech", "entity_id": 28, "name": "Bimaristan"}
+{"entity_type": "tech", "entity_id": 34, "name": "Warships"}
+{"entity_type": "tech", "entity_id": 35, "name": "Heavy Warships"}
+{"entity_type": "tech", "entity_id": 39, "name": "Husbandry"}
+{"entity_type": "tech", "entity_id": 45, "name": "Faith"}
+{"entity_type": "tech", "entity_id": 46, "name": "Devotion"}
+{"entity_type": "tech", "entity_id": 47, "name": "Chemistry"}
+{"entity_type": "tech", "entity_id": 48, "name": "Caravan"}
+{"entity_type": "tech", "entity_id": 49, "name": "Bogsveigar"}
+{"entity_type": "tech", "entity_id": 50, "name": "Masonry"}
+{"entity_type": "tech", "entity_id": 51, "name": "Architecture"}
+{"entity_type": "tech", "entity_id": 52, "name": "Rocketry"}
+{"entity_type": "tech", "entity_id": 54, "name": "Treadmill Crane"}
+{"entity_type": "tech", "entity_id": 55, "name": "Gold Mining"}
+{"entity_type": "tech", "entity_id": 59, "name": "Kataparuto"}
+{"entity_type": "tech", "entity_id": 61, "name": "Logistica"}
+{"entity_type": "tech", "entity_id": 63, "name": "Keep"}
+{"entity_type": "tech", "entity_id": 64, "name": "Bombard Tower"}
+{"entity_type": "tech", "entity_id": 65, "name": "Gillnets"}
+{"entity_type": "tech", "entity_id": 67, "name": "Forging"}
+{"entity_type": "tech", "entity_id": 68, "name": "Iron Casting"}
+{"entity_type": "tech", "entity_id": 74, "name": "Scale Mail Armor"}
+{"entity_type": "tech", "entity_id": 75, "name": "Blast Furnace"}
+{"entity_type": "tech", "entity_id": 76, "name": "Chain Mail Armor"}
+{"entity_type": "tech", "entity_id": 77, "name": "Plate Mail Armor"}
+{"entity_type": "tech", "entity_id": 80, "name": "Plate Barding Armor"}
+{"entity_type": "tech", "entity_id": 81, "name": "Scale Barding Armor"}
+{"entity_type": "tech", "entity_id": 82, "name": "Chain Barding Armor"}
+{"entity_type": "tech", "entity_id": 83, "name": "Bearded Axe"}
+{"entity_type": "tech", "entity_id": 90, "name": "Tracking"}
+{"entity_type": "tech", "entity_id": 93, "name": "Ballistics"}
+{"entity_type": "tech", "entity_id": 101, "name": "Feudal Age"}
+{"entity_type": "tech", "entity_id": 102, "name": "Castle Age"}
+{"entity_type": "tech", "entity_id": 103, "name": "Imperial Age"}
+{"entity_type": "tech", "entity_id": 140, "name": "Guard Tower"}
+{"entity_type": "tech", "entity_id": 182, "name": "Gold Shaft Mining"}
+{"entity_type": "tech", "entity_id": 194, "name": "Fortified Wall"}
+{"entity_type": "tech", "entity_id": 199, "name": "Fletching"}
+{"entity_type": "tech", "entity_id": 200, "name": "Bodkin Arrow"}
+{"entity_type": "tech", "entity_id": 201, "name": "Bracer"}
+{"entity_type": "tech", "entity_id": 202, "name": "Double-Bit Axe"}
+{"entity_type": "tech", "entity_id": 203, "name": "Bow Saw"}
+{"entity_type": "tech", "entity_id": 211, "name": "Padded Archer Armor"}
+{"entity_type": "tech", "entity_id": 212, "name": "Leather Archer Armor"}
+{"entity_type": "tech", "entity_id": 213, "name": "Wheelbarrow"}
+{"entity_type": "tech", "entity_id": 215, "name": "Squires"}
+{"entity_type": "tech", "entity_id": 219, "name": "Ring Archer Armor"}
+{"entity_type": "tech", "entity_id": 221, "name": "Two-Man Saw"}
+{"entity_type": "tech", "entity_id": 230, "name": "Block Printing"}
+{"entity_type": "tech", "entity_id": 231, "name": "Sanctity"}
+{"entity_type": "tech", "entity_id": 233, "name": "Illumination"}
+{"entity_type": "tech", "entity_id": 249, "name": "Hand Cart"}
+{"entity_type": "tech", "entity_id": 252, "name": "Fervor"}
+{"entity_type": "tech", "entity_id": 278, "name": "Stone Mining"}
+{"entity_type": "tech", "entity_id": 279, "name": "Stone Shaft Mining"}
+{"entity_type": "tech", "entity_id": 280, "name": "Town Patrol"}
+{"entity_type": "tech", "entity_id": 315, "name": "Conscription"}
+{"entity_type": "tech", "entity_id": 316, "name": "Redemption"}
+{"entity_type": "tech", "entity_id": 319, "name": "Atonement"}
+{"entity_type": "tech", "entity_id": 321, "name": "Sappers"}
+{"entity_type": "tech", "entity_id": 322, "name": "Murder Holes"}
+{"entity_type": "tech", "entity_id": 373, "name": "Shipwright"}
+{"entity_type": "tech", "entity_id": 374, "name": "Careening"}
+{"entity_type": "tech", "entity_id": 375, "name": "Dry Dock"}
+{"entity_type": "tech", "entity_id": 377, "name": "Siege Engineers"}
+{"entity_type": "tech", "entity_id": 379, "name": "Hoardings"}
+{"entity_type": "tech", "entity_id": 380, "name": "Heated Shot"}
+{"entity_type": "tech", "entity_id": 408, "name": "Spies/Treason"}
+{"entity_type": "tech", "entity_id": 435, "name": "Bloodlines"}
+{"entity_type": "tech", "entity_id": 436, "name": "Parthian Tactics"}
+{"entity_type": "tech", "entity_id": 437, "name": "Thumb Ring"}
+{"entity_type": "tech", "entity_id": 438, "name": "Theocracy"}
+{"entity_type": "tech", "entity_id": 439, "name": "Heresy"}
+{"entity_type": "tech", "entity_id": 440, "name": "Supremacy"}
+{"entity_type": "tech", "entity_id": 441, "name": "Herbal Medicine"}
+{"entity_type": "tech", "entity_id": 445, "name": "Shinkichon"}
+{"entity_type": "tech", "entity_id": 454, "name": "Counterweights"}
+{"entity_type": "tech", "entity_id": 455, "name": "Detinets"}
+{"entity_type": "tech", "entity_id": 457, "name": "Perfusion"}
+{"entity_type": "tech", "entity_id": 460, "name": "Atlatl"}
+{"entity_type": "tech", "entity_id": 461, "name": "Warwolf"}
+{"entity_type": "tech", "entity_id": 462, "name": "Great Wall"}
+{"entity_type": "tech", "entity_id": 463, "name": "Chieftains"}
+{"entity_type": "tech", "entity_id": 464, "name": "Greek Fire"}
+{"entity_type": "tech", "entity_id": 482, "name": "Stronghold"}
+{"entity_type": "tech", "entity_id": 483, "name": "Marauders"}
+{"entity_type": "tech", "entity_id": 484, "name": "Yasama"}
+{"entity_type": "tech", "entity_id": 485, "name": "Obsidian Arrows"}
+{"entity_type": "tech", "entity_id": 486, "name": "Eupseong"}
+{"entity_type": "tech", "entity_id": 487, "name": "Nomads"}
+{"entity_type": "tech", "entity_id": 488, "name": "Kamandaran"}
+{"entity_type": "tech", "entity_id": 489, "name": "Ironclad"}
+{"entity_type": "tech", "entity_id": 491, "name": "Sipahi"}
+{"entity_type": "tech", "entity_id": 492, "name": "Inquisition"}
+{"entity_type": "tech", "entity_id": 493, "name": "Chivalry"}
+{"entity_type": "tech", "entity_id": 499, "name": "Silk Road"}
+{"entity_type": "tech", "entity_id": 506, "name": "Grand Trunk Road"}
+{"entity_type": "tech", "entity_id": 507, "name": "Shatagni"}
+{"entity_type": "tech", "entity_id": 513, "name": "Druzhina"}
+{"entity_type": "tech", "entity_id": 514, "name": "Corvinian Army"}
+{"entity_type": "tech", "entity_id": 515, "name": "Recurve Bow"}
+{"entity_type": "tech", "entity_id": 516, "name": "Andean Sling"}
+{"entity_type": "tech", "entity_id": 517, "name": "Fabric Shields"}
+{"entity_type": "tech", "entity_id": 573, "name": "Arquebus"}
+{"entity_type": "tech", "entity_id": 574, "name": "Royal Heirs"}
+{"entity_type": "tech", "entity_id": 575, "name": "Torsion Engines"}
+{"entity_type": "tech", "entity_id": 576, "name": "Tigui"}
+{"entity_type": "tech", "entity_id": 577, "name": "Farimba"}
+{"entity_type": "tech", "entity_id": 578, "name": "Kasbah"}
+{"entity_type": "tech", "entity_id": 579, "name": "Maghrebi Camels"}
+{"entity_type": "tech", "entity_id": 602, "name": "Arson"}
+{"entity_type": "tech", "entity_id": 608, "name": "Arrowslits"}
+{"entity_type": "tech", "entity_id": 622, "name": "Tusk Swords"}
+{"entity_type": "tech", "entity_id": 623, "name": "Double Crossbow"}
+{"entity_type": "tech", "entity_id": 624, "name": "Thalassocracy"}
+{"entity_type": "tech", "entity_id": 625, "name": "Forced Levy"}
+{"entity_type": "tech", "entity_id": 626, "name": "Howdah"}
+{"entity_type": "tech", "entity_id": 627, "name": "Manipur Cavalry"}
+{"entity_type": "tech", "entity_id": 628, "name": "Chatras"}
+{"entity_type": "tech", "entity_id": 629, "name": "Paper Money"}
+{"entity_type": "tech", "entity_id": 685, "name": "Stirrups"}
+{"entity_type": "tech", "entity_id": 686, "name": "Bagains"}
+{"entity_type": "tech", "entity_id": 687, "name": "Silk Armor"}
+{"entity_type": "tech", "entity_id": 688, "name": "Timurid Siegecraft"}
+{"entity_type": "tech", "entity_id": 689, "name": "Steppe Husbandry"}
+{"entity_type": "tech", "entity_id": 690, "name": "Cuman Mercenaries"}
+{"entity_type": "tech", "entity_id": 691, "name": "Hill Forts"}
+{"entity_type": "tech", "entity_id": 692, "name": "Tower Shields"}
+{"entity_type": "tech", "entity_id": 754, "name": "Burgundian Vineyards"}
+{"entity_type": "tech", "entity_id": 755, "name": "Flemish Revolution"}
+{"entity_type": "tech", "entity_id": 756, "name": "First Crusade"}
+{"entity_type": "tech", "entity_id": 757, "name": "Hauberk"}
+{"entity_type": "tech", "entity_id": 782, "name": "Szlachta Privileges"}
+{"entity_type": "tech", "entity_id": 783, "name": "Lechitic Legacy"}
+{"entity_type": "tech", "entity_id": 784, "name": "Eastern Settlement"}
+{"entity_type": "tech", "entity_id": 785, "name": "Hussite Reforms"}
+{"entity_type": "tech", "entity_id": 831, "name": "Medical Corps"}
+{"entity_type": "tech", "entity_id": 832, "name": "Wootz Steel"}
+{"entity_type": "tech", "entity_id": 833, "name": "Paiks"}
+{"entity_type": "tech", "entity_id": 834, "name": "Mahayana"}
+{"entity_type": "tech", "entity_id": 835, "name": "Kshatriyas"}
+{"entity_type": "tech", "entity_id": 836, "name": "Frontier Guards"}
+{"entity_type": "tech", "entity_id": 875, "name": "Gambesons"}
+{"entity_type": "tech", "entity_id": 883, "name": "Ballistas"}
+{"entity_type": "tech", "entity_id": 884, "name": "Comitatenses"}
+{"entity_type": "tech", "entity_id": 902, "name": "Pirotechnia"}
+{"entity_type": "tech", "entity_id": 906, "name": "Fishing Lines"}
+{"entity_type": "tech", "entity_id": 907, "name": "Carvel Hull"}
+{"entity_type": "tech", "entity_id": 908, "name": "Clinker Construction"}
+{"entity_type": "tech", "entity_id": 909, "name": "Siphons"}
+{"entity_type": "tech", "entity_id": 910, "name": "Incendiaries"}
+{"entity_type": "tech", "entity_id": 921, "name": "Fereters"}
+{"entity_type": "tech", "entity_id": 922, "name": "Cilician Fleet"}
+{"entity_type": "tech", "entity_id": 923, "name": "Svan Towers"}
+{"entity_type": "tech", "entity_id": 924, "name": "Aznauri Cavalry"}
+{"entity_type": "tech", "entity_id": 996, "name": "Fortified Bastions"}
+{"entity_type": "tech", "entity_id": 997, "name": "Thunderclap Bombs"}
+{"entity_type": "tech", "entity_id": 1006, "name": "Lamellar Armor"}
+{"entity_type": "tech", "entity_id": 1007, "name": "Ordo Cavalry"}
+{"entity_type": "tech", "entity_id": 1012, "name": "Transhumance"}
+{"entity_type": "tech", "entity_id": 1013, "name": "Pastoralism"}
+{"entity_type": "tech", "entity_id": 1014, "name": "Domestication"}
+{"entity_type": "tech", "entity_id": 1061, "name": "Tuntian"}
+{"entity_type": "tech", "entity_id": 1062, "name": "Ming-Kuang Armor"}
+{"entity_type": "tech", "entity_id": 1069, "name": "Bolt Magazine"}
+{"entity_type": "tech", "entity_id": 1070, "name": "Coiled Serpent Array"}
+{"entity_type": "tech", "entity_id": 1080, "name": "Red Cliff Tactics"}
+{"entity_type": "tech", "entity_id": 1081, "name": "Sitting Tiger"}
+{"entity_type": "tech", "entity_id": 1365, "name": "Herbalism"}
+{"entity_type": "tech", "entity_id": 1366, "name": "Fabric Shields"}
+{"entity_type": "tech", "entity_id": 1379, "name": "Malon"}
+{"entity_type": "tech", "entity_id": 1380, "name": "Butalmapu"}
+{"entity_type": "tech", "entity_id": 1392, "name": "Caciques"}
+{"entity_type": "tech", "entity_id": 1393, "name": "Curare"}
+{"entity_type": "tech", "entity_id": 1404, "name": "Circumnavigation"}

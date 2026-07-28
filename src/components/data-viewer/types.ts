@@ -1,6 +1,8 @@
 import type React from "react"
 export interface DataItem {
   id: string
+  // Configs index items by arbitrary field names, so the value type is open.
+  // biome-ignore lint/suspicious/noExplicitAny: generic data viewer contract
   [key: string]: any
 }
 
@@ -28,7 +30,10 @@ export interface TableColumn<T> {
   key: string
   header: string
   render: (item: T) => React.ReactNode
-  sortable?: boolean
+  /** Key of an entry in `sortOptions`; a column without one is not sortable. */
+  sortKey?: string
+  /** Grid track for this column, e.g. "2fr" or "120px". Defaults to "1fr". */
+  width?: string
 }
 
 export interface DataViewerConfig<T extends DataItem> {

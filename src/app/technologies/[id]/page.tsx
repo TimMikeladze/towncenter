@@ -1,17 +1,13 @@
-import { getTechnologyById } from "@/lib/data"
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
+import { notFound } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { getTechnologyById } from "@/lib/data"
 import { getEntityImagePath } from "@/lib/utils/images"
 
-export default async function TechnologyDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
+export default async function TechnologyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const tech = await getTechnologyById(id)
 
@@ -77,8 +73,8 @@ export default async function TechnologyDetailPage({
               <CardTitle className="text-xs font-mono uppercase">Effects</CardTitle>
             </CardHeader>
             <CardContent className="py-3 px-4 space-y-2">
-              {tech.effects.map((effect, index) => (
-                <div key={index} className="text-xs font-mono">
+              {tech.effects.map((effect) => (
+                <div key={effect} className="text-xs font-mono">
                   • {effect}
                 </div>
               ))}

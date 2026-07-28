@@ -1,215 +1,220 @@
-{"building_id":12,"armour_class":21,"amount":0}
-{"building_id":12,"armour_class":11,"amount":0}
-{"building_id":12,"armour_class":4,"amount":0}
-{"building_id":12,"armour_class":3,"amount":7}
-{"building_id":12,"armour_class":31,"amount":0}
-{"building_id":45,"armour_class":21,"amount":0}
-{"building_id":45,"armour_class":11,"amount":0}
-{"building_id":45,"armour_class":4,"amount":0}
-{"building_id":45,"armour_class":3,"amount":7}
-{"building_id":45,"armour_class":31,"amount":0}
-{"building_id":49,"armour_class":21,"amount":0}
-{"building_id":49,"armour_class":11,"amount":0}
-{"building_id":49,"armour_class":4,"amount":1}
-{"building_id":49,"armour_class":3,"amount":8}
-{"building_id":49,"armour_class":31,"amount":1}
-{"building_id":50,"armour_class":21,"amount":0}
-{"building_id":50,"armour_class":11,"amount":0}
-{"building_id":50,"armour_class":4,"amount":0}
-{"building_id":50,"armour_class":3,"amount":0}
-{"building_id":50,"armour_class":31,"amount":0}
-{"building_id":68,"armour_class":21,"amount":0}
-{"building_id":68,"armour_class":11,"amount":0}
-{"building_id":68,"armour_class":4,"amount":0}
-{"building_id":68,"armour_class":3,"amount":7}
-{"building_id":68,"armour_class":31,"amount":0}
-{"building_id":70,"armour_class":21,"amount":0}
-{"building_id":70,"armour_class":11,"amount":0}
-{"building_id":70,"armour_class":4,"amount":-2}
-{"building_id":70,"armour_class":3,"amount":7}
-{"building_id":70,"armour_class":31,"amount":-2}
-{"building_id":70,"armour_class":40,"amount":0}
-{"building_id":71,"armour_class":21,"amount":0}
-{"building_id":71,"armour_class":11,"amount":0}
-{"building_id":71,"armour_class":4,"amount":4}
-{"building_id":71,"armour_class":3,"amount":6}
-{"building_id":71,"armour_class":31,"amount":4}
-{"building_id":72,"armour_class":21,"amount":0}
-{"building_id":72,"armour_class":11,"amount":0}
-{"building_id":72,"armour_class":4,"amount":2}
-{"building_id":72,"armour_class":3,"amount":5}
-{"building_id":72,"armour_class":22,"amount":0}
-{"building_id":72,"armour_class":31,"amount":2}
-{"building_id":72,"armour_class":40,"amount":0}
-{"building_id":79,"armour_class":21,"amount":0}
-{"building_id":79,"armour_class":11,"amount":0}
-{"building_id":79,"armour_class":4,"amount":1}
-{"building_id":79,"armour_class":3,"amount":7}
-{"building_id":79,"armour_class":13,"amount":0}
-{"building_id":79,"armour_class":31,"amount":1}
-{"building_id":82,"armour_class":26,"amount":0}
-{"building_id":82,"armour_class":21,"amount":0}
-{"building_id":82,"armour_class":11,"amount":8}
-{"building_id":82,"armour_class":4,"amount":8}
-{"building_id":82,"armour_class":3,"amount":11}
-{"building_id":82,"armour_class":31,"amount":8}
-{"building_id":84,"armour_class":21,"amount":0}
-{"building_id":84,"armour_class":11,"amount":0}
-{"building_id":84,"armour_class":4,"amount":1}
-{"building_id":84,"armour_class":3,"amount":8}
-{"building_id":84,"armour_class":31,"amount":1}
-{"building_id":87,"armour_class":21,"amount":0}
-{"building_id":87,"armour_class":11,"amount":0}
-{"building_id":87,"armour_class":4,"amount":1}
-{"building_id":87,"armour_class":3,"amount":8}
-{"building_id":87,"armour_class":31,"amount":1}
-{"building_id":101,"armour_class":21,"amount":0}
-{"building_id":101,"armour_class":11,"amount":0}
-{"building_id":101,"armour_class":4,"amount":1}
-{"building_id":101,"armour_class":3,"amount":8}
-{"building_id":101,"armour_class":31,"amount":1}
-{"building_id":103,"armour_class":21,"amount":0}
-{"building_id":103,"armour_class":11,"amount":0}
-{"building_id":103,"armour_class":4,"amount":0}
-{"building_id":103,"armour_class":3,"amount":7}
-{"building_id":103,"armour_class":31,"amount":0}
-{"building_id":104,"armour_class":21,"amount":0}
-{"building_id":104,"armour_class":11,"amount":0}
-{"building_id":104,"armour_class":4,"amount":0}
-{"building_id":104,"armour_class":3,"amount":7}
-{"building_id":104,"armour_class":31,"amount":0}
-{"building_id":109,"armour_class":21,"amount":0}
-{"building_id":109,"armour_class":11,"amount":0}
-{"building_id":109,"armour_class":4,"amount":3}
-{"building_id":109,"armour_class":3,"amount":5}
-{"building_id":109,"armour_class":31,"amount":3}
-{"building_id":117,"armour_class":21,"amount":0}
-{"building_id":117,"armour_class":11,"amount":16}
-{"building_id":117,"armour_class":4,"amount":8}
-{"building_id":117,"armour_class":3,"amount":10}
-{"building_id":117,"armour_class":13,"amount":0}
-{"building_id":117,"armour_class":22,"amount":0}
-{"building_id":117,"armour_class":31,"amount":8}
-{"building_id":155,"armour_class":21,"amount":0}
-{"building_id":155,"armour_class":11,"amount":24}
-{"building_id":155,"armour_class":4,"amount":12}
-{"building_id":155,"armour_class":3,"amount":12}
-{"building_id":155,"armour_class":13,"amount":0}
-{"building_id":155,"armour_class":22,"amount":0}
-{"building_id":155,"armour_class":31,"amount":12}
-{"building_id":199,"armour_class":4,"amount":0}
-{"building_id":199,"armour_class":3,"amount":0}
-{"building_id":199,"armour_class":11,"amount":10}
-{"building_id":199,"armour_class":21,"amount":0}
-{"building_id":199,"armour_class":31,"amount":0}
-{"building_id":209,"armour_class":21,"amount":0}
-{"building_id":209,"armour_class":11,"amount":0}
-{"building_id":209,"armour_class":4,"amount":2}
-{"building_id":209,"armour_class":3,"amount":9}
-{"building_id":209,"armour_class":31,"amount":2}
-{"building_id":234,"armour_class":21,"amount":0}
-{"building_id":234,"armour_class":11,"amount":0}
-{"building_id":234,"armour_class":4,"amount":2}
-{"building_id":234,"armour_class":3,"amount":8}
-{"building_id":234,"armour_class":13,"amount":0}
-{"building_id":234,"armour_class":31,"amount":2}
-{"building_id":235,"armour_class":21,"amount":0}
-{"building_id":235,"armour_class":11,"amount":0}
-{"building_id":235,"armour_class":4,"amount":3}
-{"building_id":235,"armour_class":3,"amount":9}
-{"building_id":235,"armour_class":13,"amount":0}
-{"building_id":235,"armour_class":31,"amount":3}
-{"building_id":236,"armour_class":21,"amount":0}
-{"building_id":236,"armour_class":11,"amount":0}
-{"building_id":236,"armour_class":4,"amount":3}
-{"building_id":236,"armour_class":3,"amount":9}
-{"building_id":236,"armour_class":13,"amount":0}
-{"building_id":236,"armour_class":23,"amount":0}
-{"building_id":236,"armour_class":31,"amount":3}
-{"building_id":276,"armour_class":0,"amount":0}
-{"building_id":276,"armour_class":11,"amount":0}
-{"building_id":276,"armour_class":4,"amount":3}
-{"building_id":276,"armour_class":3,"amount":10}
-{"building_id":276,"armour_class":31,"amount":3}
-{"building_id":487,"armour_class":21,"amount":0}
-{"building_id":487,"armour_class":11,"amount":20}
-{"building_id":487,"armour_class":4,"amount":0}
-{"building_id":487,"armour_class":3,"amount":0}
-{"building_id":487,"armour_class":13,"amount":0}
-{"building_id":487,"armour_class":22,"amount":0}
-{"building_id":487,"armour_class":31,"amount":0}
-{"building_id":562,"armour_class":21,"amount":0}
-{"building_id":562,"armour_class":11,"amount":0}
-{"building_id":562,"armour_class":4,"amount":0}
-{"building_id":562,"armour_class":3,"amount":7}
-{"building_id":562,"armour_class":31,"amount":0}
-{"building_id":584,"armour_class":21,"amount":0}
-{"building_id":584,"armour_class":11,"amount":0}
-{"building_id":584,"armour_class":4,"amount":0}
-{"building_id":584,"armour_class":3,"amount":7}
-{"building_id":584,"armour_class":31,"amount":0}
-{"building_id":598,"armour_class":21,"amount":0}
-{"building_id":598,"armour_class":11,"amount":0}
-{"building_id":598,"armour_class":4,"amount":0}
-{"building_id":598,"armour_class":3,"amount":0}
-{"building_id":598,"armour_class":31,"amount":0}
-{"building_id":621,"armour_class":21,"amount":0}
-{"building_id":621,"armour_class":11,"amount":0}
-{"building_id":621,"armour_class":4,"amount":0}
-{"building_id":621,"armour_class":3,"amount":7}
-{"building_id":621,"armour_class":31,"amount":0}
-{"building_id":792,"armour_class":21,"amount":0}
-{"building_id":792,"armour_class":11,"amount":0}
-{"building_id":792,"armour_class":4,"amount":0}
-{"building_id":792,"armour_class":3,"amount":0}
-{"building_id":792,"armour_class":22,"amount":0}
-{"building_id":792,"armour_class":31,"amount":0}
-{"building_id":1021,"armour_class":3,"amount":10}
-{"building_id":1021,"armour_class":4,"amount":3}
-{"building_id":1021,"armour_class":21,"amount":0}
-{"building_id":1021,"armour_class":11,"amount":0}
-{"building_id":1021,"armour_class":31,"amount":3}
-{"building_id":1189,"armour_class":21,"amount":0}
-{"building_id":1189,"armour_class":11,"amount":0}
-{"building_id":1189,"armour_class":4,"amount":3}
-{"building_id":1189,"armour_class":3,"amount":10}
-{"building_id":1189,"armour_class":13,"amount":0}
-{"building_id":1189,"armour_class":31,"amount":3}
-{"building_id":1251,"armour_class":26,"amount":0}
-{"building_id":1251,"armour_class":21,"amount":0}
-{"building_id":1251,"armour_class":11,"amount":8}
-{"building_id":1251,"armour_class":4,"amount":8}
-{"building_id":1251,"armour_class":3,"amount":11}
-{"building_id":1251,"armour_class":31,"amount":8}
-{"building_id":1665,"armour_class":21,"amount":0}
-{"building_id":1665,"armour_class":11,"amount":0}
-{"building_id":1665,"armour_class":4,"amount":0}
-{"building_id":1665,"armour_class":3,"amount":6}
-{"building_id":1665,"armour_class":13,"amount":0}
-{"building_id":1665,"armour_class":31,"amount":1}
-{"building_id":1734,"armour_class":21,"amount":0}
-{"building_id":1734,"armour_class":11,"amount":0}
-{"building_id":1734,"armour_class":4,"amount":0}
-{"building_id":1734,"armour_class":3,"amount":7}
-{"building_id":1734,"armour_class":31,"amount":0}
-{"building_id":1754,"armour_class":21,"amount":0}
-{"building_id":1754,"armour_class":11,"amount":0}
-{"building_id":1754,"armour_class":4,"amount":3}
-{"building_id":1754,"armour_class":3,"amount":10}
-{"building_id":1754,"armour_class":31,"amount":3}
-{"building_id":1806,"armour_class":21,"amount":0}
-{"building_id":1806,"armour_class":11,"amount":0}
-{"building_id":1806,"armour_class":4,"amount":4}
-{"building_id":1806,"armour_class":3,"amount":10}
-{"building_id":1806,"armour_class":13,"amount":0}
-{"building_id":1806,"armour_class":31,"amount":4}
-{"building_id":1808,"armour_class":21,"amount":0}
-{"building_id":1808,"armour_class":11,"amount":0}
-{"building_id":1808,"armour_class":4,"amount":1}
-{"building_id":1808,"armour_class":3,"amount":2}
-{"building_id":1808,"armour_class":31,"amount":1}
-{"building_id":1889,"armour_class":21,"amount":0}
-{"building_id":1889,"armour_class":11,"amount":0}
-{"building_id":1889,"armour_class":4,"amount":0}
-{"building_id":1889,"armour_class":3,"amount":0}
-{"building_id":1889,"armour_class":31,"amount":0}
+{"building_id": 12, "armour_class": 21, "amount": 0}
+{"building_id": 12, "armour_class": 11, "amount": 0}
+{"building_id": 12, "armour_class": 4, "amount": 0}
+{"building_id": 12, "armour_class": 3, "amount": 7}
+{"building_id": 12, "armour_class": 31, "amount": 0}
+{"building_id": 45, "armour_class": 21, "amount": 0}
+{"building_id": 45, "armour_class": 11, "amount": 0}
+{"building_id": 45, "armour_class": 4, "amount": 0}
+{"building_id": 45, "armour_class": 3, "amount": 7}
+{"building_id": 45, "armour_class": 31, "amount": 0}
+{"building_id": 49, "armour_class": 21, "amount": 0}
+{"building_id": 49, "armour_class": 11, "amount": 0}
+{"building_id": 49, "armour_class": 4, "amount": 1}
+{"building_id": 49, "armour_class": 3, "amount": 8}
+{"building_id": 49, "armour_class": 31, "amount": 1}
+{"building_id": 50, "armour_class": 21, "amount": 0}
+{"building_id": 50, "armour_class": 11, "amount": 0}
+{"building_id": 50, "armour_class": 4, "amount": 0}
+{"building_id": 50, "armour_class": 3, "amount": 0}
+{"building_id": 50, "armour_class": 31, "amount": 0}
+{"building_id": 68, "armour_class": 21, "amount": 0}
+{"building_id": 68, "armour_class": 11, "amount": 0}
+{"building_id": 68, "armour_class": 4, "amount": 0}
+{"building_id": 68, "armour_class": 3, "amount": 7}
+{"building_id": 68, "armour_class": 31, "amount": 0}
+{"building_id": 70, "armour_class": 21, "amount": 0}
+{"building_id": 70, "armour_class": 11, "amount": 0}
+{"building_id": 70, "armour_class": 4, "amount": -2}
+{"building_id": 70, "armour_class": 3, "amount": 7}
+{"building_id": 70, "armour_class": 31, "amount": 0}
+{"building_id": 70, "armour_class": 40, "amount": 0}
+{"building_id": 71, "armour_class": 21, "amount": 0}
+{"building_id": 71, "armour_class": 11, "amount": 0}
+{"building_id": 71, "armour_class": 4, "amount": 4}
+{"building_id": 71, "armour_class": 3, "amount": 6}
+{"building_id": 71, "armour_class": 31, "amount": 4}
+{"building_id": 72, "armour_class": 21, "amount": 0}
+{"building_id": 72, "armour_class": 11, "amount": 0}
+{"building_id": 72, "armour_class": 4, "amount": 2}
+{"building_id": 72, "armour_class": 3, "amount": 5}
+{"building_id": 72, "armour_class": 22, "amount": 0}
+{"building_id": 72, "armour_class": 31, "amount": 2}
+{"building_id": 72, "armour_class": 40, "amount": 0}
+{"building_id": 79, "armour_class": 21, "amount": 0}
+{"building_id": 79, "armour_class": 11, "amount": 0}
+{"building_id": 79, "armour_class": 4, "amount": 1}
+{"building_id": 79, "armour_class": 3, "amount": 7}
+{"building_id": 79, "armour_class": 13, "amount": 0}
+{"building_id": 79, "armour_class": 31, "amount": 1}
+{"building_id": 82, "armour_class": 26, "amount": 0}
+{"building_id": 82, "armour_class": 21, "amount": 0}
+{"building_id": 82, "armour_class": 11, "amount": 8}
+{"building_id": 82, "armour_class": 4, "amount": 8}
+{"building_id": 82, "armour_class": 3, "amount": 11}
+{"building_id": 82, "armour_class": 31, "amount": 8}
+{"building_id": 84, "armour_class": 21, "amount": 0}
+{"building_id": 84, "armour_class": 11, "amount": 0}
+{"building_id": 84, "armour_class": 4, "amount": 1}
+{"building_id": 84, "armour_class": 3, "amount": 8}
+{"building_id": 84, "armour_class": 31, "amount": 1}
+{"building_id": 87, "armour_class": 21, "amount": 0}
+{"building_id": 87, "armour_class": 11, "amount": 0}
+{"building_id": 87, "armour_class": 4, "amount": 1}
+{"building_id": 87, "armour_class": 3, "amount": 8}
+{"building_id": 87, "armour_class": 31, "amount": 1}
+{"building_id": 101, "armour_class": 21, "amount": 0}
+{"building_id": 101, "armour_class": 11, "amount": 0}
+{"building_id": 101, "armour_class": 4, "amount": 1}
+{"building_id": 101, "armour_class": 3, "amount": 8}
+{"building_id": 101, "armour_class": 31, "amount": 1}
+{"building_id": 103, "armour_class": 21, "amount": 0}
+{"building_id": 103, "armour_class": 11, "amount": 0}
+{"building_id": 103, "armour_class": 4, "amount": 0}
+{"building_id": 103, "armour_class": 3, "amount": 7}
+{"building_id": 103, "armour_class": 31, "amount": 0}
+{"building_id": 104, "armour_class": 21, "amount": 0}
+{"building_id": 104, "armour_class": 11, "amount": 0}
+{"building_id": 104, "armour_class": 4, "amount": 0}
+{"building_id": 104, "armour_class": 3, "amount": 7}
+{"building_id": 104, "armour_class": 31, "amount": 0}
+{"building_id": 109, "armour_class": 21, "amount": 0}
+{"building_id": 109, "armour_class": 11, "amount": 0}
+{"building_id": 109, "armour_class": 4, "amount": 3}
+{"building_id": 109, "armour_class": 3, "amount": 5}
+{"building_id": 109, "armour_class": 31, "amount": 3}
+{"building_id": 117, "armour_class": 21, "amount": 0}
+{"building_id": 117, "armour_class": 11, "amount": 16}
+{"building_id": 117, "armour_class": 4, "amount": 8}
+{"building_id": 117, "armour_class": 3, "amount": 10}
+{"building_id": 117, "armour_class": 13, "amount": 0}
+{"building_id": 117, "armour_class": 22, "amount": 0}
+{"building_id": 117, "armour_class": 31, "amount": 8}
+{"building_id": 155, "armour_class": 21, "amount": 0}
+{"building_id": 155, "armour_class": 11, "amount": 24}
+{"building_id": 155, "armour_class": 4, "amount": 12}
+{"building_id": 155, "armour_class": 3, "amount": 12}
+{"building_id": 155, "armour_class": 13, "amount": 0}
+{"building_id": 155, "armour_class": 22, "amount": 0}
+{"building_id": 155, "armour_class": 31, "amount": 12}
+{"building_id": 199, "armour_class": 4, "amount": 1}
+{"building_id": 199, "armour_class": 3, "amount": 1}
+{"building_id": 199, "armour_class": 11, "amount": 10}
+{"building_id": 199, "armour_class": 21, "amount": 0}
+{"building_id": 199, "armour_class": 31, "amount": 0}
+{"building_id": 209, "armour_class": 21, "amount": 0}
+{"building_id": 209, "armour_class": 11, "amount": 0}
+{"building_id": 209, "armour_class": 4, "amount": 2}
+{"building_id": 209, "armour_class": 3, "amount": 9}
+{"building_id": 209, "armour_class": 31, "amount": 2}
+{"building_id": 234, "armour_class": 21, "amount": 0}
+{"building_id": 234, "armour_class": 11, "amount": 0}
+{"building_id": 234, "armour_class": 4, "amount": 2}
+{"building_id": 234, "armour_class": 3, "amount": 8}
+{"building_id": 234, "armour_class": 13, "amount": 0}
+{"building_id": 234, "armour_class": 31, "amount": 2}
+{"building_id": 235, "armour_class": 21, "amount": 0}
+{"building_id": 235, "armour_class": 11, "amount": 0}
+{"building_id": 235, "armour_class": 4, "amount": 3}
+{"building_id": 235, "armour_class": 3, "amount": 9}
+{"building_id": 235, "armour_class": 13, "amount": 0}
+{"building_id": 235, "armour_class": 31, "amount": 3}
+{"building_id": 236, "armour_class": 21, "amount": 0}
+{"building_id": 236, "armour_class": 11, "amount": 0}
+{"building_id": 236, "armour_class": 4, "amount": 3}
+{"building_id": 236, "armour_class": 3, "amount": 9}
+{"building_id": 236, "armour_class": 13, "amount": 0}
+{"building_id": 236, "armour_class": 23, "amount": 0}
+{"building_id": 236, "armour_class": 31, "amount": 3}
+{"building_id": 276, "armour_class": 0, "amount": 0}
+{"building_id": 276, "armour_class": 11, "amount": 0}
+{"building_id": 276, "armour_class": 4, "amount": 3}
+{"building_id": 276, "armour_class": 3, "amount": 10}
+{"building_id": 276, "armour_class": 31, "amount": 3}
+{"building_id": 487, "armour_class": 21, "amount": 0}
+{"building_id": 487, "armour_class": 11, "amount": 20}
+{"building_id": 487, "armour_class": 4, "amount": 0}
+{"building_id": 487, "armour_class": 3, "amount": 0}
+{"building_id": 487, "armour_class": 13, "amount": 0}
+{"building_id": 487, "armour_class": 22, "amount": 0}
+{"building_id": 487, "armour_class": 31, "amount": 0}
+{"building_id": 562, "armour_class": 21, "amount": 0}
+{"building_id": 562, "armour_class": 11, "amount": 0}
+{"building_id": 562, "armour_class": 4, "amount": 0}
+{"building_id": 562, "armour_class": 3, "amount": 7}
+{"building_id": 562, "armour_class": 31, "amount": 0}
+{"building_id": 584, "armour_class": 21, "amount": 0}
+{"building_id": 584, "armour_class": 11, "amount": 0}
+{"building_id": 584, "armour_class": 4, "amount": 0}
+{"building_id": 584, "armour_class": 3, "amount": 7}
+{"building_id": 584, "armour_class": 31, "amount": 0}
+{"building_id": 598, "armour_class": 21, "amount": 0}
+{"building_id": 598, "armour_class": 11, "amount": 0}
+{"building_id": 598, "armour_class": 4, "amount": 0}
+{"building_id": 598, "armour_class": 3, "amount": 0}
+{"building_id": 598, "armour_class": 31, "amount": 0}
+{"building_id": 621, "armour_class": 21, "amount": 0}
+{"building_id": 621, "armour_class": 11, "amount": 0}
+{"building_id": 621, "armour_class": 4, "amount": 0}
+{"building_id": 621, "armour_class": 3, "amount": 7}
+{"building_id": 621, "armour_class": 31, "amount": 0}
+{"building_id": 792, "armour_class": 21, "amount": 0}
+{"building_id": 792, "armour_class": 11, "amount": 0}
+{"building_id": 792, "armour_class": 4, "amount": 0}
+{"building_id": 792, "armour_class": 3, "amount": 0}
+{"building_id": 792, "armour_class": 22, "amount": 0}
+{"building_id": 792, "armour_class": 31, "amount": 0}
+{"building_id": 1021, "armour_class": 3, "amount": 10}
+{"building_id": 1021, "armour_class": 4, "amount": 3}
+{"building_id": 1021, "armour_class": 21, "amount": 0}
+{"building_id": 1021, "armour_class": 11, "amount": 0}
+{"building_id": 1021, "armour_class": 31, "amount": 3}
+{"building_id": 1189, "armour_class": 21, "amount": 0}
+{"building_id": 1189, "armour_class": 11, "amount": 0}
+{"building_id": 1189, "armour_class": 4, "amount": 3}
+{"building_id": 1189, "armour_class": 3, "amount": 10}
+{"building_id": 1189, "armour_class": 13, "amount": 0}
+{"building_id": 1189, "armour_class": 31, "amount": 3}
+{"building_id": 1251, "armour_class": 26, "amount": 0}
+{"building_id": 1251, "armour_class": 21, "amount": 0}
+{"building_id": 1251, "armour_class": 11, "amount": 8}
+{"building_id": 1251, "armour_class": 4, "amount": 8}
+{"building_id": 1251, "armour_class": 3, "amount": 11}
+{"building_id": 1251, "armour_class": 31, "amount": 8}
+{"building_id": 1665, "armour_class": 21, "amount": 0}
+{"building_id": 1665, "armour_class": 11, "amount": 0}
+{"building_id": 1665, "armour_class": 4, "amount": 0}
+{"building_id": 1665, "armour_class": 3, "amount": 6}
+{"building_id": 1665, "armour_class": 13, "amount": 0}
+{"building_id": 1665, "armour_class": 31, "amount": 1}
+{"building_id": 1734, "armour_class": 21, "amount": 0}
+{"building_id": 1734, "armour_class": 11, "amount": 0}
+{"building_id": 1734, "armour_class": 4, "amount": 0}
+{"building_id": 1734, "armour_class": 3, "amount": 7}
+{"building_id": 1734, "armour_class": 31, "amount": 0}
+{"building_id": 1754, "armour_class": 21, "amount": 0}
+{"building_id": 1754, "armour_class": 11, "amount": 0}
+{"building_id": 1754, "armour_class": 4, "amount": 3}
+{"building_id": 1754, "armour_class": 3, "amount": 10}
+{"building_id": 1754, "armour_class": 31, "amount": 3}
+{"building_id": 1806, "armour_class": 21, "amount": 0}
+{"building_id": 1806, "armour_class": 11, "amount": 0}
+{"building_id": 1806, "armour_class": 4, "amount": 4}
+{"building_id": 1806, "armour_class": 3, "amount": 10}
+{"building_id": 1806, "armour_class": 13, "amount": 0}
+{"building_id": 1806, "armour_class": 31, "amount": 4}
+{"building_id": 1808, "armour_class": 21, "amount": 0}
+{"building_id": 1808, "armour_class": 11, "amount": 0}
+{"building_id": 1808, "armour_class": 4, "amount": 1}
+{"building_id": 1808, "armour_class": 3, "amount": 2}
+{"building_id": 1808, "armour_class": 31, "amount": 1}
+{"building_id": 1889, "armour_class": 21, "amount": 0}
+{"building_id": 1889, "armour_class": 11, "amount": 0}
+{"building_id": 1889, "armour_class": 4, "amount": 0}
+{"building_id": 1889, "armour_class": 3, "amount": 0}
+{"building_id": 1889, "armour_class": 31, "amount": 0}
+{"building_id": 2556, "armour_class": 21, "amount": 0}
+{"building_id": 2556, "armour_class": 11, "amount": 0}
+{"building_id": 2556, "armour_class": 4, "amount": 0}
+{"building_id": 2556, "armour_class": 3, "amount": 7}
+{"building_id": 2556, "armour_class": 31, "amount": 0}
