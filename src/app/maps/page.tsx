@@ -1,10 +1,12 @@
 "use client"
 
-import { MapPin, Users } from "lucide-react"
+import { Map as MapIcon, Users } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 import type { DataViewerConfig } from "@/components/data-viewer"
 import { DataViewer } from "@/components/data-viewer"
+import { Chip } from "@/components/game/badges"
+import { PageHeader, PageShell } from "@/components/layout/page-shell"
 import { SecondaryNav } from "@/components/secondary-nav"
 import { getAllMaps } from "@/lib/data-client"
 import type { GameMap } from "@/lib/types"
@@ -16,6 +18,12 @@ const secondaryNavItems = [
   { label: "Hybrid", value: "Hybrid" },
 ]
 
+const TYPE_TONE: Record<string, string> = {
+  Land: "var(--type-economy)",
+  Water: "var(--type-naval)",
+  Hybrid: "var(--type-monk)",
+}
+
 function MapsContent() {
   const searchParams = useSearchParams()
   const activeTab = searchParams.get("type") || "all"
@@ -26,50 +34,34 @@ function MapsContent() {
   const config: DataViewerConfig<GameMap> = {
     itemName: "maps",
     searchFields: ["name", "type", "description"],
-    searchPlaceholder: "Search maps...",
-
-    filters: [],
+    searchPlaceholder: "Search maps…",
 
     sortOptions: [
-      {
-        key: "name",
-        label: "Name",
-        sortFn: (a: GameMap, b: GameMap) => a.name.localeCompare(b.name),
-      },
-      {
-        key: "type",
-        label: "Type",
-        sortFn: (a: GameMap, b: GameMap) => a.type.localeCompare(b.type),
-      },
+      { key: "name", label: "Name", sortFn: (a, b) => a.name.localeCompare(b.name) },
+      { key: "type", label: "Type", sortFn: (a, b) => a.type.localeCompare(b.type) },
     ],
 
-    cardTitle: (map: GameMap) => map.name,
-    cardDescription: (map: GameMap) => (
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="px-2 py-0.5 text-[9px] font-bold border rounded uppercase tracking-wider">{map.type}</span>
-        <span className="text-[9px]">•</span>
-        <span className="text-[9px] font-bold uppercase tracking-wider">{map.size}</span>
-      </div>
-    ),
-    cardHeader: (_map: GameMap) => (
-      <div className="relative h-16 bg-muted flex items-center justify-center border-b">
-        <MapPin className="h-6 w-6 text-muted-foreground" />
-      </div>
-    ),
-    cardContent: (map: GameMap) => (
+    cardTitle: (map) => map.name,
+    cardDescription: (map) => (
       <>
-        <p className="text-[10px] text-muted-foreground leading-tight line-clamp-2">{map.description}</p>
+        <Chip tone={TYPE_TONE[map.type]}>{map.type}</Chip>
+        <Chip>{map.size}</Chip>
+      </>
+    ),
+    cardContent: (map) => (
+      <>
+        <p className="line-clamp-3 text-[13px] leading-snug text-muted-foreground">{map.description}</p>
         {map.recommendedCivs.length > 0 && (
-          <div className="space-y-1 text-[10px] border-t pt-2">
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Users className="h-3 w-3" />
-              <span className="font-bold uppercase text-[9px]">Recommended Civs:</span>
-            </div>
+          <div className="mt-auto space-y-1.5 border-t pt-2">
+            <p className="label-caps flex items-center gap-1">
+              <Users className="h-3 w-3" aria-hidden />
+              Recommended civs
+            </p>
             <div className="flex flex-wrap gap-1">
-              {map.recommendedCivs.slice(0, 3).map((civId) => (
-                <span key={civId} className="px-1.5 py-0.5 text-[9px] border rounded capitalize">
+              {map.recommendedCivs.slice(0, 4).map((civId) => (
+                <Chip key={civId} className="capitalize">
                   {civId.replace(/-/g, " ")}
-                </span>
+                </Chip>
               ))}
             </div>
           </div>
@@ -80,37 +72,40 @@ function MapsContent() {
     tableColumns: [
       {
         key: "name",
-        header: "MAP",
+        header: "Map",
         sortKey: "name",
-        render: (map: GameMap) => (
-          <div>
-            <div className="font-bold uppercase flex items-center gap-2">
-              <MapPin className="h-3 w-3" />
+        width: "minmax(200px, 1.2fr)",
+        render: (map) => (
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 truncate font-medium">
+              <MapIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
               {map.name}
-            </div>
-            <div className="text-[10px] text-muted-foreground flex items-center gap-2 mt-0.5">
-              <span className="px-1.5 py-0.5 border rounded uppercase">{map.type}</span>
-              <span className="uppercase">{map.size}</span>
+            </p>
+            <div className="mt-0.5 flex items-center gap-1">
+              <Chip tone={TYPE_TONE[map.type]}>{map.type}</Chip>
+              <Chip>{map.size}</Chip>
             </div>
           </div>
         ),
       },
       {
         key: "description",
-        header: "DESCRIPTION",
-        render: (map: GameMap) => (
-          <p className="text-[10px] text-muted-foreground line-clamp-2 max-w-xs">{map.description}</p>
+        header: "Description",
+        width: "minmax(280px, 2fr)",
+        render: (map) => (
+          <span className="line-clamp-2 text-[13px] leading-snug text-muted-foreground">{map.description}</span>
         ),
       },
       {
         key: "recommended",
-        header: "RECOMMENDED CIVS",
-        render: (map: GameMap) => (
+        header: "Recommended civs",
+        width: "minmax(200px, 1.2fr)",
+        render: (map) => (
           <div className="flex flex-wrap gap-1">
             {map.recommendedCivs.slice(0, 3).map((civId) => (
-              <span key={civId} className="px-1.5 py-0.5 text-[10px] border rounded capitalize">
+              <Chip key={civId} className="capitalize">
                 {civId.replace(/-/g, " ")}
-              </span>
+              </Chip>
             ))}
           </div>
         ),
@@ -121,30 +116,21 @@ function MapsContent() {
   return (
     <>
       <SecondaryNav items={secondaryNavItems} defaultValue="all" currentValue={activeTab} />
-
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-6">
-          <div className="max-w-7xl mx-auto space-y-4">
-            <div className="flex items-center justify-between pb-4 border-b">
-              <div>
-                <h1 className="text-xl font-mono font-bold uppercase tracking-tight">GameMap Database</h1>
-                <p className="text-muted-foreground text-[10px] mt-0.5 uppercase tracking-wide">
-                  Showing {filteredMaps.length} of {allMaps.length} maps
-                </p>
-              </div>
-            </div>
-
-            <DataViewer config={config} data={filteredMaps} defaultView="cards" />
-          </div>
-        </div>
-      </div>
+      <PageShell>
+        <PageHeader
+          eyebrow="Reference"
+          title="Maps"
+          description={`Terrain, size and civ recommendations across ${allMaps.length} maps.`}
+        />
+        <DataViewer config={config} data={filteredMaps} defaultView="cards" />
+      </PageShell>
     </>
   )
 }
 
 export default function MapsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={null}>
       <MapsContent />
     </Suspense>
   )

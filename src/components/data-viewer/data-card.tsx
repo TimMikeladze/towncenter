@@ -1,6 +1,6 @@
+import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-import type React from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 import type { DataItem, DataViewerConfig } from "./types"
 
 interface DataCardProps<T extends DataItem> {
@@ -8,39 +8,40 @@ interface DataCardProps<T extends DataItem> {
   config: DataViewerConfig<T>
 }
 
+/**
+ * One card shape for units, civs, buildings, techs and maps: media strip,
+ * title + taxonomy, then whatever the page's config puts in the body.
+ */
 export function DataCard<T extends DataItem>({ item, config }: DataCardProps<T>) {
   const href = config.itemLink?.(item)
-  const CardWrapper = href
-    ? ({ children }: { children: React.ReactNode }) => (
-        <Link href={href} className="group block">
-          {children}
-        </Link>
-      )
-    : ({ children }: { children: React.ReactNode }) => <>{children}</>
 
-  return (
-    <CardWrapper>
-      <Card className="border-2 card-minimal h-full overflow-hidden bg-card">
-        {/* Header Image/Color Bar */}
-        {config.cardHeader?.(item)}
+  const body = (
+    <article
+      className={cn("panel flex h-full flex-col overflow-hidden", href && "panel-interactive group cursor-pointer")}
+    >
+      {config.cardHeader?.(item)}
 
-        <CardHeader className="space-y-1.5 py-3 px-4">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <CardTitle className="text-sm font-mono font-bold tracking-tight uppercase">
-                {config.cardTitle(item)}
-              </CardTitle>
-              {config.cardDescription && (
-                <CardDescription className="mt-1 text-[10px] font-mono uppercase tracking-wider">
-                  {config.cardDescription(item)}
-                </CardDescription>
-              )}
-            </div>
-          </div>
-        </CardHeader>
+      <div className="flex items-start justify-between gap-2 px-3.5 pt-3">
+        <div className="min-w-0 space-y-1.5">
+          <h3 className="truncate font-display text-[15px] font-semibold leading-tight">{config.cardTitle(item)}</h3>
+          {config.cardDescription && (
+            <div className="flex flex-wrap items-center gap-1.5">{config.cardDescription(item)}</div>
+          )}
+        </div>
+        {href && (
+          <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+        )}
+      </div>
 
-        <CardContent className="space-y-2 text-xs font-mono py-3 px-4">{config.cardContent(item)}</CardContent>
-      </Card>
-    </CardWrapper>
+      <div className="flex flex-1 flex-col gap-2.5 px-3.5 pb-3.5 pt-2.5 text-sm">{config.cardContent(item)}</div>
+    </article>
+  )
+
+  return href ? (
+    <Link href={href} className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+      {body}
+    </Link>
+  ) : (
+    body
   )
 }

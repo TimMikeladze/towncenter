@@ -1,6 +1,8 @@
 "use client"
 
+import { TriangleAlert } from "lucide-react"
 import { useEffect } from "react"
+import { PageShell } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
 
 export default function ErrorBoundary({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
@@ -9,16 +11,19 @@ export default function ErrorBoundary({ error, reset }: { error: Error & { diges
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-md space-y-4 text-center">
-        <h1 className="text-2xl font-mono font-bold uppercase">Something broke</h1>
-        <p className="text-sm text-muted-foreground">
+    <PageShell width="narrow">
+      <div className="panel flex flex-col items-center gap-3 px-6 py-16 text-center">
+        <TriangleAlert className="h-6 w-6 text-destructive" aria-hidden />
+        <h1 className="text-2xl">Something broke</h1>
+        <p className="max-w-md text-sm text-muted-foreground">
           The page could not be rendered. If this keeps happening the game-data export may be missing or corrupt —
-          re-run <code className="font-mono">bun run sync-data</code>.
+          re-run <code className="kbd-shortcut">bun run sync-data</code>.
         </p>
-        {error.digest && <p className="text-[10px] font-mono text-muted-foreground">digest: {error.digest}</p>}
-        <Button onClick={reset}>Try again</Button>
+        {error.digest && <p className="font-mono text-[11px] text-muted-foreground">digest: {error.digest}</p>}
+        <Button onClick={reset} className="mt-2">
+          Try again
+        </Button>
       </div>
-    </div>
+    </PageShell>
   )
 }

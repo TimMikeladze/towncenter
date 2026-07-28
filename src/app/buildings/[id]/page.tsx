@@ -1,11 +1,13 @@
-import { ArrowLeft } from "lucide-react"
-import Image from "next/image"
+import { Clock, Eye, Shield, Users } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { AgeBadge, Chip } from "@/components/game/badges"
+import { CostChips } from "@/components/game/cost"
+import { DetailHero } from "@/components/game/detail-hero"
+import { StatRow, StatTile } from "@/components/game/stats"
+import { BackLink, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getBuildingById } from "@/lib/data"
-import { getEntityImagePath } from "@/lib/utils/images"
 
 export default async function BuildingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -16,126 +18,94 @@ export default async function BuildingDetailPage({ params }: { params: Promise<{
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="mb-4">
-        <Link href="/buildings">
-          <Button variant="ghost" size="sm" className="font-mono text-xs h-7 px-2">
-            <ArrowLeft className="h-3 w-3 mr-1" />
-            Buildings
-          </Button>
-        </Link>
-      </div>
+    <PageShell width="default">
+      <BackLink href="/buildings" label="All buildings" />
 
-      <div className="max-w-4xl mx-auto space-y-4">
-        <div className="border-2 p-6 bg-card">
-          <div className="flex items-start gap-6">
-            <Image
-              src={getEntityImagePath(building.image_path)}
-              alt={building.name}
-              width={120}
-              height={120}
-              className="border"
+      <DetailHero
+        name={building.name}
+        image={building.image_path}
+        meta={
+          <>
+            <Chip tone="var(--type-economy)">{building.type}</Chip>
+            <AgeBadge age={building.age} />
+          </>
+        }
+        description={building.description}
+        stats={
+          <>
+            <StatTile label="Hit points" value={building.hitPoints} icon={Shield} />
+            <StatTile
+              label="Armor"
+              value={`${building.meleeArmor} / ${building.pierceArmor}`}
+              hint="melee / pierce"
+              icon={Shield}
             />
-            <div className="flex-1 space-y-3">
-              <div>
-                <h1 className="text-2xl font-mono font-bold uppercase tracking-tight">{building.name}</h1>
-                <p className="text-xs font-mono text-muted-foreground uppercase mt-1">
-                  {building.type} · {building.age} Age
-                </p>
-              </div>
-              <p className="text-xs font-mono leading-relaxed">{building.description}</p>
+            <StatTile label="Line of sight" value={building.lineOfSight} icon={Eye} />
+            <StatTile label="Build time" value={`${building.buildTime}s`} icon={Clock} />
+          </>
+        }
+      />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Section title="Cost">
+          <Panel className="space-y-2">
+            <CostChips cost={building.cost} size="md" />
+            <div className="divide-y">
+              <StatRow label="Build time" value={`${building.buildTime}s`} />
+              {building.garrisonCapacity ? (
+                <StatRow
+                  label={
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3.5 w-3.5" aria-hidden />
+                      Garrison
+                    </span>
+                  }
+                  value={building.garrisonCapacity}
+                />
+              ) : null}
             </div>
-          </div>
-        </div>
+          </Panel>
+        </Section>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Cost</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4 space-y-2">
-              {Object.entries(building.cost).map(([resource, amount]) => (
-                <div key={resource} className="flex justify-between text-xs font-mono">
-                  <span className="uppercase">{resource}</span>
-                  <span className="font-bold">{amount}</span>
-                </div>
-              ))}
-              <div className="flex justify-between text-xs font-mono pt-2 border-t">
-                <span className="uppercase">Build Time</span>
-                <span className="font-bold">{building.buildTime}s</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Stats</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4 space-y-2">
-              <div className="flex justify-between text-xs font-mono">
-                <span className="uppercase">Hit Points</span>
-                <span className="font-bold">{building.hitPoints}</span>
-              </div>
-              <div className="flex justify-between text-xs font-mono">
-                <span className="uppercase">Melee Armor</span>
-                <span className="font-bold">{building.meleeArmor}</span>
-              </div>
-              <div className="flex justify-between text-xs font-mono">
-                <span className="uppercase">Pierce Armor</span>
-                <span className="font-bold">{building.pierceArmor}</span>
-              </div>
-              <div className="flex justify-between text-xs font-mono">
-                <span className="uppercase">Line of Sight</span>
-                <span className="font-bold">{building.lineOfSight}</span>
-              </div>
-              {building.garrisonCapacity && (
-                <div className="flex justify-between text-xs font-mono pt-2 border-t">
-                  <span className="uppercase">Garrison</span>
-                  <span className="font-bold">{building.garrisonCapacity}</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-
-        {building.trainsUnits && building.trainsUnits.length > 0 && (
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Trains Units</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4">
-              <div className="flex flex-wrap gap-2">
-                {building.trainsUnits.map((unitId) => (
-                  <Link key={unitId} href={`/units/${unitId}`}>
-                    <Button variant="outline" size="sm" className="font-mono text-xs h-7 bg-transparent">
-                      {unitId.replace(/-/g, " ").toUpperCase()}
-                    </Button>
-                  </Link>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {building.researchesTechs && building.researchesTechs.length > 0 && (
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Researches Technologies</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4">
-              <div className="flex flex-wrap gap-2">
-                {building.researchesTechs.map((techId) => (
-                  <Link key={techId} href={`/technologies/${techId}`}>
-                    <Button variant="outline" size="sm" className="font-mono text-xs h-7 bg-transparent">
-                      {techId.replace(/-/g, " ").toUpperCase()}
-                    </Button>
-                  </Link>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <Section title="Stats">
+          <Panel>
+            <div className="divide-y">
+              <StatRow label="Hit points" value={building.hitPoints} />
+              <StatRow label="Melee armor" value={building.meleeArmor} />
+              <StatRow label="Pierce armor" value={building.pierceArmor} />
+              <StatRow label="Line of sight" value={building.lineOfSight} />
+            </div>
+          </Panel>
+        </Section>
       </div>
-    </div>
+
+      {building.trainsUnits && building.trainsUnits.length > 0 && (
+        <Section title="Trains units">
+          <div className="flex flex-wrap gap-2">
+            {building.trainsUnits.map((unitId) => (
+              <Button key={unitId} asChild size="sm" variant="outline">
+                <Link href={`/units/${unitId}`} className="capitalize">
+                  {unitId.replace(/-/g, " ")}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {building.researchesTechs && building.researchesTechs.length > 0 && (
+        <Section title="Researches technologies">
+          <div className="flex flex-wrap gap-2">
+            {building.researchesTechs.map((techId) => (
+              <Button key={techId} asChild size="sm" variant="outline">
+                <Link href={`/technologies/${techId}`} className="capitalize">
+                  {techId.replace(/-/g, " ")}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </Section>
+      )}
+    </PageShell>
   )
 }

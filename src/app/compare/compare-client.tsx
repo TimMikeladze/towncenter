@@ -1,14 +1,17 @@
 "use client"
 
-import { X } from "lucide-react"
-import Image from "next/image"
+import { Plus, X } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { AgeBadge, TypeBadge } from "@/components/game/badges"
+import { CostChips } from "@/components/game/cost"
+import { EmptyState } from "@/components/game/empty-state"
+import { EntityIcon } from "@/components/game/entity-icon"
+import { PageHeader, PageShell, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { UnitCost } from "@/lib/types"
-import { getEntityImagePath } from "@/lib/utils/images"
+import { cn } from "@/lib/utils"
 
 export interface CompareUnit {
   id: string
@@ -76,138 +79,143 @@ export function CompareClient({ units, selected, maxUnits }: CompareClientProps)
   const remove = (id: string) => setSelection(selected.filter((unit) => unit.id !== id).map((unit) => unit.id))
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-mono font-bold">Compare Units</h1>
-              <p className="text-muted-foreground">Up to {maxUnits} units side by side, with deltas</p>
-            </div>
-            <Button variant="outline" asChild>
-              <Link href="/units">All units</Link>
-            </Button>
+    <PageShell>
+      <PageHeader
+        eyebrow="Analysis"
+        title="Compare units"
+        description={`Up to ${maxUnits} units side by side, with deltas against the first pick.`}
+        actions={
+          <Button asChild variant="outline">
+            <Link href="/units">All units</Link>
+          </Button>
+        }
+      />
+
+      <Section title="Selection" description="The URL keeps your selection, so it is shareable.">
+        <div className="panel flex flex-col gap-3 p-3 sm:flex-row sm:items-center">
+          <div className="flex flex-1 flex-wrap items-center gap-2">
+            {selected.length === 0 && <p className="text-sm text-muted-foreground">Nothing selected yet.</p>}
+            {selected.map((unit) => (
+              <Button key={unit.id} variant="secondary" size="sm" className="gap-1.5" onClick={() => remove(unit.id)}>
+                {unit.name}
+                <X className="h-3 w-3" />
+              </Button>
+            ))}
           </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Selection</CardTitle>
-              <CardDescription>Add units to compare; the URL keeps your selection</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex flex-wrap gap-2">
-                {selected.map((unit) => (
-                  <Button key={unit.id} variant="secondary" size="sm" onClick={() => remove(unit.id)}>
-                    {unit.name}
-                    <X className="h-3 w-3 ml-2" />
-                  </Button>
-                ))}
-                {selected.length === 0 && <p className="text-sm text-muted-foreground">Nothing selected yet.</p>}
-              </div>
-              {selected.length < maxUnits && (
-                <Select value="" onValueChange={add}>
-                  <SelectTrigger className="w-full md:w-96">
-                    <SelectValue placeholder="Add a unit" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {units
-                      .filter((unit) => !selected.some((entry) => entry.id === unit.id))
-                      .map((unit) => (
-                        <SelectItem key={unit.id} value={unit.id}>
-                          {unit.name} ({unit.type})
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              )}
-            </CardContent>
-          </Card>
-
-          {selected.length > 0 && (
-            <Card className="overflow-x-auto">
-              <CardContent className="p-0">
-                <div
-                  className="grid min-w-[640px] text-sm"
-                  style={{ gridTemplateColumns: `180px repeat(${selected.length}, minmax(0, 1fr))` }}
-                >
-                  <div className="p-3 border-b bg-muted/50" />
-                  {selected.map((unit) => (
-                    <div key={unit.id} className="p-3 border-b bg-muted/50">
-                      <Link href={`/units/${unit.id}`} className="flex items-center gap-2 hover:underline">
-                        <Image
-                          src={getEntityImagePath(unit.image_path)}
-                          alt=""
-                          width={28}
-                          height={28}
-                          className="h-7 w-7 object-contain"
-                        />
-                        <span className="font-mono font-bold">{unit.name}</span>
-                      </Link>
-                      <p className="text-[10px] text-muted-foreground uppercase mt-1">
-                        {unit.type} • {unit.age} Age
-                      </p>
-                    </div>
+          {selected.length < maxUnits && (
+            <Select value="" onValueChange={add}>
+              <SelectTrigger className="h-10 w-full sm:w-64">
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <Plus className="h-3.5 w-3.5" />
+                  <SelectValue placeholder="Add a unit" />
+                </span>
+              </SelectTrigger>
+              <SelectContent>
+                {units
+                  .filter((unit) => !selected.some((entry) => entry.id === unit.id))
+                  .map((unit) => (
+                    <SelectItem key={unit.id} value={unit.id}>
+                      {unit.name} ({unit.type})
+                    </SelectItem>
                   ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
+      </Section>
 
-                  {ROWS.map((row) => {
-                    const values = selected.map(row.value)
-                    const best = row.lowerIsBetter ? Math.min(...values) : Math.max(...values)
-                    const baseline = values[0]
+      {selected.length === 0 ? (
+        <EmptyState
+          title="Pick a unit to start"
+          description="Add up to four units and every stat lines up in one table, with the best value in each row highlighted."
+        />
+      ) : (
+        <div className="panel overflow-x-auto">
+          <div className="min-w-[560px]">
+            <div
+              className="grid border-b bg-muted/60"
+              style={{ gridTemplateColumns: `170px repeat(${selected.length}, minmax(0, 1fr))` }}
+            >
+              <div className="p-3" />
+              {selected.map((unit) => (
+                <div key={unit.id} className="space-y-1.5 p-3">
+                  <Link href={`/units/${unit.id}`} className="flex items-center gap-2 hover:underline">
+                    <EntityIcon src={unit.image_path} alt="" size="sm" />
+                    <span className="min-w-0 truncate font-display font-semibold">{unit.name}</span>
+                  </Link>
+                  <div className="flex flex-wrap items-center gap-1">
+                    <TypeBadge type={unit.type} />
+                    <AgeBadge age={unit.age} />
+                  </div>
+                </div>
+              ))}
+            </div>
 
+            {ROWS.map((row) => {
+              const values = selected.map(row.value)
+              const best = row.lowerIsBetter ? Math.min(...values) : Math.max(...values)
+              const baseline = values[0]
+
+              return (
+                <div
+                  key={row.label}
+                  className="grid border-b border-border/60"
+                  style={{ gridTemplateColumns: `170px repeat(${selected.length}, minmax(0, 1fr))` }}
+                >
+                  <div className="p-3 text-sm text-muted-foreground">{row.label}</div>
+                  {selected.map((unit, index) => {
+                    const value = values[index]
+                    const delta = value - baseline
                     return (
-                      <div key={row.label} className="contents">
-                        <div className="p-3 border-b text-muted-foreground">{row.label}</div>
-                        {selected.map((unit, index) => {
-                          const value = values[index]
-                          const delta = value - baseline
-                          return (
-                            <div key={unit.id} className="p-3 border-b font-mono">
-                              <span className={value === best && values.length > 1 ? "font-bold" : ""}>
-                                {row.format ? row.format(value) : value}
-                              </span>
-                              {index > 0 && delta !== 0 && (
-                                <span
-                                  className={`ml-2 text-[10px] ${
-                                    (delta > 0) === !row.lowerIsBetter ? "text-primary" : "text-destructive"
-                                  }`}
-                                >
-                                  {delta > 0 ? "+" : ""}
-                                  {Number(delta.toFixed(2))}
-                                </span>
-                              )}
-                            </div>
-                          )
-                        })}
+                      <div key={unit.id} className="tabular p-3 font-mono text-sm">
+                        <span className={cn(value === best && values.length > 1 && "font-bold text-primary")}>
+                          {row.format ? row.format(value) : value}
+                        </span>
+                        {index > 0 && delta !== 0 && (
+                          <span
+                            className="ml-1.5 text-[11px]"
+                            style={{
+                              color: delta > 0 === !row.lowerIsBetter ? "var(--success)" : "var(--destructive)",
+                            }}
+                          >
+                            {delta > 0 ? "+" : ""}
+                            {Number(delta.toFixed(2))}
+                          </span>
+                        )}
                       </div>
                     )
                   })}
-
-                  <div className="p-3 text-muted-foreground">Cost</div>
-                  {selected.map((unit) => (
-                    <div key={unit.id} className="p-3 font-mono text-xs">
-                      {unit.costBreakdown.food ? `${unit.costBreakdown.food}F ` : ""}
-                      {unit.costBreakdown.wood ? `${unit.costBreakdown.wood}W ` : ""}
-                      {unit.costBreakdown.gold ? `${unit.costBreakdown.gold}G ` : ""}
-                      {unit.costBreakdown.stone ? `${unit.costBreakdown.stone}S` : ""}
-                    </div>
-                  ))}
-
-                  <div className="p-3 text-muted-foreground border-t">Attack bonuses</div>
-                  {selected.map((unit) => (
-                    <div key={unit.id} className="p-3 border-t text-xs space-y-1">
-                      {unit.bonuses.length > 0 ? (
-                        unit.bonuses.map((bonus) => <div key={bonus}>{bonus}</div>)
-                      ) : (
-                        <span className="text-muted-foreground">None</span>
-                      )}
-                    </div>
-                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          )}
+              )
+            })}
+
+            <div
+              className="grid border-b border-border/60"
+              style={{ gridTemplateColumns: `170px repeat(${selected.length}, minmax(0, 1fr))` }}
+            >
+              <div className="p-3 text-sm text-muted-foreground">Cost</div>
+              {selected.map((unit) => (
+                <div key={unit.id} className="p-3">
+                  <CostChips cost={unit.costBreakdown} />
+                </div>
+              ))}
+            </div>
+
+            <div className="grid" style={{ gridTemplateColumns: `170px repeat(${selected.length}, minmax(0, 1fr))` }}>
+              <div className="p-3 text-sm text-muted-foreground">Attack bonuses</div>
+              {selected.map((unit) => (
+                <div key={unit.id} className="space-y-1 p-3 text-[13px]">
+                  {unit.bonuses.length > 0 ? (
+                    unit.bonuses.map((bonus) => <div key={bonus}>{bonus}</div>)
+                  ) : (
+                    <span className="text-muted-foreground">None</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </PageShell>
   )
 }

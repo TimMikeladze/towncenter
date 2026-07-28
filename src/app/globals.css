@@ -3,105 +3,111 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Palette: parchment + bronze in light, iron night + gold in dark. The game's
+ * own resource and age colours are first-class tokens so every page tints the
+ * same numbers the same way.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #000000;
-  --card: #ffffff;
-  --card-foreground: #000000;
-  --popover: #ffffff;
-  --popover-foreground: #000000;
-  --primary: #000000;
-  --primary-foreground: #ffffff;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #000000;
-  --muted: #f5f5f5;
-  --muted-foreground: #737373;
-  --accent: #f0f0f0;
-  --accent-foreground: #000000;
-  --destructive: #000000;
-  --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #f5f5f5;
-  --ring: #000000;
-  --color-infantry: #1a1a1a;
-  --color-archer: #2a2a2a;
-  --color-cavalry: #3a3a3a;
-  --color-siege: #4a4a4a;
-  --color-monk: #5a5a5a;
-  --color-unique: #6a6a6a;
-  --color-naval: #7a7a7a;
-  --chart-1: #000000;
-  --chart-2: #404040;
-  --chart-3: #808080;
-  --chart-4: #b3b3b3;
-  --chart-5: #d9d9d9;
-  --radius: 0.125rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #000000;
-  --sidebar-primary: #000000;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f5f5f5;
-  --sidebar-accent-foreground: #000000;
-  --sidebar-border: #e5e5e5;
-  --sidebar-ring: #000000;
-  --shadow-x: 0px;
-  --shadow-y: 1px;
-  --shadow-blur: 2px;
-  --shadow-spread: 0px;
-  --shadow-opacity: 0.1;
-  --shadow-color: #000000;
+  --background: #f2ebdd;
+  --foreground: #221a10;
+  --card: #fbf6ea;
+  --card-foreground: #221a10;
+  --popover: #fbf6ea;
+  --popover-foreground: #221a10;
+  --primary: #8a5a1a;
+  --primary-foreground: #fdf8ec;
+  --secondary: #e7dcc6;
+  --secondary-foreground: #3a2c19;
+  --muted: #e9e0cc;
+  --muted-foreground: #6b5b45;
+  --accent: #e2d4b4;
+  --accent-foreground: #2a2015;
+  --destructive: #9b2c2c;
+  --destructive-foreground: #fdf8ec;
+  --success: #4f7a3a;
+  --border: #d9cbae;
+  --input: #d9cbae;
+  --ring: #b8862f;
+
+  --resource-food: #c2452d;
+  --resource-wood: #4f7a3a;
+  --resource-gold: #b8862f;
+  --resource-stone: #6f7d8a;
+
+  --age-dark: #6f6a63;
+  --age-feudal: #a9743a;
+  --age-castle: #6c8090;
+  --age-imperial: #b8862f;
+
+  --type-infantry: #a9552f;
+  --type-archer: #4f7a3a;
+  --type-cavalry: #96652a;
+  --type-siege: #64707c;
+  --type-monk: #3f6f8f;
+  --type-naval: #2c7382;
+  --type-economy: #7d7048;
+  --type-unique: #8a4f8f;
+
+  --chart-1: #8a5a1a;
+  --chart-2: #4f7a3a;
+  --chart-3: #3f6f8f;
+  --chart-4: #a9552f;
+  --chart-5: #6f7d8a;
+
+  --radius: 0.5rem;
+  --header-height: 3.5rem;
 }
 
 .dark {
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #0a0a0a;
-  --card-foreground: #ffffff;
-  --popover: #0a0a0a;
-  --popover-foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #000000;
-  --secondary: #1a1a1a;
-  --secondary-foreground: #ffffff;
-  --muted: #1a1a1a;
-  --muted-foreground: #a3a3a3;
-  --accent: #262626;
-  --accent-foreground: #ffffff;
-  --destructive: #ffffff;
-  --destructive-foreground: #000000;
-  --border: #262626;
-  --input: #1a1a1a;
-  --ring: #ffffff;
-  --color-infantry: #e5e5e5;
-  --color-archer: #d4d4d4;
-  --color-cavalry: #c4c4c4;
-  --color-siege: #b3b3b3;
-  --color-monk: #a3a3a3;
-  --color-unique: #939393;
-  --color-naval: #838383;
-  --chart-1: #ffffff;
-  --chart-2: #b3b3b3;
-  --chart-3: #808080;
-  --chart-4: #404040;
-  --chart-5: #262626;
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: #1a1a1a;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #262626;
-  --sidebar-ring: #ffffff;
-  --shadow-x: 0px;
-  --shadow-y: 1px;
-  --shadow-blur: 4px;
-  --shadow-spread: 0px;
-  --shadow-opacity: 0.3;
-  --shadow-color: #000000;
+  --background: #12100c;
+  --foreground: #f0e7d6;
+  --card: #1a1610;
+  --card-foreground: #f0e7d6;
+  --popover: #1a1610;
+  --popover-foreground: #f0e7d6;
+  --primary: #d9a83c;
+  --primary-foreground: #1a1408;
+  --secondary: #241f18;
+  --secondary-foreground: #f0e7d6;
+  --muted: #221d16;
+  --muted-foreground: #a4917a;
+  --accent: #2b2318;
+  --accent-foreground: #f6eeda;
+  --destructive: #e07070;
+  --destructive-foreground: #1a1408;
+  --success: #86b56a;
+  --border: #322a20;
+  --input: #322a20;
+  --ring: #d9a83c;
+
+  --resource-food: #e0705c;
+  --resource-wood: #86b56a;
+  --resource-gold: #e0bd5c;
+  --resource-stone: #9fb0bd;
+
+  --age-dark: #9c968c;
+  --age-feudal: #d09a5c;
+  --age-castle: #9fb0bd;
+  --age-imperial: #e0bd5c;
+
+  --type-infantry: #e08a63;
+  --type-archer: #8fc06f;
+  --type-cavalry: #dcae5f;
+  --type-siege: #9aa7b4;
+  --type-monk: #7cb4d6;
+  --type-naval: #5cb6c4;
+  --type-economy: #c4b177;
+  --type-unique: #c58fca;
+
+  --chart-1: #d9a83c;
+  --chart-2: #86b56a;
+  --chart-3: #7cb4d6;
+  --chart-4: #e08a63;
+  --chart-5: #9fb0bd;
 }
 
 @theme inline {
-  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -118,109 +124,135 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-infantry: var(--color-infantry);
-  --color-archer: var(--color-archer);
-  --color-cavalry: var(--color-cavalry);
-  --color-siege: var(--color-siege);
-  --color-monk: var(--color-monk);
-  --color-unique: var(--color-unique);
-  --color-naval: var(--color-naval);
+
+  --color-food: var(--resource-food);
+  --color-wood: var(--resource-wood);
+  --color-gold: var(--resource-gold);
+  --color-stone: var(--resource-stone);
+
+  --color-age-dark: var(--age-dark);
+  --color-age-feudal: var(--age-feudal);
+  --color-age-castle: var(--age-castle);
+  --color-age-imperial: var(--age-imperial);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --font-serif: "Geist Mono", "Geist Mono Fallback";
-  --shadow-2xs: var(--shadow-x) var(--shadow-y)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
-  --shadow-xs: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-spread)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
-  --shadow-sm: var(--shadow-x) var(--shadow-y) calc(var(--shadow-blur) * 1.5) var(--shadow-spread)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
-  --shadow-md: calc(var(--shadow-x) * 2) calc(var(--shadow-y) * 2) calc(var(--shadow-blur) * 3)
-    calc(var(--shadow-spread) - 1px)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
-  --shadow-lg: calc(var(--shadow-x) * 4) calc(var(--shadow-y) * 4) calc(var(--shadow-blur) * 5)
-    calc(var(--shadow-spread) - 3px)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
-  --shadow-xl: calc(var(--shadow-x) * 6) calc(var(--shadow-y) * 6) calc(var(--shadow-blur) * 7)
-    calc(var(--shadow-spread) - 5px)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 100%), transparent);
-  --shadow-2xl: calc(var(--shadow-x) * 8) calc(var(--shadow-y) * 8) calc(max(0px, var(--shadow-blur) * 9 - 8px))
-    calc(var(--shadow-spread) - 12px)
-    color-mix(in srgb, var(--shadow-color) calc(var(--shadow-opacity) * 250%), transparent);
-  --shadow: var(--shadow-xs);
-  --color-shadow-color: var(--shadow-color);
-  --shadow-opacity: var(--shadow-opacity);
-  --shadow-spread: var(--shadow-spread);
-  --shadow-blur: var(--shadow-blur);
-  --shadow-y: var(--shadow-y);
-  --shadow-x: var(--shadow-x);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cinzel), "Iowan Old Style", Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px -16px rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.08), 0 12px 32px -18px rgb(0 0 0 / 0.35);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-background text-foreground;
-    font-family: "Geist Mono", "Geist Mono Fallback", monospace;
-    font-size: 0.75rem;
-    line-height: 1rem;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    /* Parchment grain in light, quiet vignette in dark. No image assets. */
+    background-image:
+      radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--primary) 6%, transparent), transparent 55%),
+      radial-gradient(circle at 85% 10%, color-mix(in srgb, var(--ring) 5%, transparent), transparent 45%);
+    background-attachment: fixed;
+    /* Room for the mobile tab bar. */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+    font-weight: 600;
+  }
+
+  /* Numbers line up in tables and stat blocks. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply bg-card text-card-foreground rounded-lg border;
+    box-shadow: var(--shadow-panel);
+  }
+
+  .panel-interactive {
+    @apply bg-card text-card-foreground rounded-lg border transition-all duration-150;
+    box-shadow: var(--shadow-panel);
+  }
+
+  .panel-interactive:hover {
+    border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-1px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel-interactive:hover {
+      transform: none;
+    }
+  }
+
+  /* Section rule with a bronze cap, used above every section title. */
+  .rule-accent::before {
+    content: "";
+    display: block;
+    width: 2rem;
+    height: 2px;
+    margin-bottom: 0.5rem;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+
+  .kbd-shortcut {
+    @apply inline-flex items-center justify-center rounded border bg-muted px-1.5 font-mono text-[10px] leading-5 text-muted-foreground;
+  }
+
+  .label-caps {
+    @apply font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground;
   }
 }
 
 @layer utilities {
-  .terminal-border {
-    border: 1px solid var(--border);
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .card-minimal {
-    transition: all 0.15s ease;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 
-  .card-minimal:hover {
-    border-color: var(--foreground);
-    box-shadow: 0 0 0 1px var(--foreground);
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
-  .unit-type-infantry,
-  .unit-type-archer,
-  .unit-type-cavalry,
-  .unit-type-siege,
-  .unit-type-monk,
-  .unit-type-unique,
-  .unit-type-naval {
-    background-color: var(--foreground);
-    color: var(--background);
-    border: 1px solid var(--foreground);
-  }
-
-  .kbd-shortcut {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.125rem 0.375rem;
-    border: 1px solid var(--border);
-    border-radius: 0.125rem;
-    background-color: var(--muted);
-    font-family: "Geist Mono", "Geist Mono Fallback", monospace;
-    font-size: 0.625rem;
-    line-height: 1rem;
+  /* Every interactive target on touch layouts clears 44px. */
+  .touch-target {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
   }
 }

@@ -1,11 +1,13 @@
-import { ArrowLeft } from "lucide-react"
-import Image from "next/image"
+import { Clock } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { AgeBadge, Chip } from "@/components/game/badges"
+import { CostChips } from "@/components/game/cost"
+import { DetailHero } from "@/components/game/detail-hero"
+import { StatTile } from "@/components/game/stats"
+import { BackLink, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { getTechnologyById } from "@/lib/data"
-import { getEntityImagePath } from "@/lib/utils/images"
 
 export default async function TechnologyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -15,105 +17,84 @@ export default async function TechnologyDetailPage({ params }: { params: Promise
     notFound()
   }
 
+  const totalCost = Object.values(tech.cost).reduce<number>((sum, amount) => sum + (amount ?? 0), 0)
+
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="mb-4">
-        <Link href="/technologies">
-          <Button variant="ghost" size="sm" className="font-mono text-xs h-7 px-2">
-            <ArrowLeft className="h-3 w-3 mr-1" />
-            Technologies
-          </Button>
-        </Link>
-      </div>
+    <PageShell width="default">
+      <BackLink href="/technologies" label="All technologies" />
 
-      <div className="max-w-4xl mx-auto space-y-4">
-        <div className="border-2 p-6 bg-card">
-          <div className="flex items-start gap-6">
-            <Image
-              src={getEntityImagePath(tech.image_path)}
-              alt={tech.name}
-              width={120}
-              height={120}
-              className="border"
-            />
-            <div className="flex-1 space-y-3">
-              <div>
-                <h1 className="text-2xl font-mono font-bold uppercase tracking-tight">{tech.name}</h1>
-                <p className="text-xs font-mono text-muted-foreground uppercase mt-1">
-                  {tech.category} · {tech.age} Age
-                  {tech.civSpecific && ` · ${tech.civSpecific.toUpperCase()}`}
-                </p>
-              </div>
-              <p className="text-xs font-mono leading-relaxed">{tech.description}</p>
-            </div>
-          </div>
-        </div>
+      <DetailHero
+        name={tech.name}
+        image={tech.image_path}
+        meta={
+          <>
+            <Chip tone="var(--type-monk)">{tech.category}</Chip>
+            <AgeBadge age={tech.age} />
+            {tech.civSpecific && <Chip tone="var(--type-unique)">{tech.civSpecific.replace(/-/g, " ")}</Chip>}
+          </>
+        }
+        description={tech.description}
+        stats={
+          <>
+            <StatTile label="Research time" value={`${tech.researchTime}s`} icon={Clock} />
+            <StatTile label="Total resources" value={totalCost} />
+            <StatTile label="Age" value={tech.age} />
+            <StatTile label="Researched at" value={tech.category} />
+          </>
+        }
+      />
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Cost & Time</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4 space-y-2">
-              {Object.entries(tech.cost).map(([resource, amount]) => (
-                <div key={resource} className="flex justify-between text-xs font-mono">
-                  <span className="uppercase">{resource}</span>
-                  <span className="font-bold">{amount}</span>
-                </div>
-              ))}
-              <div className="flex justify-between text-xs font-mono pt-2 border-t">
-                <span className="uppercase">Research Time</span>
-                <span className="font-bold">{tech.researchTime}s</span>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Section title="Cost">
+          <Panel className="space-y-3">
+            <CostChips cost={tech.cost} size="md" />
+            <p className="text-sm text-muted-foreground">Research takes {tech.researchTime}s.</p>
+          </Panel>
+        </Section>
 
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Effects</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4 space-y-2">
-              {tech.effects.map((effect) => (
-                <div key={effect} className="text-xs font-mono">
-                  • {effect}
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
-
-        {tech.affectedUnits && tech.affectedUnits.length > 0 && (
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Affected Units</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4">
-              <div className="flex flex-wrap gap-2">
-                {tech.affectedUnits.map((unitId) => (
-                  <Link key={unitId} href={`/units/${unitId}`}>
-                    <Button variant="outline" size="sm" className="font-mono text-xs h-7 bg-transparent">
-                      {unitId.replace(/-/g, " ").toUpperCase()}
-                    </Button>
-                  </Link>
+        <Section title="Effects">
+          <Panel>
+            {tech.effects.length > 0 ? (
+              <ul className="space-y-1.5 text-sm">
+                {tech.effects.map((effect) => (
+                  <li key={effect} className="flex gap-1.5">
+                    <span className="text-primary">•</span>
+                    {effect}
+                  </li>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {tech.affectedBuildings && tech.affectedBuildings.length > 0 && (
-          <Card className="border-2">
-            <CardHeader className="py-3 px-4">
-              <CardTitle className="text-xs font-mono uppercase">Affected Buildings</CardTitle>
-            </CardHeader>
-            <CardContent className="py-3 px-4">
-              <div className="text-xs font-mono uppercase">
-                {tech.affectedBuildings.includes("all") ? "All Buildings" : tech.affectedBuildings.join(", ")}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">No effect text in the game data.</p>
+            )}
+          </Panel>
+        </Section>
       </div>
-    </div>
+
+      {tech.affectedUnits && tech.affectedUnits.length > 0 && (
+        <Section title="Affected units">
+          <div className="flex flex-wrap gap-2">
+            {tech.affectedUnits.map((unitId) => (
+              <Button key={unitId} asChild size="sm" variant="outline">
+                <Link href={`/units/${unitId}`} className="capitalize">
+                  {unitId.replace(/-/g, " ")}
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {tech.affectedBuildings && tech.affectedBuildings.length > 0 && (
+        <Section title="Affected buildings">
+          <Panel>
+            <p className="text-sm capitalize text-muted-foreground">
+              {tech.affectedBuildings.includes("all")
+                ? "All buildings"
+                : tech.affectedBuildings.map((entry) => entry.replace(/-/g, " ")).join(", ")}
+            </p>
+          </Panel>
+        </Section>
+      )}
+    </PageShell>
   )
 }

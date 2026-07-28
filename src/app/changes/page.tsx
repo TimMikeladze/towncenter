@@ -1,5 +1,8 @@
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Chip } from "@/components/game/badges"
+import { EmptyState } from "@/components/game/empty-state"
+import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import patchChanges from "@/data/patch-changes.json"
 
 interface FieldChange {
@@ -37,11 +40,11 @@ function Delta({ change }: { change: FieldChange }) {
   const after = change.after ?? 0
   const improved = after > before
   return (
-    <span className="font-mono text-xs">
-      {change.field}{" "}
-      <span className="text-muted-foreground">
-        {before} → <span className={improved ? "text-primary" : "text-destructive"}>{after}</span>
-      </span>
+    <span className="tabular inline-flex items-center gap-1 font-mono text-[12px]">
+      <span className="text-muted-foreground">{change.field}</span>
+      <span className="text-muted-foreground">{before}</span>
+      <ArrowRight className="h-3 w-3 text-muted-foreground" aria-hidden />
+      <span style={{ color: improved ? "var(--success)" : "var(--destructive)" }}>{after}</span>
     </span>
   )
 }
@@ -49,95 +52,99 @@ function Delta({ change }: { change: FieldChange }) {
 export default function ChangesPage() {
   const tables = patchChanges.tables as Record<string, TableDiff>
   const newCivs = patchChanges.civilizations?.added ?? []
+  const hasChanges = Object.values(tables).some(
+    (diff) => diff.added.length + diff.removed.length + diff.changed.length > 0,
+  )
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-5xl mx-auto space-y-6">
-          <div>
-            <h1 className="text-3xl font-mono font-bold">What Changed</h1>
-            <p className="text-muted-foreground">
-              Stat differences between the current game-data export and the previous one
-              {patchChanges.base ? ` (baseline: ${patchChanges.base})` : ""}
-            </p>
+    <PageShell width="default">
+      <PageHeader
+        eyebrow="Data"
+        title="What changed"
+        description={`Stat differences between the current game-data export and the previous one${
+          patchChanges.base ? ` (baseline: ${patchChanges.base})` : ""
+        }.`}
+      />
+
+      {newCivs.length > 0 && (
+        <Section title="New civilizations" description={`${newCivs.length} added`}>
+          <div className="flex flex-wrap gap-1.5">
+            {newCivs.map((civ: string) => (
+              <Link key={civ} href={`/civilizations/${civ.toLowerCase()}`}>
+                <Chip tone="var(--primary)" className="px-2 py-1">
+                  {civ}
+                </Chip>
+              </Link>
+            ))}
           </div>
+        </Section>
+      )}
 
-          {newCivs.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>New Civilizations</CardTitle>
-                <CardDescription>{newCivs.length} added</CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {newCivs.map((civ: string) => (
-                  <Link key={civ} href={`/civilizations/${civ.toLowerCase()}`}>
-                    <span className="border rounded px-2 py-1 text-sm hover:bg-accent">{civ}</span>
-                  </Link>
-                ))}
-              </CardContent>
-            </Card>
-          )}
+      {!hasChanges && newCivs.length === 0 && (
+        <EmptyState title="No differences" description="The current export matches the previous one." />
+      )}
 
-          {Object.entries(tables).map(([kind, diff]) => (
-            <Card key={kind}>
-              <CardHeader>
-                <CardTitle>{TITLES[kind] ?? kind}</CardTitle>
-                <CardDescription>
-                  {diff.changed.length} changed • {diff.added.length} added • {diff.removed.length} removed
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {diff.added.length > 0 && (
-                  <div>
-                    <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">Added</h3>
-                    <div className="flex flex-wrap gap-1.5">
-                      {diff.added.map((entity) => (
-                        <Link key={entity.id} href={`${HREF_BASE[kind]}/${entity.id}`}>
-                          <span className="border rounded px-2 py-1 text-xs hover:bg-accent">{entity.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
+      {Object.entries(tables).map(([kind, diff]) => {
+        if (diff.added.length + diff.removed.length + diff.changed.length === 0) return null
 
-                {diff.changed.length > 0 && (
-                  <div className="space-y-2">
-                    <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Stat changes</h3>
-                    {diff.changed.map((entity) => (
-                      <div key={entity.id} className="border rounded p-2">
-                        <Link
-                          href={`${HREF_BASE[kind]}/${entity.id}`}
-                          className="font-mono font-semibold text-sm hover:underline"
-                        >
+        return (
+          <Section
+            key={kind}
+            title={TITLES[kind] ?? kind}
+            description={`${diff.changed.length} changed · ${diff.added.length} added · ${diff.removed.length} removed`}
+          >
+            <div className="space-y-3">
+              {diff.added.length > 0 && (
+                <Panel className="space-y-2">
+                  <p className="label-caps">Added</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {diff.added.map((entity) => (
+                      <Link key={entity.id} href={`${HREF_BASE[kind]}/${entity.id}`}>
+                        <Chip tone="var(--success)" className="px-2 py-1">
                           {entity.name}
-                        </Link>
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                          {entity.fields.map((field) => (
-                            <Delta key={field.field} change={field} />
-                          ))}
-                        </div>
-                      </div>
+                        </Chip>
+                      </Link>
                     ))}
                   </div>
-                )}
+                </Panel>
+              )}
 
-                {diff.removed.length > 0 && (
-                  <div>
-                    <h3 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">Removed</h3>
-                    <div className="flex flex-wrap gap-1.5">
-                      {diff.removed.map((entity) => (
-                        <span key={entity.id} className="border rounded px-2 py-1 text-xs line-through">
-                          {entity.name}
-                        </span>
-                      ))}
-                    </div>
+              {diff.changed.length > 0 && (
+                <div className="space-y-2">
+                  {diff.changed.map((entity) => (
+                    <Panel key={entity.id} className="space-y-1.5 p-3">
+                      <Link
+                        href={`${HREF_BASE[kind]}/${entity.id}`}
+                        className="font-display text-sm font-semibold hover:underline"
+                      >
+                        {entity.name}
+                      </Link>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1">
+                        {entity.fields.map((field) => (
+                          <Delta key={field.field} change={field} />
+                        ))}
+                      </div>
+                    </Panel>
+                  ))}
+                </div>
+              )}
+
+              {diff.removed.length > 0 && (
+                <Panel className="space-y-2">
+                  <p className="label-caps">Removed</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {diff.removed.map((entity) => (
+                      <Chip key={entity.id} tone="var(--destructive)" className="px-2 py-1 line-through">
+                        {entity.name}
+                      </Chip>
+                    ))}
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
+                </Panel>
+              )}
+            </div>
+          </Section>
+        )
+      })}
+    </PageShell>
   )
 }

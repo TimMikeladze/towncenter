@@ -1,5 +1,7 @@
 import Link from "next/link"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Chip } from "@/components/game/badges"
+import { EmptyState } from "@/components/game/empty-state"
+import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { compareCivilizations, getAllCivilizations } from "@/lib/data"
 import type { Building, Technology, Unit } from "@/lib/types"
 import { CivComparePicker } from "./compare-client"
@@ -20,17 +22,17 @@ function DiffSection({
   hrefBase: string
 }) {
   return (
-    <div>
-      <h4 className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">
+    <div className="space-y-1.5">
+      <p className="label-caps">
         {title} ({items.length})
-      </h4>
+      </p>
       {items.length === 0 ? (
         <p className="text-sm text-muted-foreground">None</p>
       ) : (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {items.map((item) => (
             <Link key={item.id} href={`${hrefBase}/${item.id}`}>
-              <span className="text-xs border rounded px-2 py-1 hover:bg-accent">{item.name}</span>
+              <Chip className="px-2 py-1">{item.name}</Chip>
             </Link>
           ))}
         </div>
@@ -41,7 +43,7 @@ function DiffSection({
 
 function DiffColumn({ diff }: { diff: Diff }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <DiffSection title="Units" items={diff.units} hrefBase="/units" />
       <DiffSection title="Technologies" items={diff.techs} hrefBase="/technologies" />
       <DiffSection title="Buildings" items={diff.buildings} hrefBase="/buildings" />
@@ -63,53 +65,38 @@ export default async function CivilizationComparePage({
   const comparison = a && b ? await compareCivilizations(a, b) : null
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div>
-            <h1 className="text-3xl font-mono font-bold">Compare Civilizations</h1>
-            <p className="text-muted-foreground">What one civ has that the other does not</p>
-          </div>
+    <PageShell>
+      <PageHeader
+        eyebrow="Analysis"
+        title="Compare civilizations"
+        description="What one civ has that the other does not."
+      />
 
-          <CivComparePicker options={options} a={a} b={b} />
+      <CivComparePicker options={options} a={a} b={b} />
 
-          {!comparison ? (
-            <Card>
-              <CardContent className="py-12 text-center text-muted-foreground">
-                Pick two civilizations to see the difference.
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Only {comparison.a.name}</CardTitle>
-                  <CardDescription>
-                    {comparison.onlyA.units.length} units • {comparison.onlyA.techs.length} techs •{" "}
-                    {comparison.onlyA.buildings.length} buildings
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <DiffColumn diff={comparison.onlyA} />
-                </CardContent>
-              </Card>
+      {!comparison ? (
+        <EmptyState title="Pick two civilizations" description="Choose a civ on each side to see the difference." />
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Section
+            title={`Only ${comparison.a.name}`}
+            description={`${comparison.onlyA.units.length} units · ${comparison.onlyA.techs.length} techs · ${comparison.onlyA.buildings.length} buildings`}
+          >
+            <Panel>
+              <DiffColumn diff={comparison.onlyA} />
+            </Panel>
+          </Section>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Only {comparison.b.name}</CardTitle>
-                  <CardDescription>
-                    {comparison.onlyB.units.length} units • {comparison.onlyB.techs.length} techs •{" "}
-                    {comparison.onlyB.buildings.length} buildings
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <DiffColumn diff={comparison.onlyB} />
-                </CardContent>
-              </Card>
-            </div>
-          )}
+          <Section
+            title={`Only ${comparison.b.name}`}
+            description={`${comparison.onlyB.units.length} units · ${comparison.onlyB.techs.length} techs · ${comparison.onlyB.buildings.length} buildings`}
+          >
+            <Panel>
+              <DiffColumn diff={comparison.onlyB} />
+            </Panel>
+          </Section>
         </div>
-      </div>
-    </div>
+      )}
+    </PageShell>
   )
 }

@@ -1,11 +1,13 @@
 "use client"
 
-import { Filter, LayoutGrid, Search, TableIcon, X } from "lucide-react"
+import { ArrowDownAZ, ArrowUpAZ, LayoutGrid, Rows3, Search, SlidersHorizontal, X } from "lucide-react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useCallback, useEffect, useMemo } from "react"
+import { EmptyState } from "@/components/game/empty-state"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 import { DataCard } from "./data-card"
 import { DataTable } from "./data-table"
 import type { DataItem, DataViewerConfig, ViewMode } from "./types"
@@ -67,6 +69,8 @@ function DataViewerInner<T extends DataItem>({
     return values
   }, [config.filters, searchParams])
 
+  const hasActiveFilters = Object.values(activeFilters).some((value) => value !== "all") || searchQuery !== ""
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "t") {
@@ -117,147 +121,172 @@ function DataViewerInner<T extends DataItem>({
   }, [data, searchQuery, activeFilters, sortBy, sortDirection, config])
 
   const toggleSort = (key: string) => {
-    if (sortBy === key) {
-      setParams({ dir: sortDirection === "asc" ? "desc" : "asc" })
-    } else {
-      setParams({ sort: key, dir: "asc" })
-    }
+    if (sortBy === key) setParams({ dir: sortDirection === "asc" ? "desc" : "asc" })
+    else setParams({ sort: key, dir: "asc" })
+  }
+
+  const clearAll = () => {
+    const cleared: Record<string, string | null> = { q: null }
+    for (const filter of config.filters ?? []) cleared[filter.key] = null
+    setParams(cleared)
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-col gap-3 flex-1 md:flex-row md:items-center">
+      <div className="panel space-y-3 p-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           {showSearch && config.searchFields && (
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 id="data-search"
                 placeholder={config.searchPlaceholder || "Search..."}
                 value={searchQuery}
                 onChange={(event) => setParams({ q: event.target.value })}
-                className="pl-9 border-2"
+                className="h-10 pl-9 pr-9"
               />
               {searchQuery && (
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon-sm"
                   onClick={() => setParams({ q: null })}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 p-0"
+                  className="absolute right-1 top-1/2 -translate-y-1/2"
                   aria-label="Clear search"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-3.5 w-3.5" />
                 </Button>
               )}
             </div>
           )}
 
-          {config.sortOptions && config.sortOptions.length > 0 && (
-            <div className="flex items-center gap-2">
-              <select
-                value={sortBy ?? ""}
-                onChange={(event) => setParams({ sort: event.target.value || null })}
-                className="text-sm border-2 rounded-md px-3 py-1.5 bg-background"
-                aria-label="Sort by"
-              >
-                {config.sortOptions.map((option) => (
-                  <option key={option.key} value={option.key}>
-                    Sort: {option.label}
-                  </option>
-                ))}
-              </select>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setParams({ dir: sortDirection === "asc" ? "desc" : "asc" })}
-                className="border-2"
-                aria-label="Toggle sort direction"
-              >
-                {sortDirection === "asc" ? "↑" : "↓"}
-              </Button>
-            </div>
-          )}
-        </div>
-
-        {showViewToggle && (
-          <div className="flex items-center gap-2 border-2 rounded-lg p-1 bg-muted/30">
-            <Button
-              variant={viewMode === "cards" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setParams({ view: "cards" })}
-            >
-              <LayoutGrid className="h-4 w-4 mr-2" />
-              Cards
-              <kbd className="kbd-shortcut ml-1">⌘G</kbd>
-            </Button>
-            <Button
-              variant={viewMode === "table" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setParams({ view: "table" })}
-            >
-              <TableIcon className="h-4 w-4 mr-2" />
-              Table
-              <kbd className="kbd-shortcut ml-1">⌘T</kbd>
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {showFilters && config.filters && config.filters.length > 0 && (
-        <div className="flex flex-wrap gap-2 items-center border-t border-b py-2">
-          <Filter className="h-3 w-3 mr-1" />
-          {config.filters.map((filter) => (
-            <div key={filter.key} className="flex flex-wrap gap-1">
-              {filter.options.map((option) => (
+          <div className="flex items-center gap-2">
+            {config.sortOptions && config.sortOptions.length > 0 && (
+              <>
+                <Select value={sortBy ?? ""} onValueChange={(value) => setParams({ sort: value })}>
+                  <SelectTrigger className="h-10 w-full min-w-40 sm:w-44" aria-label="Sort by">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {config.sortOptions.map((option) => (
+                      <SelectItem key={option.key} value={option.key}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <Button
-                  key={option.value}
-                  variant={activeFilters[filter.key] === option.value ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setParams({ [filter.key]: option.value })}
-                  className="h-6 px-2 text-[10px] font-mono uppercase"
+                  variant="outline"
+                  size="icon"
+                  className="h-10 w-10 shrink-0"
+                  onClick={() => setParams({ dir: sortDirection === "asc" ? "desc" : "asc" })}
+                  aria-label={`Sort ${sortDirection === "asc" ? "descending" : "ascending"}`}
                 >
-                  {option.label}
+                  {sortDirection === "asc" ? <ArrowUpAZ className="h-4 w-4" /> : <ArrowDownAZ className="h-4 w-4" />}
                 </Button>
-              ))}
-            </div>
-          ))}
+              </>
+            )}
+
+            {showViewToggle && (
+              <div className="hidden items-center rounded-md border p-0.5 md:flex">
+                <Button
+                  variant={viewMode === "cards" ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-9 gap-1.5"
+                  onClick={() => setParams({ view: "cards" })}
+                  aria-pressed={viewMode === "cards"}
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                  <span className="hidden lg:inline">Cards</span>
+                </Button>
+                <Button
+                  variant={viewMode === "table" ? "secondary" : "ghost"}
+                  size="sm"
+                  className="h-9 gap-1.5"
+                  onClick={() => setParams({ view: "table" })}
+                  aria-pressed={viewMode === "table"}
+                >
+                  <Rows3 className="h-4 w-4" />
+                  <span className="hidden lg:inline">Table</span>
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
 
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>
-          Showing {filteredData.length} of {data.length} {config.itemName || "items"}
-        </span>
-        {sortBy && (
-          <span>
-            Sorted by {config.sortOptions?.find((option) => option.key === sortBy)?.label}{" "}
-            {sortDirection === "asc" ? "↑" : "↓"}
-          </span>
-        )}
-      </div>
-
-      {filteredData.length > 0 ? (
-        viewMode === "cards" ? (
-          <div className={`grid gap-4 ${config.cardGridCols || "md:grid-cols-2 lg:grid-cols-3"}`}>
-            {filteredData.map((item) => (
-              <DataCard key={item.id} item={item} config={config} />
+        {showFilters && config.filters && config.filters.length > 0 && (
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t pt-3">
+            {config.filters.map((filter) => (
+              <div key={filter.key} className="flex flex-wrap items-center gap-1.5">
+                <span className="label-caps flex items-center gap-1">
+                  <SlidersHorizontal className="h-3 w-3" aria-hidden />
+                  {filter.label}
+                </span>
+                {filter.options.map((option) => {
+                  const active = activeFilters[filter.key] === option.value
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setParams({ [filter.key]: option.value })}
+                      aria-pressed={active}
+                      className={cn(
+                        "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
+                        active
+                          ? "border-primary/50 bg-primary/12 text-primary"
+                          : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  )
+                })}
+              </div>
             ))}
           </div>
-        ) : (
-          <Card className="overflow-hidden border-2">
-            <DataTable
-              data={filteredData}
-              config={config}
-              onSort={toggleSort}
-              sortBy={sortBy}
-              sortDirection={sortDirection}
-            />
-          </Card>
-        )
+        )}
+      </div>
+
+      <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+        <span className="tabular">
+          {filteredData.length} of {data.length} {config.itemName || "items"}
+        </span>
+        {hasActiveFilters && (
+          <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs" onClick={clearAll}>
+            <X className="h-3 w-3" />
+            Clear
+          </Button>
+        )}
+      </div>
+
+      {filteredData.length === 0 ? (
+        <EmptyState
+          title={`No ${config.itemName || "items"} found`}
+          description="Try a different search term or clear the active filters."
+          icon={Search}
+          action={
+            hasActiveFilters ? (
+              <Button variant="outline" size="sm" className="mt-2" onClick={clearAll}>
+                Clear filters
+              </Button>
+            ) : undefined
+          }
+        />
+      ) : viewMode === "table" ? (
+        <div className="panel overflow-hidden">
+          <DataTable
+            data={filteredData}
+            config={config}
+            onSort={toggleSort}
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+          />
+        </div>
       ) : (
-        <Card className="p-12 text-center border-2">
-          <p className="text-muted-foreground">No {config.itemName || "items"} found matching your criteria</p>
-        </Card>
+        <div className={cn("grid gap-3", config.cardGridCols || "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4")}>
+          {filteredData.map((item) => (
+            <DataCard key={item.id} item={item} config={config} />
+          ))}
+        </div>
       )}
     </div>
   )

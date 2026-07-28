@@ -1,12 +1,14 @@
 "use client"
 
-import { Heart, Shield, Swords, Target, Zap } from "lucide-react"
-import Image from "next/image"
+import { Gauge, Heart, Shield, Swords, Target } from "lucide-react"
 import type { DataViewerConfig } from "@/components/data-viewer"
 import { DataViewer } from "@/components/data-viewer"
+import { AgeBadge, Chip, TypeBadge } from "@/components/game/badges"
+import { CostChips } from "@/components/game/cost"
+import { EntityIcon } from "@/components/game/entity-icon"
+import { PageHeader, PageShell } from "@/components/layout/page-shell"
 import { costEfficiency, resourceCost } from "@/lib/game/combat"
 import type { Unit } from "@/lib/types"
-import { getEntityImagePath } from "@/lib/utils/images"
 
 interface UnitsClientProps {
   allUnits: Unit[]
@@ -17,14 +19,14 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
   const config: DataViewerConfig<Unit> = {
     itemName: "units",
     searchFields: ["name", "type", "age", "description"],
-    searchPlaceholder: "Search units...",
+    searchPlaceholder: "Search units by name, type or text…",
 
     filters: [
       {
         key: "age",
         label: "Age",
         options: [
-          { label: "All Ages", value: "all" },
+          { label: "All", value: "all" },
           { label: "Dark", value: "Dark" },
           { label: "Feudal", value: "Feudal" },
           { label: "Castle", value: "Castle" },
@@ -36,73 +38,48 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
 
     sortOptions: [
       { key: "name", label: "Name", sortFn: (a, b) => a.name.localeCompare(b.name) },
-      { key: "hp", label: "HP", sortFn: (a, b) => b.stats.hp - a.stats.hp },
+      { key: "hp", label: "Hit points", sortFn: (a, b) => b.stats.hp - a.stats.hp },
       { key: "attack", label: "Attack", sortFn: (a, b) => b.stats.attack - a.stats.attack },
       { key: "cost", label: "Cost", sortFn: (a, b) => resourceCost(a) - resourceCost(b) },
-      {
-        key: "efficiency",
-        label: "Cost efficiency",
-        sortFn: (a, b) => costEfficiency(b) - costEfficiency(a),
-      },
+      { key: "efficiency", label: "Cost efficiency", sortFn: (a, b) => costEfficiency(b) - costEfficiency(a) },
     ],
 
     cardTitle: (unit) => unit.name,
     cardDescription: (unit) => (
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="px-2 py-0.5 text-[9px] font-bold border rounded uppercase tracking-wider">{unit.type}</span>
-        <span className="text-[9px]">•</span>
-        <span className="text-[9px] font-bold uppercase tracking-wider">{unit.age} Age</span>
-      </div>
+      <>
+        <TypeBadge type={unit.type} />
+        <AgeBadge age={unit.age} />
+        {unit.civSpecific && unit.type !== "Unique" && <Chip tone="var(--type-unique)">Unique</Chip>}
+      </>
     ),
     cardHeader: (unit) => (
-      <div className="relative h-24 bg-muted flex items-center justify-center border-b">
-        <Image
-          src={getEntityImagePath(unit.image_path)}
-          alt={unit.name}
-          width={64}
-          height={64}
-          className="h-16 w-16 object-contain"
-        />
-        {unit.civSpecific && (
-          <div className="absolute top-1 right-1">
-            <span className="px-2 py-0.5 text-[9px] font-bold rounded border-2 bg-background uppercase tracking-wider">
-              UNIQUE
-            </span>
-          </div>
-        )}
+      <div className="flex items-center justify-center border-b bg-muted/40 py-4">
+        <EntityIcon src={unit.image_path} alt={unit.name} size="lg" className="border-0 bg-transparent" />
       </div>
     ),
     cardContent: (unit) => (
       <>
-        <div className="grid grid-cols-3 gap-1.5 text-[10px]">
-          <div className="flex flex-col items-center p-1.5 border">
-            <Heart className="h-3 w-3 mb-0.5" />
-            <span className="text-[8px] text-muted-foreground uppercase">HP</span>
-            <span className="font-bold">{unit.stats.hp}</span>
+        <div className="grid grid-cols-3 gap-1.5 text-center">
+          <div className="rounded-md border py-1.5" title="Hit points">
+            <Heart className="mx-auto h-3 w-3 text-muted-foreground" aria-hidden />
+            <p className="tabular font-mono text-sm font-semibold">{unit.stats.hp}</p>
           </div>
-          <div className="flex flex-col items-center p-1.5 border">
-            <Swords className="h-3 w-3 mb-0.5" />
-            <span className="text-[8px] text-muted-foreground uppercase">ATK</span>
-            <span className="font-bold">{unit.stats.attack}</span>
+          <div className="rounded-md border py-1.5" title="Attack">
+            <Swords className="mx-auto h-3 w-3 text-muted-foreground" aria-hidden />
+            <p className="tabular font-mono text-sm font-semibold">{unit.stats.attack}</p>
           </div>
-          <div className="flex flex-col items-center p-1.5 border">
-            <Shield className="h-3 w-3 mb-0.5" />
-            <span className="text-[8px] text-muted-foreground uppercase">ARM</span>
-            <span className="font-bold">
+          <div className="rounded-md border py-1.5" title="Melee / pierce armor">
+            <Shield className="mx-auto h-3 w-3 text-muted-foreground" aria-hidden />
+            <p className="tabular font-mono text-sm font-semibold">
               {unit.stats.meleeArmor}/{unit.stats.pierceArmor}
-            </span>
+            </p>
           </div>
         </div>
-        <p className="text-[10px] text-muted-foreground leading-tight line-clamp-2">{unit.description}</p>
-        <div className="space-y-1 text-[10px] border-t pt-2">
-          <div className="flex items-center justify-between p-1.5 border">
-            <span className="text-muted-foreground font-bold uppercase text-[9px]">Cost:</span>
-            <span className="font-mono text-[9px]">
-              {unit.cost.food && `${unit.cost.food}F `}
-              {unit.cost.wood && `${unit.cost.wood}W `}
-              {unit.cost.gold && `${unit.cost.gold}G`}
-            </span>
-          </div>
+        {unit.description && (
+          <p className="line-clamp-2 text-[13px] leading-snug text-muted-foreground">{unit.description}</p>
+        )}
+        <div className="mt-auto pt-1">
+          <CostChips cost={unit.cost} />
         </div>
       </>
     ),
@@ -110,23 +87,17 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
     tableColumns: [
       {
         key: "name",
-        header: "UNIT",
+        header: "Unit",
         sortKey: "name",
-        width: "2fr",
+        width: "minmax(220px, 2fr)",
         render: (unit) => (
-          <div className="flex items-center gap-2">
-            <Image
-              src={getEntityImagePath(unit.image_path)}
-              alt=""
-              width={24}
-              height={24}
-              className="h-6 w-6 object-contain shrink-0"
-            />
-            <div>
-              <div className="font-bold uppercase">{unit.name}</div>
-              <div className="text-[10px] text-muted-foreground flex items-center gap-2 mt-0.5">
-                <span className="px-1.5 py-0.5 border rounded uppercase">{unit.type}</span>
-                <span className="uppercase">{unit.age} Age</span>
+          <div className="flex min-w-0 items-center gap-2.5">
+            <EntityIcon src={unit.image_path} alt="" size="sm" />
+            <div className="min-w-0">
+              <p className="truncate font-medium">{unit.name}</p>
+              <div className="mt-0.5 flex items-center gap-1">
+                <TypeBadge type={unit.type} />
+                <AgeBadge age={unit.age} />
               </div>
             </div>
           </div>
@@ -134,20 +105,21 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       },
       {
         key: "stats",
-        header: "COMBAT STATS",
+        header: "Combat",
         sortKey: "hp",
+        width: "minmax(160px, 1fr)",
         render: (unit) => (
-          <div className="flex items-center gap-3 text-[10px] font-mono">
-            <span className="flex items-center gap-1">
-              <Heart className="h-3 w-3" />
+          <div className="tabular flex items-center gap-3 font-mono text-[13px]">
+            <span className="flex items-center gap-1" title="Hit points">
+              <Heart className="h-3 w-3 text-muted-foreground" aria-hidden />
               {unit.stats.hp}
             </span>
-            <span className="flex items-center gap-1">
-              <Swords className="h-3 w-3" />
+            <span className="flex items-center gap-1" title="Attack">
+              <Swords className="h-3 w-3 text-muted-foreground" aria-hidden />
               {unit.stats.attack}
             </span>
-            <span className="flex items-center gap-1">
-              <Shield className="h-3 w-3" />
+            <span className="flex items-center gap-1" title="Melee / pierce armor">
+              <Shield className="h-3 w-3 text-muted-foreground" aria-hidden />
               {unit.stats.meleeArmor}/{unit.stats.pierceArmor}
             </span>
           </div>
@@ -155,31 +127,26 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       },
       {
         key: "cost",
-        header: "COST",
+        header: "Cost",
         sortKey: "cost",
-        render: (unit) => (
-          <span className="font-mono text-[10px]">
-            {unit.cost.food && `${unit.cost.food}F `}
-            {unit.cost.wood && `${unit.cost.wood}W `}
-            {unit.cost.gold && `${unit.cost.gold}G `}
-            {unit.cost.stone && `${unit.cost.stone}S`}
-          </span>
-        ),
+        width: "minmax(160px, 1fr)",
+        render: (unit) => <CostChips cost={unit.cost} />,
       },
       {
         key: "mobility",
-        header: "MOBILITY",
+        header: "Mobility",
+        width: "minmax(150px, 0.8fr)",
         render: (unit) => (
-          <div className="flex flex-col gap-0.5 text-[10px] font-mono">
-            {unit.stats.range && (
-              <span className="flex items-center gap-1">
-                <Target className="h-3 w-3" />
-                Range: {unit.stats.range}
+          <div className="tabular flex items-center gap-3 font-mono text-[13px] text-muted-foreground">
+            {unit.stats.range ? (
+              <span className="flex items-center gap-1" title="Range">
+                <Target className="h-3 w-3" aria-hidden />
+                {unit.stats.range}
               </span>
-            )}
-            <span className="flex items-center gap-1">
-              <Zap className="h-3 w-3" />
-              Speed: {unit.stats.movementSpeed}
+            ) : null}
+            <span className="flex items-center gap-1" title="Movement speed">
+              <Gauge className="h-3 w-3" aria-hidden />
+              {unit.stats.movementSpeed}
             </span>
           </div>
         ),
@@ -190,21 +157,13 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-6">
-        <div className="max-w-7xl mx-auto space-y-4">
-          <div className="flex items-center justify-between pb-4 border-b">
-            <div>
-              <h1 className="text-xl font-mono font-bold uppercase tracking-tight">Unit Database</h1>
-              <p className="text-muted-foreground text-[10px] mt-0.5 uppercase tracking-wide">
-                Showing {filteredUnits.length} of {allUnits.length} units
-              </p>
-            </div>
-          </div>
-
-          <DataViewer config={config} data={filteredUnits} defaultView="table" />
-        </div>
-      </div>
-    </div>
+    <PageShell>
+      <PageHeader
+        eyebrow="Reference"
+        title="Units"
+        description={`Combat stats, costs and matchups for all ${allUnits.length} units in the game.`}
+      />
+      <DataViewer config={config} data={filteredUnits} defaultView="cards" />
+    </PageShell>
   )
 }

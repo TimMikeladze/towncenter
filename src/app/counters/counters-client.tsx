@@ -1,13 +1,15 @@
 "use client"
 
-import Image from "next/image"
+import { Gauge, Heart, Shield, ShieldAlert, Swords } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
+import { AgeBadge, Chip, TypeBadge } from "@/components/game/badges"
+import { DetailHero } from "@/components/game/detail-hero"
+import { EntityIcon } from "@/components/game/entity-icon"
+import { StatTile } from "@/components/game/stats"
+import { PageHeader, PageShell, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { getEntityImagePath } from "@/lib/utils/images"
 
 interface MatchupRow {
   id: string
@@ -58,54 +60,51 @@ function MatchupList({
   subjectName: string
 }) {
   if (rows.length === 0) {
-    return <p className="text-muted-foreground text-center py-8">{emptyMessage}</p>
+    return <p className="panel px-4 py-8 text-center text-sm text-muted-foreground">{emptyMessage}</p>
   }
 
+  const accent = tone === "good" ? "var(--success)" : "var(--destructive)"
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {rows.map((row) => (
-        <Link key={row.id} href={`/units/${row.id}`}>
-          <div
-            className={`border rounded-lg p-3 transition-colors ${
-              tone === "good" ? "border-primary/20 hover:bg-primary/5" : "border-destructive/20 hover:bg-destructive/5"
-            }`}
-          >
-            <div className="flex items-start justify-between mb-2 gap-2">
-              <div className="flex items-center gap-2">
-                <Image
-                  src={getEntityImagePath(row.image_path)}
-                  alt=""
-                  width={28}
-                  height={28}
-                  className="h-7 w-7 object-contain"
-                />
-                <div>
-                  <h3 className="font-mono font-semibold text-sm">{row.name}</h3>
-                  <p className="text-xs text-muted-foreground">
-                    {row.type} • {row.age} Age
-                  </p>
+        <Link key={row.id} href={`/units/${row.id}`} className="panel panel-interactive block p-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <EntityIcon src={row.image_path} alt="" size="sm" />
+              <div className="min-w-0">
+                <p className="truncate font-medium">{row.name}</p>
+                <div className="mt-0.5 flex items-center gap-1">
+                  <TypeBadge type={row.type} />
+                  <AgeBadge age={row.age} />
                 </div>
               </div>
-              <Badge variant={tone === "good" ? "secondary" : "destructive"}>
-                {tone === "good" ? "Weak to you" : "Counter"}
-              </Badge>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono mt-2">
-              <span>
-                <span className="text-muted-foreground">{subjectName} deals:</span> {row.damageDealt} ({row.dpsDealt}{" "}
-                dps)
-              </span>
-              <span>
-                <span className="text-muted-foreground">{row.name} deals:</span> {row.damageTaken} ({row.dpsTaken} dps)
-              </span>
-              <span>
-                <span className="text-muted-foreground">HP:</span> {row.hp}
-              </span>
-              <span>
-                <span className="text-muted-foreground">Cost:</span> {row.cost}
-              </span>
-            </div>
+            <Chip tone={accent}>{tone === "good" ? "Weak to you" : "Counter"}</Chip>
           </div>
+
+          <dl className="tabular mt-2.5 grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[12px] sm:grid-cols-4">
+            <div>
+              <dt className="label-caps">{subjectName} deals</dt>
+              <dd style={{ color: "var(--success)" }}>
+                {row.damageDealt} ({row.dpsDealt} dps)
+              </dd>
+            </div>
+            <div>
+              <dt className="label-caps">{row.name} deals</dt>
+              <dd style={{ color: "var(--destructive)" }}>
+                {row.damageTaken} ({row.dpsTaken} dps)
+              </dd>
+            </div>
+            <div>
+              <dt className="label-caps">HP</dt>
+              <dd>{row.hp}</dd>
+            </div>
+            <div>
+              <dt className="label-caps">Cost</dt>
+              <dd>{row.cost}</dd>
+            </div>
+          </dl>
         </Link>
       ))}
     </div>
@@ -116,122 +115,95 @@ export function CountersClient({ units, unit, goodAgainst, counteredBy }: Counte
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-mono font-bold">Unit Counters</h1>
-              <p className="text-muted-foreground">
-                Computed from attack classes, armour and cost — not hand-written lists
-              </p>
-            </div>
-            <Button variant="outline" asChild>
-              <Link href="/units">All units</Link>
-            </Button>
-          </div>
+    <PageShell width="default">
+      <PageHeader
+        eyebrow="Analysis"
+        title="Unit counters"
+        description="Computed from attack classes, armour and cost — not hand-written lists."
+        actions={
+          <Button asChild variant="outline">
+            <Link href="/units">All units</Link>
+          </Button>
+        }
+      />
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Select Unit</CardTitle>
-              <CardDescription>Pick a unit to see both sides of its matchups</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Select value={unit.id} onValueChange={(value) => router.push(`/counters?unit=${value}`)}>
-                <SelectTrigger className="w-full md:w-96">
-                  <SelectValue placeholder="Select unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {units.map((entry) => (
-                    <SelectItem key={entry.id} value={entry.id}>
-                      {entry.name} ({entry.type})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </CardContent>
-          </Card>
+      <Section title="Pick a unit">
+        <Select value={unit.id} onValueChange={(value) => router.push(`/counters?unit=${value}`)}>
+          <SelectTrigger className="h-11 w-full sm:w-96" aria-label="Select unit">
+            <SelectValue placeholder="Select unit" />
+          </SelectTrigger>
+          <SelectContent>
+            {units.map((entry) => (
+              <SelectItem key={entry.id} value={entry.id}>
+                {entry.name} ({entry.type})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Section>
 
-          <Card>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <Image
-                    src={getEntityImagePath(unit.image_path)}
-                    alt=""
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 object-contain"
-                  />
-                  <div>
-                    <CardTitle className="text-2xl">{unit.name}</CardTitle>
-                    <CardDescription>
-                      {unit.type} • {unit.age} Age
-                    </CardDescription>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={`/units/${unit.id}`}>Full stats</Link>
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">{unit.description}</p>
-              <div className="grid gap-4 md:grid-cols-3 text-sm font-mono">
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Cost</p>
-                  <p>{unit.cost} weighted resources</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Combat</p>
-                  <p>
-                    {unit.hp} HP • {unit.attack} atk • {unit.meleeArmor}/{unit.pierceArmor} armor
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Mobility</p>
-                  <p>
-                    Speed {unit.movementSpeed}
-                    {unit.range ? ` • range ${unit.range}` : " • melee"}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <DetailHero
+        name={unit.name}
+        image={unit.image_path}
+        meta={
+          <>
+            <TypeBadge type={unit.type} />
+            <AgeBadge age={unit.age} />
+          </>
+        }
+        description={unit.description}
+        actions={
+          <Button asChild size="sm" variant="outline">
+            <Link href={`/units/${unit.id}`}>Full stats</Link>
+          </Button>
+        }
+        stats={
+          <>
+            <StatTile label="Hit points" value={unit.hp} icon={Heart} />
+            <StatTile label="Attack" value={unit.attack} icon={Swords} />
+            <StatTile
+              label="Armor"
+              value={`${unit.meleeArmor} / ${unit.pierceArmor}`}
+              hint="melee / pierce"
+              icon={Shield}
+            />
+            <StatTile
+              label="Speed"
+              value={unit.movementSpeed}
+              hint={unit.range ? `range ${unit.range}` : "melee"}
+              icon={Gauge}
+            />
+          </>
+        }
+      />
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-primary">Counters</CardTitle>
-                <CardDescription>{unit.name} wins these trades</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <MatchupList
-                  rows={goodAgainst}
-                  tone="good"
-                  emptyMessage="No lopsided matchups in its favour"
-                  subjectName={unit.name}
-                />
-              </CardContent>
-            </Card>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Section title="Counters" description={`${unit.name} wins these trades`}>
+          <MatchupList
+            rows={goodAgainst}
+            tone="good"
+            emptyMessage="No lopsided matchups in its favour."
+            subjectName={unit.name}
+          />
+        </Section>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-destructive">Countered By</CardTitle>
-                <CardDescription>These win the trade against {unit.name}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <MatchupList
-                  rows={counteredBy}
-                  tone="bad"
-                  emptyMessage="Nothing clearly counters it"
-                  subjectName={unit.name}
-                />
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        <Section
+          title={
+            <span className="flex items-center gap-1.5">
+              <ShieldAlert className="h-4 w-4" aria-hidden />
+              Countered by
+            </span>
+          }
+          description={`These win the trade against ${unit.name}`}
+        >
+          <MatchupList
+            rows={counteredBy}
+            tone="bad"
+            emptyMessage="Nothing clearly counters it."
+            subjectName={unit.name}
+          />
+        </Section>
       </div>
-    </div>
+    </PageShell>
   )
 }

@@ -1,25 +1,36 @@
-import Image from "next/image"
+import { ArrowRight, Gauge, Heart, Shield, Swords } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { AgeBadge, Chip, TypeBadge } from "@/components/game/badges"
+import { CostChips } from "@/components/game/cost"
+import { DetailHero } from "@/components/game/detail-hero"
+import { EntityIcon } from "@/components/game/entity-icon"
+import { StatRow, StatTile } from "@/components/game/stats"
+import { BackLink, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { getAllUnits, getCivilizationById, getUnitById } from "@/lib/data"
 import { BASE_MELEE_CLASS, BASE_PIERCE_CLASS } from "@/lib/game/classes"
 import type { Unit } from "@/lib/types"
-import { getEntityImagePath } from "@/lib/utils/images"
 
-function UnitChips({ units }: { units: Unit[] }) {
+function MatchupGrid({ units, empty }: { units: Unit[]; empty: string }) {
   if (units.length === 0) {
-    return <p className="text-sm text-muted-foreground">No clear matchup in the combat data.</p>
+    return <p className="text-sm text-muted-foreground">{empty}</p>
   }
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid gap-2 sm:grid-cols-2">
       {units.map((unit) => (
-        <Link key={unit.id} href={`/units/${unit.id}`}>
-          <Button variant="outline" size="sm">
-            {unit.name}
-          </Button>
+        <Link
+          key={unit.id}
+          href={`/units/${unit.id}`}
+          className="panel panel-interactive flex items-center gap-2.5 p-2.5"
+        >
+          <EntityIcon src={unit.image_path} alt="" size="sm" />
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-medium">{unit.name}</span>
+            <span className="tabular block font-mono text-[11px] text-muted-foreground">
+              {unit.stats.hp} HP · {unit.stats.attack} atk
+            </span>
+          </span>
         </Link>
       ))}
     </div>
@@ -56,226 +67,142 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
   )
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-5xl mx-auto space-y-6">
-          <div className="flex items-center gap-4">
-            <Button variant="outline" asChild>
-              <Link href="/units">Back to Units</Link>
+    <PageShell width="default">
+      <BackLink href="/units" label="All units" />
+
+      <DetailHero
+        name={unit.name}
+        image={unit.image_path}
+        meta={
+          <>
+            <TypeBadge type={unit.type} />
+            <AgeBadge age={unit.age} />
+            {civ && <Chip tone="var(--type-unique)">{civ.name} unique</Chip>}
+          </>
+        }
+        description={unit.description}
+        actions={
+          <>
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/counters?unit=${unit.id}`}>
+                Counter analysis
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </Button>
-            <Image
-              src={getEntityImagePath(unit.image_path)}
-              alt={unit.name}
-              width={48}
-              height={48}
-              className="h-12 w-12 object-contain"
+            <Button asChild size="sm" variant="outline">
+              <Link href={`/compare?units=${unit.id}`}>Compare</Link>
+            </Button>
+          </>
+        }
+        stats={
+          <>
+            <StatTile label="Hit points" value={unit.stats.hp} icon={Heart} />
+            <StatTile label="Attack" value={`${unit.stats.attack} ${unit.stats.attackType}`} icon={Swords} />
+            <StatTile
+              label="Armor"
+              value={`${unit.stats.meleeArmor} / ${unit.stats.pierceArmor}`}
+              hint="melee / pierce"
+              icon={Shield}
             />
-            <div>
-              <h1 className="text-3xl font-mono font-bold">{unit.name}</h1>
-              <p className="text-muted-foreground">
-                {unit.type} • {unit.age} Age
-                {civ && ` • ${civ.name} unique unit`}
-              </p>
+            <StatTile
+              label="Speed"
+              value={unit.stats.movementSpeed}
+              hint={unit.stats.range ? `range ${unit.stats.range}` : "melee"}
+              icon={Gauge}
+            />
+          </>
+        }
+      />
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Section title="Cost">
+          <Panel className="space-y-2">
+            <CostChips cost={unit.cost} size="md" />
+            <div className="divide-y">
+              <StatRow label="Training time" value={`${unit.stats.trainingTime}s`} />
+              <StatRow label="Attack speed" value={`${unit.stats.attackSpeed}s`} />
+              <StatRow label="Line of sight" value={unit.stats.lineOfSight} />
             </div>
-          </div>
+          </Panel>
+        </Section>
 
-          {unit.description && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Description</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-muted-foreground">{unit.description}</p>
-                {unit.effects.map((effect) => (
-                  <p key={effect} className="text-sm text-muted-foreground italic">
-                    {effect}
-                  </p>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Cost</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {unit.cost.food && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Food</span>
-                    <span className="font-mono">{unit.cost.food}</span>
-                  </div>
-                )}
-                {unit.cost.wood && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Wood</span>
-                    <span className="font-mono">{unit.cost.wood}</span>
-                  </div>
-                )}
-                {unit.cost.gold && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Gold</span>
-                    <span className="font-mono">{unit.cost.gold}</span>
-                  </div>
-                )}
-                {unit.cost.stone && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Stone</span>
-                    <span className="font-mono">{unit.cost.stone}</span>
-                  </div>
-                )}
-                <Separator />
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Training Time</span>
-                  <span className="font-mono">{unit.stats.trainingTime}s</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Combat Stats</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Hit Points</span>
-                  <span className="font-mono">{unit.stats.hp}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Attack ({unit.stats.attackType})</span>
-                  <span className="font-mono">{unit.stats.attack}</span>
-                </div>
-                {unit.stats.range && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Range</span>
-                    <span className="font-mono">{unit.stats.range}</span>
-                  </div>
-                )}
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Attack Speed</span>
-                  <span className="font-mono">{unit.stats.attackSpeed}s</span>
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Melee Armor</span>
-                  <span className="font-mono">{unit.stats.meleeArmor}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Pierce Armor</span>
-                  <span className="font-mono">{unit.stats.pierceArmor}</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Additional Stats</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Movement Speed</span>
-                <span className="font-mono">{unit.stats.movementSpeed}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Line of Sight</span>
-                <span className="font-mono">{unit.stats.lineOfSight}</span>
-              </div>
-              {armorClasses.length > 0 && (
-                <>
-                  <Separator />
-                  <div>
-                    <span className="text-muted-foreground">Armor Classes</span>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {armorClasses.map((armour) => (
-                        <span key={armour.id} className="text-xs bg-muted px-2 py-1 rounded">
-                          {armour.name}
-                          {armour.amount !== 0 && ` ${armour.amount > 0 ? "+" : ""}${armour.amount}`}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-
-          {attackBonuses.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Attack Bonuses</CardTitle>
-                <CardDescription>Extra damage against specific armor classes</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {attackBonuses.map((bonus) => (
-                  <div key={bonus.classId} className="flex items-center justify-between">
-                    <span className="text-muted-foreground">vs {bonus.class}</span>
-                    <span className="font-mono">
-                      {bonus.bonus > 0 ? "+" : ""}
-                      {bonus.bonus}
-                    </span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Strong Against</CardTitle>
-                <CardDescription>Derived from attack, armor and cost</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <UnitChips units={goodAgainstUnits} />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Weak Against</CardTitle>
-                <CardDescription>Units that win the trade against {unit.name}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <UnitChips units={counterUnits} />
-              </CardContent>
-            </Card>
-          </div>
-
-          {upgradeChain.length > 1 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Upgrade Path</CardTitle>
-                <CardDescription>Where {unit.name} sits in its line</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap items-center gap-2">
-                  {upgradeChain.map((step, index) => (
-                    <div key={step.id} className="flex items-center gap-2">
-                      {index > 0 && <span className="text-muted-foreground">→</span>}
-                      <Link href={`/units/${step.id}`}>
-                        <Button variant={step.id === unit.id ? "default" : "outline"} size="sm">
-                          {step.name}
-                        </Button>
-                      </Link>
-                    </div>
+        <Section title="Combat detail">
+          <Panel>
+            <div className="divide-y">
+              <StatRow label="Hit points" value={unit.stats.hp} />
+              <StatRow label={`Attack (${unit.stats.attackType})`} value={unit.stats.attack} />
+              {unit.stats.range ? <StatRow label="Range" value={unit.stats.range} /> : null}
+              <StatRow label="Melee armor" value={unit.stats.meleeArmor} />
+              <StatRow label="Pierce armor" value={unit.stats.pierceArmor} />
+            </div>
+            {armorClasses.length > 0 && (
+              <div className="mt-3 space-y-1.5 border-t pt-3">
+                <p className="label-caps">Armor classes</p>
+                <div className="flex flex-wrap gap-1">
+                  {armorClasses.map((armour) => (
+                    <Chip key={armour.id}>
+                      {armour.name}
+                      {armour.amount !== 0 && ` ${armour.amount > 0 ? "+" : ""}${armour.amount}`}
+                    </Chip>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Button asChild variant="outline">
-              <Link href={`/counters?unit=${unit.id}`}>Counter analysis</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href={`/compare?units=${unit.id}`}>Compare with other units</Link>
-            </Button>
-          </div>
-        </div>
+              </div>
+            )}
+          </Panel>
+        </Section>
       </div>
-    </div>
+
+      {unit.effects.length > 0 && (
+        <Section title="Notes">
+          <Panel className="space-y-1.5">
+            {unit.effects.map((effect) => (
+              <p key={effect} className="text-sm text-muted-foreground">
+                {effect}
+              </p>
+            ))}
+          </Panel>
+        </Section>
+      )}
+
+      {attackBonuses.length > 0 && (
+        <Section title="Attack bonuses" description="Extra damage against specific armor classes">
+          <Panel>
+            <div className="grid gap-x-6 sm:grid-cols-2">
+              {attackBonuses.map((bonus) => (
+                <StatRow
+                  key={bonus.classId}
+                  label={`vs ${bonus.class}`}
+                  value={`${bonus.bonus > 0 ? "+" : ""}${bonus.bonus}`}
+                />
+              ))}
+            </div>
+          </Panel>
+        </Section>
+      )}
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <Section title="Strong against" description="Derived from attack, armor and cost">
+          <MatchupGrid units={goodAgainstUnits} empty="No lopsided matchup in its favour." />
+        </Section>
+        <Section title="Weak against" description={`Units that win the trade against ${unit.name}`}>
+          <MatchupGrid units={counterUnits} empty="Nothing clearly counters it." />
+        </Section>
+      </div>
+
+      {upgradeChain.length > 1 && (
+        <Section title="Upgrade path">
+          <Panel className="flex flex-wrap items-center gap-2">
+            {upgradeChain.map((step, index) => (
+              <div key={step.id} className="flex items-center gap-2">
+                {index > 0 && <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />}
+                <Button asChild size="sm" variant={step.id === unit.id ? "default" : "outline"}>
+                  <Link href={`/units/${step.id}`}>{step.name}</Link>
+                </Button>
+              </div>
+            ))}
+          </Panel>
+        </Section>
+      )}
+    </PageShell>
   )
 }

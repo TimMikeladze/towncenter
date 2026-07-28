@@ -1,7 +1,6 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface CivComparePickerProps {
@@ -23,36 +22,34 @@ export function CivComparePicker({ options, a, b }: CivComparePickerProps) {
   }
 
   return (
-    <Card>
-      <CardContent className="flex flex-col gap-3 py-6 md:flex-row md:items-center">
-        <Select value={a ?? ""} onValueChange={(value) => navigate({ a: value })}>
-          <SelectTrigger className="w-full md:w-64">
-            <SelectValue placeholder="First civilization" />
-          </SelectTrigger>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.id} value={option.id}>
-                {option.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+    <div className="panel flex flex-col gap-2 p-3 sm:flex-row sm:items-center">
+      <Select value={a ?? ""} onValueChange={(value) => navigate({ a: value })}>
+        <SelectTrigger className="h-10 w-full sm:w-64" aria-label="First civilization">
+          <SelectValue placeholder="First civilization" />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.id} value={option.id}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
-        <span className="text-muted-foreground font-mono text-sm">vs</span>
+      <span className="label-caps px-1 text-center">vs</span>
 
-        <Select value={b ?? ""} onValueChange={(value) => navigate({ b: value })}>
-          <SelectTrigger className="w-full md:w-64">
-            <SelectValue placeholder="Second civilization" />
-          </SelectTrigger>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.id} value={option.id}>
-                {option.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </CardContent>
-    </Card>
+      <Select value={b ?? ""} onValueChange={(value) => navigate({ b: value })}>
+        <SelectTrigger className="h-10 w-full sm:w-64" aria-label="Second civilization">
+          <SelectValue placeholder="Second civilization" />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.id} value={option.id}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
