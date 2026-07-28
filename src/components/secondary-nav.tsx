@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useCallback } from "react"
+import { Rail } from "@/components/ui/rail"
 import { cn } from "@/lib/utils"
 
 interface SecondaryNavItem {
@@ -45,8 +46,12 @@ function SecondaryNavInner({ items, defaultValue, currentValue }: SecondaryNavPr
   )
 
   return (
-    <div className="sticky top-14 z-40 border-b bg-background/90 backdrop-blur">
-      <div className="no-scrollbar flex snap-x gap-1 overflow-x-auto px-3 py-1.5 sm:px-4">
+    <div
+      className="sticky z-40 border-b bg-background/90 backdrop-blur-xl"
+      // Sits directly under the fixed header, safe area included.
+      style={{ top: "var(--header-offset)" }}
+    >
+      <Rail className="gap-1.5 px-3 py-2 sm:px-4">
         {items.map((item) => {
           const active = activeValue === item.value
           return (
@@ -56,17 +61,17 @@ function SecondaryNavInner({ items, defaultValue, currentValue }: SecondaryNavPr
               onClick={() => select(item.value)}
               aria-pressed={active}
               className={cn(
-                "shrink-0 snap-start rounded-full border px-3 py-1.5 text-[13px] font-medium transition-colors",
+                "press h-9 shrink-0 rounded-full border px-3.5 text-[13px] font-medium transition-colors",
                 active
                   ? "border-primary/50 bg-primary/12 text-primary"
-                  : "border-transparent text-muted-foreground hover:bg-muted hover:text-foreground",
+                  : "border-border/70 text-muted-foreground md:hover:bg-muted md:hover:text-foreground",
               )}
             >
               {item.label}
             </button>
           )
         })}
-      </div>
+      </Rail>
     </div>
   )
 }

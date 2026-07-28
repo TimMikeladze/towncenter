@@ -48,10 +48,13 @@ export function BuildingsClient({ allBuildings, filteredBuildings }: BuildingsCl
         <AgeBadge age={building.age} />
       </>
     ),
-    cardHeader: (building) => (
-      <div className="flex items-center justify-center border-b bg-muted/40 py-4">
-        <EntityIcon src={building.image_path} alt={building.name} size="lg" className="border-0 bg-transparent" />
-      </div>
+    cardMedia: (building) => (
+      <EntityIcon
+        src={building.image_path}
+        alt={building.name}
+        size="lg"
+        className="border-0 bg-transparent max-md:h-14 max-md:w-14"
+      />
     ),
     cardContent: (building) => (
       <>
