@@ -70,11 +70,7 @@
 
   --radius: 0.5rem;
 
-  /*
-   * Layout metrics every fixed chrome element and every page shares. Nothing
-   * hard-codes a header or tab-bar height, so the two can never drift out of
-   * step with the padding that clears them.
-   */
+  /* Layout metrics the shell and its chrome share. */
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
@@ -83,13 +79,10 @@
   /*
    * Zero on a phone. The tab bar owns navigation, search and the overflow
    * menu, which leaves the header holding nothing — so it collapses to the
-   * status-bar scrim and gives the height back to the page.
+   * status-bar strip and gives the height back to the page.
    */
   --header-height: 0rem;
   --tab-bar-height: 3.5rem;
-  /* Total space the chrome occupies, safe areas included. */
-  --header-offset: calc(var(--header-height) + var(--safe-top));
-  --tab-bar-offset: calc(var(--tab-bar-height) + var(--safe-bottom));
 }
 
 /* Tablet and up: the header comes back to carry the nav rail. Must match the
@@ -206,31 +199,37 @@
     @apply border-border outline-ring/50;
   }
 
+  /*
+   * The document itself never scrolls, and no part of the chrome is
+   * `position: fixed`.
+   *
+   * iOS resolves fixed positioning against the layout viewport, and Safari
+   * gets that viewport wrong often enough — mid rubber-band, while its
+   * toolbars collapse, and outright on iOS 26 — to strand a bottom-fixed tab
+   * bar in the middle of the screen. The only reliable answer is to give it
+   * nothing to get wrong: html and body are a locked full-height frame, the
+   * shell inside them is a flex column, and the header and tab bar are
+   * ordinary flow children of it. Only `.app-scroll` between them moves.
+   */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   html {
-    /*
-     * The page is never allowed to grow sideways. `clip` rather than `hidden`
-     * so it does not turn the viewport into a scroll container and break the
-     * sticky header.
-     */
-    overflow-x: clip;
     /* iOS resizes text in landscape unless this is pinned. */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     /* Kills the 300ms tap delay and double-tap-to-zoom. */
     touch-action: manipulation;
-    /* No rubber-band past the top/bottom of the document — the giveaway that
-       a PWA is really a web page. */
-    overscroll-behavior-y: none;
-    height: 100%;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    overflow-x: clip;
     font-size: 0.9375rem;
     line-height: 1.5;
-    min-height: 100dvh;
-    overscroll-behavior-y: none;
     /*
      * A single neutral wash off the top of the page so the flat monochrome
      * canvas still has somewhere to fall away to. Tinted from the foreground,
@@ -245,9 +244,9 @@
 
   /*
    * Safari zooms the page whenever a focused control renders below 16px, and a
-   * zoomed page throws every `position: fixed` element out of place. Touch
-   * layouts therefore get a 16px floor on every control, regardless of the
-   * utility classes on it. Desktop keeps the tighter type.
+   * zoomed page throws the whole layout out of place. Touch layouts therefore
+   * get a 16px floor on every control, regardless of the utility classes on
+   * it. Desktop keeps the tighter type.
    */
   @media (pointer: coarse) {
     input,
@@ -298,19 +297,37 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Anchored scrolling clears the fixed header instead of hiding under it. */
+  /* Anchored scrolling clears the sticky section rail instead of hiding under
+     it. The header is outside the scroll pane and no longer overlaps. */
   :target {
-    scroll-margin-top: calc(var(--header-offset) + 1rem);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
+    scroll-margin-top: 4rem;
   }
 }
 
 @layer components {
+  /*
+   * The one element in the app that scrolls. It is a flex child of the shell,
+   * so it takes whatever height the header and tab bar leave — no padding has
+   * to be kept in step with their sizes, and neither can be scrolled away
+   * from its edge.
+   */
+  .app-scroll {
+    flex: 1 1 auto;
+    /* Flex items floor at min-content; without this the pane grows to fit its
+       content and pushes the tab bar off the bottom instead of scrolling. */
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: clip;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .app-scroll {
+      scroll-behavior: smooth;
+    }
+  }
+
   .panel {
     @apply bg-card text-card-foreground rounded-lg border;
     box-shadow: var(--shadow-panel);

@@ -22,14 +22,15 @@ export function AppHeader() {
 
   return (
     <header
-      // Fixed, not sticky: with `viewport-fit=cover` the header also has to own
-      // the status-bar strip, and it must not scroll away with the content.
+      // A flow child of the shell, not a fixed overlay. Nothing scrolls
+      // underneath it, so it is opaque rather than blurred, and it owns the
+      // status-bar strip through its own safe-area padding.
       //
       // On a phone that strip is all it is. The row below is hidden and
-      // `--header-height` is 0, so what survives is a blurred scrim exactly the
-      // height of the status bar — and nothing at all in a browser tab, where
-      // there is no status bar to cover.
-      className="fixed inset-x-0 top-0 z-50 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 md:border-b"
+      // `--header-height` is 0, so what survives is a band exactly the height
+      // of the status bar — and nothing at all in a browser tab, where there
+      // is no status bar to cover.
+      className="bg-background shrink-0 md:border-b"
       style={{ paddingTop: "var(--safe-top)", paddingLeft: "var(--safe-left)", paddingRight: "var(--safe-right)" }}
     >
       <div

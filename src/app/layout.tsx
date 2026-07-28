@@ -7,6 +7,7 @@ import "./globals.css"
 import { CommandPalette } from "@/components/command-palette"
 import { AppHeader } from "@/components/layout/app-header"
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar"
+import { ScrollReset } from "@/components/layout/scroll-reset"
 import { AppChrome } from "@/components/pwa/app-chrome"
 import { ThemeProvider } from "@/components/theme-provider"
 import { getSearchIndex } from "@/lib/db/queries/search-index"
@@ -75,20 +76,21 @@ export default async function RootLayout({
       <body className={`${inter.variable} ${cinzel.variable} ${geistMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AppChrome />
-          <AppHeader />
-          <CommandPalette items={searchIndex} />
           {/*
-            Top padding clears the fixed header, bottom padding clears the phone
-            tab bar. Both come from the same tokens the chrome sizes itself
-            with, so they cannot drift apart.
+            The app shell: a full-height column that cannot scroll. The header
+            and the tab bar are flow children of it rather than fixed overlays,
+            so they hold their edges without depending on iOS agreeing with us
+            about where the viewport is. Only the pane between them scrolls.
           */}
-          <main
-            className="px-safe pt-[var(--header-offset)] pb-[var(--tab-bar-offset)] md:pb-0"
-            style={{ minHeight: "calc(100dvh - var(--header-offset))" }}
-          >
-            {children}
-          </main>
-          <MobileTabBar />
+          <div className="flex h-full flex-col overflow-hidden">
+            <AppHeader />
+            <main id="app-scroll" className="app-scroll px-safe">
+              {children}
+            </main>
+            <MobileTabBar />
+          </div>
+          <ScrollReset targetId="app-scroll" />
+          <CommandPalette items={searchIndex} />
           <Analytics />
         </ThemeProvider>
       </body>

@@ -46,11 +46,9 @@ function SecondaryNavInner({ items, defaultValue, currentValue }: SecondaryNavPr
   )
 
   return (
-    <div
-      className="sticky z-40 border-b bg-background/90 backdrop-blur-xl"
-      // Sits directly under the fixed header, safe area included.
-      style={{ top: "var(--header-offset)" }}
-    >
+    // Sticky to the top of the content pane, which already starts below the
+    // header — so this pins at 0 rather than clearing anything.
+    <div className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur-xl">
       <Rail className="gap-1.5 px-3 py-2 sm:px-4">
         {items.map((item) => {
           const active = activeValue === item.value

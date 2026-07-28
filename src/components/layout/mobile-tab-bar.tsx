@@ -62,9 +62,10 @@ export function MobileTabBar() {
     <>
       <nav
         aria-label="Primary"
-        // Fixed to the visual bottom, with its own safe-area padding so the row
-        // of labels never sits under the home indicator.
-        className="pb-safe fixed inset-x-0 bottom-0 z-50 border-t border-border/80 bg-background/92 backdrop-blur-xl md:hidden"
+        // The last child of the shell, not a fixed overlay: it holds the bottom
+        // because nothing above it can scroll past. Its own safe-area padding
+        // keeps the row of labels clear of the home indicator.
+        className="pb-safe bg-background shrink-0 border-t border-border/80 md:hidden"
         style={{ paddingLeft: "var(--safe-left)", paddingRight: "var(--safe-right)" }}
       >
         <ul className="grid grid-cols-5" style={{ height: "var(--tab-bar-height)" }}>
