@@ -6,10 +6,15 @@ const nextConfig: NextConfig = {
   // External packages for native modules like DuckDB
   serverExternalPackages: ["@duckdb/node-api", "@duckdb/node-bindings"],
 
-  // The parquet files are read at runtime by path, so tracing cannot infer
-  // them — include them explicitly or dynamic routes 404 in production.
+  // Two things tracing cannot infer: the parquet files (read at runtime by
+  // path) and libduckdb.so (loaded by the native addon, not required by JS).
+  // Without both, every server-rendered page 500s in production.
   outputFileTracingIncludes: {
-    "/**": ["./export/parquet/**"],
+    "/**": [
+      "./export/parquet/**",
+      "./node_modules/@duckdb/node-bindings-linux-x64/**",
+      "./node_modules/@duckdb/node-bindings-linux-arm64/**",
+    ],
   },
 
   // Empty turbopack config to allow build
