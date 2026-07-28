@@ -57,5 +57,8 @@ export const NAV_ITEMS: NavItem[] = [
   },
 ]
 
-/** The five destinations that earn a slot in the mobile tab bar. */
+/**
+ * The four destinations that earn a slot in the mobile tab bar. The fifth slot
+ * is "More", which opens a sheet onto everything left over.
+ */
 export const MOBILE_TAB_HREFS = ["/units", "/civilizations", "/tech-tree", "/battle"]
