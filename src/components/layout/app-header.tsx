@@ -24,14 +24,21 @@ export function AppHeader() {
     <header
       // Fixed, not sticky: with `viewport-fit=cover` the header also has to own
       // the status-bar strip, and it must not scroll away with the content.
-      className="fixed inset-x-0 top-0 z-50 border-b bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70"
+      //
+      // On a phone that strip is all it is. The row below is hidden and
+      // `--header-height` is 0, so what survives is a blurred scrim exactly the
+      // height of the status bar — and nothing at all in a browser tab, where
+      // there is no status bar to cover.
+      className="fixed inset-x-0 top-0 z-50 bg-background/85 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70 md:border-b"
       style={{ paddingTop: "var(--safe-top)", paddingLeft: "var(--safe-left)", paddingRight: "var(--safe-right)" }}
     >
-      <div className="flex items-center gap-1 px-2 sm:gap-2 sm:px-4" style={{ height: "var(--header-height)" }}>
+      <div
+        className="hidden items-center gap-1 px-2 sm:gap-2 sm:px-4 md:flex"
+        style={{ height: "var(--header-height)" }}
+      >
         {/* Tablet and desktop: one scrollable rail keeps every route reachable
-            without an overflow menu. The phone navigates from the tab bar, so
-            the header is free to be nothing but search. */}
-        <nav className="rail nav-rail-fade hidden min-w-0 flex-1 items-center gap-0.5 md:flex" aria-label="Primary">
+            without an overflow menu. */}
+        <nav className="rail nav-rail-fade min-w-0 flex-1 items-center gap-0.5" aria-label="Primary">
           {NAV_ITEMS.map((item) => {
             const active = isActive(pathname, item.href)
             return (
@@ -53,17 +60,6 @@ export function AppHeader() {
           })}
         </nav>
 
-        {/* Phone: search takes the whole bar. It is the one thing the tab bar
-            cannot hold and the one thing worth a permanent slot. */}
-        <button
-          type="button"
-          onClick={openPalette}
-          className="press flex h-9 min-w-0 flex-1 items-center gap-2 rounded-md border bg-muted/50 px-2.5 text-sm text-muted-foreground md:hidden"
-        >
-          <Search className="h-4 w-4 shrink-0" />
-          <span className="truncate text-left">Search everything</span>
-        </button>
-
         <div className="flex shrink-0 items-center gap-0.5 md:gap-1">
           <button
             type="button"
@@ -80,7 +76,7 @@ export function AppHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className="press touch-target hidden md:inline-flex lg:hidden"
+            className="press touch-target lg:hidden"
             onClick={openPalette}
             aria-label="Search"
           >

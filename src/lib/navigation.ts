@@ -58,7 +58,8 @@ export const NAV_ITEMS: NavItem[] = [
 ]
 
 /**
- * The four destinations that earn a slot in the mobile tab bar. The fifth slot
- * is "More", which opens a sheet onto everything left over.
+ * The three destinations that earn a slot in the mobile tab bar. The other two
+ * slots are fixed: search, which every page needs and no page owns, and
+ * "More", which opens a sheet onto everything left over.
  */
-export const MOBILE_TAB_HREFS = ["/units", "/civilizations", "/tech-tree", "/battle"]
+export const MOBILE_TAB_HREFS = ["/units", "/civilizations", "/tech-tree"]

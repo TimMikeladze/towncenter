@@ -1,9 +1,11 @@
 "use client"
 
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { OPEN_PALETTE_EVENT } from "@/components/command-palette"
+import { ThemeToggleRow } from "@/components/theme-toggle"
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
 import { MOBILE_TAB_HREFS, NAV_ITEMS } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
@@ -76,6 +78,19 @@ export function MobileTabBar() {
               </li>
             )
           })}
+          {/* Search has a permanent slot: it is the fastest route to anything
+              in the app and belongs to no page, so it cannot live in a header
+              the phone no longer draws. */}
+          <li className="flex">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+              className={TAB_CLASS}
+              aria-label="Search everything"
+            >
+              <TabContents icon={Search} label="Search" active={false} />
+            </button>
+          </li>
           <li className="flex">
             <button
               type="button"
@@ -131,6 +146,12 @@ export function MobileTabBar() {
                 </Link>
               )
             })}
+
+            {/* Not a destination, so it sits below a rule rather than in the
+                list. The header carries this on tablet and up. */}
+            <div className="mt-2 border-t pt-2">
+              <ThemeToggleRow />
+            </div>
           </nav>
         </SheetContent>
       </Sheet>
