@@ -3,6 +3,7 @@ import { getAllCivilizations } from "../src/lib/db/queries/civilizations"
 import { getCivTechTree } from "../src/lib/db/queries/tech-tree"
 import { getAllTechnologies } from "../src/lib/db/queries/technologies"
 import { getAllUnits } from "../src/lib/db/queries/units"
+import type { TechTreeNode } from "../src/lib/types"
 
 const units = await getAllUnits()
 const civs = await getAllCivilizations()
@@ -96,5 +97,71 @@ describe("civ tech tree", () => {
     const tree = await getCivTechTree("britons")
     const ages = new Set(tree?.units.map((entry) => entry.age))
     expect(ages.size).toBeGreaterThan(2)
+  })
+})
+
+/** Path of names from a root down to `name`, or [] if it is not in the tree. */
+function pathTo(nodes: TechTreeNode[], name: string, trail: string[] = []): string[] {
+  for (const node of nodes) {
+    const here = [...trail, node.name]
+    if (node.name === name) return here
+    const deeper = pathTo(node.children, name, here)
+    if (deeper.length > 0) return deeper
+  }
+  return []
+}
+
+describe("civ tech tree hierarchy", () => {
+  test("holds every entity exactly once, under a building", async () => {
+    for (const id of ["britons", "sicilians", "armenians", "incas", "malay"]) {
+      const tree = await getCivTechTree(id)
+      if (!tree) throw new Error(`no tech tree for ${id}`)
+
+      const seen: string[] = []
+      const walk = (nodes: TechTreeNode[]) => {
+        for (const node of nodes) {
+          seen.push(`${node.kind}:${node.id}`)
+          walk(node.children)
+        }
+      }
+      walk(tree.roots)
+
+      expect(new Set(seen).size).toBe(seen.length)
+      expect(seen.length).toBe(tree.units.length + tree.buildings.length + tree.techs.length)
+      expect(tree.roots.every((root) => root.kind === "building")).toBe(true)
+    }
+  })
+
+  test("nests unit upgrades under what they upgrade from", async () => {
+    const tree = await getCivTechTree("britons")
+    expect(pathTo(tree?.roots ?? [], "Champion")).toEqual([
+      "Barracks",
+      "Militia",
+      "Man-at-Arms",
+      "Long Swordsman",
+      "Two-Handed Swordsman",
+      "Champion",
+    ])
+    expect(pathTo(tree?.roots ?? [], "Arbalester")).toEqual(["Archery Range", "Archer", "Crossbowman", "Arbalester"])
+  })
+
+  test("nests technologies under the building that researches them", async () => {
+    const tree = await getCivTechTree("britons")
+    expect(pathTo(tree?.roots ?? [], "Bracer")).toEqual(["Blacksmith", "Fletching", "Bodkin Arrow", "Bracer"])
+    // The Monk's column is recorded as the Armenian Fortified Church upstream.
+    expect(pathTo(tree?.roots ?? [], "Monk")).toEqual(["Monastery", "Monk"])
+  })
+
+  test("uses the replacement building a civ actually has", async () => {
+    const [armenians, georgians, sicilians] = await Promise.all([
+      getCivTechTree("armenians"),
+      getCivTechTree("georgians"),
+      getCivTechTree("sicilians"),
+    ])
+    expect(pathTo(armenians?.roots ?? [], "Monk")[0]).toBe("Fortified Church")
+    expect(pathTo(georgians?.roots ?? [], "Gold Mining")[0]).toBe("Mule Cart")
+    // Sicilians train the Serjeant at both the Castle and the Donjon.
+    const donjon = sicilians?.roots.find((root) => root.name === "Donjon")
+    expect(donjon?.children.map((child) => child.name)).toContain("Serjeant")
   })
 })

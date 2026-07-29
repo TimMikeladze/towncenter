@@ -131,6 +131,93 @@ export function deriveBuildingType(buildingId: number): Building["type"] {
   return BUILDING_TYPES[buildingId] ?? "Special"
 }
 
+/**
+ * Column order of the in-game tech tree: military first, then the economy,
+ * then defences. Buildings outside this list sort last, by name.
+ */
+const TECH_TREE_COLUMNS = [
+  12, // Barracks
+  87, // Archery Range
+  101, // Stable
+  49, // Siege Workshop
+  45, // Dock
+  1189, // Harbor
+  82, // Castle
+  1251, // Krepost
+  1665, // Donjon
+  103, // Blacksmith
+  209, // University
+  104, // Monastery
+  1806, // Fortified Church
+  109, // Town Center
+  621, // Town Center (post-Dark Age)
+  70, // House
+  68, // Mill
+  50, // Farm
+  1889, // Pasture
+  562, // Lumber Camp
+  584, // Mining Camp
+  1808, // Mule Cart
+  1734, // Folwark
+  84, // Market
+  1754, // Caravanserai
+  1021, // Feitoria
+  2556, // Settlement
+  598, // Outpost
+  79, // Watch Tower
+  72, // Palisade Wall
+  792, // Palisade Gate
+  487, // Gate
+  117, // Stone Wall
+  276, // Wonder
+]
+
+export function techTreeColumnRank(buildingId: number): number {
+  const index = TECH_TREE_COLUMNS.indexOf(buildingId)
+  return index === -1 ? TECH_TREE_COLUMNS.length : index
+}
+
+/**
+ * Buildings that stand in for each other across civs. `node_types` records a
+ * single column per entity — whichever civ the sync script saw first — so the
+ * Monk lands in the Armenians' Fortified Church and Double-Bit Axe in the
+ * Georgians' Mule Cart. Everyone else needs the equivalent they do own.
+ */
+const COLUMN_EQUIVALENTS: Record<number, number[]> = {
+  12: [1665], // Barracks -> Donjon
+  45: [1189], // Dock -> Harbor
+  50: [1734, 1889, 2556], // Farm -> Folwark, Pasture, Settlement
+  68: [1734, 1889, 2556], // Mill -> Folwark, Pasture, Settlement
+  82: [1251, 1665], // Castle -> Krepost, Donjon
+  84: [1754], // Market -> Caravanserai
+  104: [1806], // Monastery -> Fortified Church
+  109: [2556], // Town Center -> Settlement
+  562: [1808, 2556], // Lumber Camp -> Mule Cart, Settlement
+  584: [1808, 2556], // Mining Camp -> Mule Cart, Settlement
+  1189: [45], // Harbor -> Dock
+  1251: [82], // Krepost -> Castle
+  1665: [12, 82], // Donjon -> Barracks, Castle
+  1734: [68], // Folwark -> Mill
+  1754: [84], // Caravanserai -> Market
+  1806: [104], // Fortified Church -> Monastery
+  1808: [562, 584, 2556], // Mule Cart -> Lumber Camp, Mining Camp, Settlement
+  1889: [68], // Pasture -> Mill
+  2556: [109], // Settlement -> Town Center
+}
+
+/** Mule Cart techs that belong to the Mining Camp rather than the Lumber Camp. */
+const MINING_CAMP_TECHS = new Set([55, 182, 278, 279])
+
+/**
+ * Columns an entity can hang off, best first: its own, then any stand-in the
+ * civ might have instead.
+ */
+export function techTreeColumns(kind: string, entityId: number, buildingId: number | null): number[] {
+  if (buildingId === null) return []
+  const preferred = kind === "tech" && MINING_CAMP_TECHS.has(entityId) ? [584] : []
+  return [...new Set([...preferred, buildingId, ...(COLUMN_EQUIVALENTS[buildingId] ?? [])])]
+}
+
 /** Technology categories are the building the tech is researched at. */
 export const ECO_TECH_CATEGORIES = [
   "Town Center",
