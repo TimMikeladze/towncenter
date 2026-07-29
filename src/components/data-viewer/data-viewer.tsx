@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Rail } from "@/components/ui/rail"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { haptic } from "@/lib/haptics"
 import { cn } from "@/lib/utils"
 import { DataCard } from "./data-card"
 import { DataTable } from "./data-table"
@@ -245,7 +246,10 @@ function DataViewerInner<T extends DataItem>({
                       <button
                         key={option.value}
                         type="button"
-                        onClick={() => setParams({ [filter.key]: option.value })}
+                        onClick={() => {
+                          haptic("tick")
+                          setParams({ [filter.key]: option.value })
+                        }}
                         aria-pressed={active}
                         className={cn(
                           "press h-8 shrink-0 rounded-full border px-3 text-xs font-medium transition-colors",
@@ -302,7 +306,13 @@ function DataViewerInner<T extends DataItem>({
         </div>
       ) : (
         <div
-          className={cn("grid gap-2 sm:gap-3", config.cardGridCols || "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4")}
+          // `stagger-grid` animates the first screenful in as a wave. It runs
+          // again whenever a filter creates new rows, which is what makes a
+          // filter change read as the list reloading rather than as a redraw.
+          className={cn(
+            "stagger-grid grid gap-2 sm:gap-3",
+            config.cardGridCols || "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+          )}
         >
           {filteredData.map((item) => (
             <DataCard key={item.id} item={item} config={config} />

@@ -11,6 +11,7 @@ import { StatTile } from "@/components/game/stats"
 import { UnitPicker } from "@/components/game/unit-picker"
 import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
+import { Rail } from "@/components/ui/rail"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { type BattleResult, breakEvenCount, simulateBattle } from "@/lib/game/battle"
 import { resourceCost } from "@/lib/game/combat"
@@ -109,9 +110,11 @@ function UpgradeChips({ applied, missing }: { applied: UpgradeTech[]; missing: U
     return <p className="text-xs text-muted-foreground">No blacksmith line reaches this unit.</p>
   }
   // Seven upgrade names wrap to three lines on a phone and push the fight
-  // controls off-screen; they scroll in one line instead.
+  // controls off-screen; they scroll in one line instead. `Rail` rather than
+  // the bare class, so the row fades at whichever end still has chips behind
+  // it — without that a phone cannot tell a clipped row from a finished one.
   return (
-    <div className="rail -mx-1 gap-1 px-1 py-0.5 md:flex-wrap md:overflow-visible">
+    <Rail className="-mx-1 gap-1 px-1 py-0.5 md:flex-wrap md:overflow-visible">
       {applied.map((tech) => (
         <Chip key={tech.id} tone="var(--success)" title={`${tech.building} · ${tech.age} Age`}>
           {tech.name}
@@ -122,7 +125,7 @@ function UpgradeChips({ applied, missing }: { applied: UpgradeTech[]; missing: U
           {tech.name} ✕
         </Chip>
       ))}
-    </div>
+    </Rail>
   )
 }
 

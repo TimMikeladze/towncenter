@@ -83,6 +83,29 @@
    */
   --header-height: 0rem;
   --tab-bar-height: 3.5rem;
+
+  /*
+   * Motion. One vocabulary for the whole app, because inconsistent easing is
+   * the single loudest tell that something is a web page.
+   *
+   * `--ease-out-native` is the curve UIKit and Material both settle on for
+   * anything entering the screen: leaves fast, arrives slowly, never
+   * overshoots. `--ease-spring` overshoots on purpose and is reserved for
+   * things that should feel physical — a tab icon taking the selection.
+   */
+  --ease-out-native: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-native: cubic-bezier(0.4, 0, 1, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --duration-press: 90ms;
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-screen: 300ms;
+  --duration-sheet: 380ms;
+
+  /* How far a screen travels on a push/pop. Short: a long slide reads as slow. */
+  --screen-shift: 1.75rem;
 }
 
 /* Tablet and up: the header comes back to carry the nav rail. Must match the
@@ -192,6 +215,155 @@
 
   --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px -16px rgb(0 0 0 / 0.25);
   --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.08), 0 12px 32px -18px rgb(0 0 0 / 0.35);
+  --shadow-sheet: 0 -1px 0 color-mix(in srgb, var(--foreground) 8%, transparent), 0 -16px 48px -12px rgb(0 0 0 / 0.45);
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * Keyframes
+ *
+ * Every one of these animates only `transform` and `opacity`, so the
+ * compositor can run them off the main thread. Anything that animates layout
+ * (height, top, margin) drops frames the moment a list is long, and a phone
+ * notices immediately.
+ * ---------------------------------------------------------------------------
+ */
+
+/* A pushed screen enters from the right; a popped one from the left. Mirrors
+   what the platform does when you drill into a list and come back out. */
+@keyframes screen-push {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--screen-shift), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes screen-pop {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--screen-shift) * -1), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Lateral moves — a tab switch — do not come from a direction, because neither
+   destination is "inside" the other. */
+@keyframes screen-fade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes sheet-out {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/* The search sheet rises a little and settles, rather than being switched on. */
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* The selected tab's icon takes the pill with a little overshoot. */
+@keyframes tab-select {
+  0% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Skeletons sweep rather than blink: a pulse reads as a broken image, a sweep
+   reads as loading. */
+@keyframes skeleton-sweep {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @layer base {
@@ -300,7 +472,26 @@
   /* Anchored scrolling clears the sticky section rail instead of hiding under
      it. The header is outside the scroll pane and no longer overlaps. */
   :target {
-    scroll-margin-top: 4rem;
+    scroll-margin-top: 4.5rem;
+  }
+
+  /*
+   * One switch for every animation in the app. Motion here is decoration on
+   * top of a layout that already works, so when the system asks for less of
+   * it, the honest answer is to cut it to nothing rather than to hand back a
+   * slower version of the same movement. Kept to 0.01ms rather than 0 so
+   * anything waiting on `animationend` — Radix unmounts on it — still fires.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -320,11 +511,108 @@
     overflow-x: clip;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    /* The gestures translate this element: an edge swipe slides the whole
+       screen right, a pull drags it down off the refresh indicator. Declared
+       here so the property is always animatable and never jumps from `none`.
+       No `will-change`: this element is the tallest thing in the app, and
+       keeping it in a permanent compositor layer costs memory all the time to
+       save a few milliseconds twice a session. */
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Mid back-swipe: the screen is a layer being slid off the one behind it, and
+     the shadow down its leading edge is what says so. */
+  .app-scroll[data-swiping] {
+    box-shadow: -0.5rem 0 1.5rem -0.25rem rgb(0 0 0 / 0.22);
+  }
+
+  /*
+   * The frame the scroll pane lives in. It exists so the pull-to-refresh
+   * indicator has something to be positioned against that is neither the
+   * viewport (wrong on a phone with a notch) nor the pane itself (which moves).
+   */
+  .app-viewport {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    /* The indicator sits above the pane's top edge and must not be seen until
+       the pull drags the pane down past it. */
+    overflow: clip;
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .app-scroll {
       scroll-behavior: smooth;
+    }
+  }
+
+  /*
+   * A screen. One per route, remounted on navigation, so the animation runs
+   * exactly once per push or pop and never on a filter change — those keep the
+   * same pathname on purpose.
+   */
+  .screen {
+    animation: screen-fade var(--duration-screen) var(--ease-out-native) backwards;
+  }
+
+  .screen[data-direction="forward"] {
+    animation-name: screen-push;
+  }
+
+  .screen[data-direction="back"] {
+    animation-name: screen-pop;
+  }
+
+  /* A gesture-driven pop already moved the screen with the thumb. Animating it
+     again on arrival would play the same movement twice. */
+  .screen[data-direction="none"] {
+    animation: none;
+  }
+
+  /*
+   * Pull to refresh. The spinner is revealed by the pane moving off it, the
+   * way the platform does it — nothing is animated into place, so the
+   * indicator tracks the thumb exactly.
+   */
+  .ptr-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    height: 3.5rem;
+    pointer-events: none;
+    /* Behind the pane, which is opaque and covers it at rest. */
+    z-index: 0;
+  }
+
+  .ptr-spinner {
+    display: grid;
+    place-items: center;
+    height: 1.75rem;
+    width: 1.75rem;
+    border-radius: 9999px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-panel);
+    color: var(--muted-foreground);
+    /* Set by the gesture as the pull winds up; no transition, because it has to
+       track the thumb exactly. */
+    transform: scale(0.72);
+  }
+
+  .ptr-spinner[data-spinning] svg {
+    animation: spin 800ms linear infinite;
+  }
+
+  /* The global reduced-motion rule would run this at 0.01ms — a strobe, not a
+     spinner. A still icon says "working" well enough. */
+  @media (prefers-reduced-motion: reduce) {
+    .ptr-spinner[data-spinning] svg {
+      animation: none;
     }
   }
 
@@ -352,6 +640,15 @@
     .panel-interactive:hover {
       transform: none;
     }
+  }
+
+  /*
+   * The tab bar's selection pill. The animation is carried by the active class
+   * itself, so it plays the instant the route becomes current and never needs
+   * to be triggered, timed or cleaned up.
+   */
+  .tab-pill-active {
+    animation: tab-select var(--duration-base) var(--ease-spring);
   }
 
   /* Section rule in the ink colour, used above every section title. */
@@ -420,6 +717,108 @@
   .rail-fade[data-fade-start][data-fade-end] {
     mask-image: linear-gradient(to right, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
   }
+
+  /*
+   * Bottom sheet. Slides up on the same curve the platform uses and can be
+   * thrown back down with a drag — see `bottom-sheet.tsx`, which sets
+   * `data-dragging` while a thumb owns the transform so these animations get
+   * out of the way.
+   */
+  .sheet-panel {
+    @apply bg-background fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-2xl border-t;
+    box-shadow: var(--shadow-sheet);
+    animation: sheet-in var(--duration-sheet) var(--ease-out-native) backwards;
+  }
+
+  .sheet-panel[data-state="closed"] {
+    animation: sheet-out var(--duration-base) var(--ease-in-native) both;
+  }
+
+  .sheet-panel[data-dragging] {
+    animation: none;
+    transition: none;
+  }
+
+  /* Released short of the dismiss threshold: springs back to rest. */
+  .sheet-panel[data-settling] {
+    animation: none;
+    transition: transform var(--duration-base) var(--ease-out-native);
+  }
+
+  .sheet-overlay {
+    @apply fixed inset-0 z-50 bg-black/50;
+    animation: fade-in var(--duration-base) var(--ease-standard) backwards;
+  }
+
+  .sheet-overlay[data-state="closed"] {
+    animation: fade-out var(--duration-base) var(--ease-standard) both;
+  }
+
+  /* The one affordance that says "this drags". Sized and padded to be a real
+     44px target rather than the 4px line it looks like. */
+  .sheet-grabber {
+    @apply mx-auto flex h-5 w-full shrink-0 cursor-grab items-center justify-center pt-2.5;
+  }
+
+  .sheet-grabber::before {
+    content: "";
+    display: block;
+    height: 0.3125rem;
+    width: 2.25rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--foreground) 22%, transparent);
+  }
+
+  /*
+   * The search palette. Same curve as the sheet, shorter travel: it is
+   * summoned rather than dragged up, and a full-screen panel sliding the whole
+   * height of the screen reads as slow however fast it actually is.
+   */
+  .palette-panel {
+    animation: palette-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .palette-panel[data-state="closed"] {
+    animation: fade-out 140ms var(--ease-in-native) both;
+  }
+
+  .palette-overlay {
+    animation: fade-in var(--duration-fast) var(--ease-standard) backwards;
+  }
+
+  .palette-overlay[data-state="closed"] {
+    animation: fade-out 140ms var(--ease-standard) both;
+  }
+
+  /*
+   * Skeletons. A sweep across a flat block, so a loading page has the shape of
+   * the page that is coming rather than a spinner in the middle of nothing.
+   */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--foreground) 7%, transparent);
+  }
+
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--foreground) 6%, transparent),
+      transparent
+    );
+    animation: skeleton-sweep 1.6s var(--ease-standard) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton::after {
+      display: none;
+    }
+  }
 }
 
 @layer utilities {
@@ -457,19 +856,121 @@
    */
   .press {
     transition:
-      transform 120ms ease,
-      background-color 120ms ease,
-      opacity 120ms ease;
+      transform var(--duration-press) var(--ease-out-native),
+      background-color var(--duration-fast) var(--ease-standard),
+      opacity var(--duration-press) var(--ease-standard);
   }
 
   .press:active {
     transform: scale(0.97);
   }
 
+  /*
+   * Chrome — tab bar, list rows, anything that fills its slot — dims instead of
+   * shrinking. Scaling an element that shares an edge with its neighbours
+   * opens a visible gap on every tap.
+   */
+  .press-dim {
+    transition:
+      opacity var(--duration-press) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .press-dim:active {
+    opacity: 0.55;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .press:active {
       transform: none;
       opacity: 0.7;
+    }
+  }
+
+  /*
+   * Content entrance. A screen animates as one block; the pieces inside it
+   * arrive just behind it, top-first, which is what makes a native screen feel
+   * assembled rather than pasted.
+   *
+   * The stagger is capped at eight children: past that the delay is longer than
+   * anyone waits, and a list of 245 units would spend two minutes arriving.
+   */
+  .rise-in {
+    animation: rise-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .stagger > * {
+    animation: rise-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .stagger > *:nth-child(1) {
+    animation-delay: 20ms;
+  }
+  .stagger > *:nth-child(2) {
+    animation-delay: 60ms;
+  }
+  .stagger > *:nth-child(3) {
+    animation-delay: 100ms;
+  }
+  .stagger > *:nth-child(4) {
+    animation-delay: 140ms;
+  }
+  .stagger > *:nth-child(5) {
+    animation-delay: 180ms;
+  }
+  .stagger > *:nth-child(6) {
+    animation-delay: 220ms;
+  }
+  .stagger > *:nth-child(7) {
+    animation-delay: 260ms;
+  }
+  .stagger > *:nth-child(n + 8) {
+    animation-delay: 300ms;
+  }
+
+  /* Grid cards land as a wave rather than a column, and only the first screenful
+     animates — everything below the fold is already in place by the time it is
+     scrolled to. */
+  .stagger-grid > *:nth-child(-n + 8) {
+    animation: rise-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .stagger-grid > *:nth-child(1) {
+    animation-delay: 0ms;
+  }
+  .stagger-grid > *:nth-child(2) {
+    animation-delay: 30ms;
+  }
+  .stagger-grid > *:nth-child(3) {
+    animation-delay: 60ms;
+  }
+  .stagger-grid > *:nth-child(4) {
+    animation-delay: 90ms;
+  }
+  .stagger-grid > *:nth-child(5) {
+    animation-delay: 120ms;
+  }
+  .stagger-grid > *:nth-child(6) {
+    animation-delay: 150ms;
+  }
+  .stagger-grid > *:nth-child(7) {
+    animation-delay: 180ms;
+  }
+  .stagger-grid > *:nth-child(8) {
+    animation-delay: 210ms;
+  }
+
+  /*
+   * Motion is a nicety; the content is not. If an animation is interrupted —
+   * a re-render, a filter change mid-flight — nothing may be left invisible,
+   * so entrance animations always use `both` and never a bare `forwards` from
+   * `opacity: 0`.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .rise-in,
+    .stagger > *,
+    .stagger-grid > * {
+      animation: none;
     }
   }
 

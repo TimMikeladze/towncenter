@@ -6,16 +6,15 @@ import { usePathname } from "next/navigation"
 import { OPEN_PALETTE_EVENT } from "@/components/command-palette"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { NAV_ITEMS } from "@/lib/navigation"
+import { HOME_ITEM, isRouteActive, NAV_ITEMS } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 
 function openPalette() {
   window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))
 }
 
-function isActive(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`)
-}
+/** Home first, then the sections. Nothing else in the app links back to it. */
+const RAIL_ITEMS = [HOME_ITEM, ...NAV_ITEMS]
 
 export function AppHeader() {
   const pathname = usePathname()
@@ -40,15 +39,15 @@ export function AppHeader() {
         {/* Tablet and desktop: one scrollable rail keeps every route reachable
             without an overflow menu. */}
         <nav className="rail nav-rail-fade min-w-0 flex-1 items-center gap-0.5" aria-label="Primary">
-          {NAV_ITEMS.map((item) => {
-            const active = isActive(pathname, item.href)
+          {RAIL_ITEMS.map((item) => {
+            const active = isRouteActive(pathname, item.href)
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "shrink-0 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors lg:px-3",
+                  "press shrink-0 rounded-md px-2.5 py-1.5 text-[13px] font-medium transition-colors lg:px-3",
                   active
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",

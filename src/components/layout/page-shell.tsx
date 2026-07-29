@@ -1,7 +1,8 @@
-import { ChevronLeft } from "lucide-react"
-import Link from "next/link"
 import type React from "react"
+import { BackLink } from "@/components/layout/back-link"
 import { cn } from "@/lib/utils"
+
+export { BackLink }
 
 type Width = "narrow" | "default" | "wide"
 
@@ -26,22 +27,14 @@ export function PageShell({
 }) {
   return (
     <div className="px-4 pb-10 pt-4 sm:px-6 sm:pt-6 lg:pb-12 lg:pt-8">
-      <div className={cn("mx-auto space-y-5 lg:space-y-8", WIDTHS[width], className)}>{children}</div>
+      {/*
+        `rise-in` is what covers the skeleton-to-content swap. The screen
+        animation cannot: it runs when the route commits, which on a streamed
+        page is while `loading.tsx` is still on screen, so the real content
+        would otherwise appear in one frame with no transition at all.
+      */}
+      <div className={cn("rise-in mx-auto space-y-5 lg:space-y-8", WIDTHS[width], className)}>{children}</div>
     </div>
-  )
-}
-
-/** Back affordance sized for a thumb: 44px tall, negative margin so it does
- *  not add visual space above the title. */
-const BACK_LINK_CLASS =
-  "press -my-2 inline-flex min-h-11 items-center gap-1 py-2 text-sm text-muted-foreground transition-colors md:my-0 md:min-h-0 md:py-0 md:hover:text-foreground"
-
-export function BackLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link href={href} className={BACK_LINK_CLASS}>
-      <ChevronLeft className="h-4 w-4" />
-      {label}
-    </Link>
   )
 }
 
@@ -60,12 +53,7 @@ export function PageHeader({
 }) {
   return (
     <header className="space-y-2.5 sm:space-y-3">
-      {back && (
-        <Link href={back.href} className={BACK_LINK_CLASS}>
-          <ChevronLeft className="h-4 w-4" />
-          {back.label}
-        </Link>
-      )}
+      {back && <BackLink href={back.href} label={back.label} />}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div className="min-w-0 space-y-1.5">
           {eyebrow && <p className="label-caps">{eyebrow}</p>}

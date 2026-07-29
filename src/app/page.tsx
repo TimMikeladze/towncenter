@@ -86,7 +86,7 @@ export default async function HomePage() {
       </section>
 
       <Section title="Explore" description="Every section shares the same search, filters and layout.">
-        <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+        <div className="stagger-grid grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
           {NAV_ITEMS.map((item) => (
             <Link key={item.href} href={item.href} className="press block rounded-lg">
               <article className="panel panel-interactive group flex h-full items-center gap-3 p-3 sm:items-start sm:p-4">

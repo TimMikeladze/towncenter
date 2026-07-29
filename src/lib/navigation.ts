@@ -3,6 +3,7 @@ import {
   Castle,
   Crosshair,
   GitCompareArrows,
+  Home,
   Map as MapIcon,
   Network,
   Scroll,
@@ -63,3 +64,27 @@ export const NAV_ITEMS: NavItem[] = [
  * "More", which opens a sheet onto everything left over.
  */
 export const MOBILE_TAB_HREFS = ["/units", "/civilizations", "/tech-tree"]
+
+/**
+ * The front page. Kept out of `NAV_ITEMS` because it is not a section — it is
+ * the page that lists them — but it still needs to be reachable from the
+ * chrome, which on a phone means the "More" sheet and nowhere else.
+ */
+export const HOME_ITEM: NavItem = {
+  href: "/",
+  label: "Home",
+  description: "Everything the app can do, on one page",
+  icon: Home,
+}
+
+/**
+ * Whether a nav entry should read as current.
+ *
+ * The root is matched exactly, because every path in the app starts with "/" —
+ * a prefix test lights up Home on every screen and, in the tab bar, lights up
+ * "More" along with it.
+ */
+export function isRouteActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/"
+  return pathname === href || pathname.startsWith(`${href}/`)
+}

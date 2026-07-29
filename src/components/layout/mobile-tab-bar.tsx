@@ -3,25 +3,40 @@
 import { MoreHorizontal, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import type React from "react"
 import { useState } from "react"
 import { OPEN_PALETTE_EVENT } from "@/components/command-palette"
 import { ThemeToggleRow } from "@/components/theme-toggle"
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
-import { MOBILE_TAB_HREFS, NAV_ITEMS } from "@/lib/navigation"
+import { BottomSheet } from "@/components/ui/bottom-sheet"
+import { haptic } from "@/lib/haptics"
+import { HOME_ITEM, isRouteActive, MOBILE_TAB_HREFS, NAV_ITEMS } from "@/lib/navigation"
 import { cn } from "@/lib/utils"
 
 const TABS = MOBILE_TAB_HREFS.map((href) => NAV_ITEMS.find((item) => item.href === href)).filter((item) => !!item)
 
-/** Everything the tab bar could not fit. This is what "More" opens onto. */
-const OVERFLOW = NAV_ITEMS.filter((item) => !MOBILE_TAB_HREFS.includes(item.href))
+/**
+ * Everything the tab bar could not fit. This is what "More" opens onto.
+ *
+ * Home leads it: the tab bar holds three sections, search and this sheet, and
+ * the header that would normally carry a way back to the front page is
+ * collapsed to the status bar on a phone. Without this row there is no route
+ * home at all.
+ */
+const OVERFLOW = [HOME_ITEM, ...NAV_ITEMS.filter((item) => !MOBILE_TAB_HREFS.includes(item.href))]
 
-function isActive(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`)
+/** Tapping the tab you are already on takes you back to the top of it. */
+function scrollScreenToTop() {
+  document.getElementById("app-scroll")?.scrollTo({ top: 0, behavior: "smooth" })
 }
 
 /**
  * One tab. The icon sits in a pill that fills on the active route, which reads
  * at a glance on a small screen far better than a colour change alone.
+ *
+ * The pill's animation is attached by the active class rather than triggered in
+ * JS: applying a rule that carries an `animation` is what starts it, so the
+ * icon springs into the selection at exactly the moment the route becomes
+ * current, with no state and no timers.
  */
 function TabContents({ icon: Icon, label, active }: { icon: typeof MoreHorizontal; label: string; active: boolean }) {
   return (
@@ -29,7 +44,7 @@ function TabContents({ icon: Icon, label, active }: { icon: typeof MoreHorizonta
       <span
         className={cn(
           "grid h-7 w-12 place-items-center rounded-full transition-colors duration-150",
-          active ? "bg-primary/15 text-primary" : "text-muted-foreground",
+          active ? "tab-pill-active bg-primary/15 text-primary" : "text-muted-foreground",
         )}
       >
         <Icon className="h-[18px] w-[18px]" aria-hidden />
@@ -46,8 +61,12 @@ function TabContents({ icon: Icon, label, active }: { icon: typeof MoreHorizonta
   )
 }
 
+/**
+ * Dims rather than shrinks: tabs share edges with their neighbours, and a tab
+ * that scales on press opens a gap down both sides of itself.
+ */
 const TAB_CLASS =
-  "press flex w-full flex-col items-center justify-center gap-0.5 px-0.5 pt-1.5 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/60"
+  "press-dim flex w-full flex-col items-center justify-center gap-0.5 px-0.5 pt-1.5 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/60"
 
 /** Phone-only bottom navigation; tablets and desktops use the header rail. */
 export function MobileTabBar() {
@@ -56,7 +75,16 @@ export function MobileTabBar() {
 
   // "More" carries the active state for every route it hides, so the bar never
   // shows nothing selected.
-  const onOverflowRoute = OVERFLOW.some((item) => isActive(pathname, item.href))
+  const onOverflowRoute = OVERFLOW.some((item) => isRouteActive(pathname, item.href))
+
+  const onTabPress = (event: React.MouseEvent, active: boolean) => {
+    haptic("tick")
+    if (!active) return
+    // Already here: the platform convention is that this scrolls to the top
+    // rather than reloading the screen.
+    event.preventDefault()
+    scrollScreenToTop()
+  }
 
   return (
     <>
@@ -70,10 +98,15 @@ export function MobileTabBar() {
       >
         <ul className="grid grid-cols-5" style={{ height: "var(--tab-bar-height)" }}>
           {TABS.map((item) => {
-            const active = isActive(pathname, item.href)
+            const active = isRouteActive(pathname, item.href)
             return (
               <li key={item.href} className="flex">
-                <Link href={item.href} aria-current={active ? "page" : undefined} className={TAB_CLASS}>
+                <Link
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={TAB_CLASS}
+                  onClick={(event) => onTabPress(event, active)}
+                >
                   <TabContents icon={item.icon} label={item.shortLabel ?? item.label} active={active} />
                 </Link>
               </li>
@@ -85,7 +118,10 @@ export function MobileTabBar() {
           <li className="flex">
             <button
               type="button"
-              onClick={() => window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))}
+              onClick={() => {
+                haptic("tick")
+                window.dispatchEvent(new Event(OPEN_PALETTE_EVENT))
+              }}
               className={TAB_CLASS}
               aria-label="Search everything"
             >
@@ -95,7 +131,10 @@ export function MobileTabBar() {
           <li className="flex">
             <button
               type="button"
-              onClick={() => setMoreOpen(true)}
+              onClick={() => {
+                haptic("tick")
+                setMoreOpen(true)
+              }}
               className={TAB_CLASS}
               aria-haspopup="dialog"
               aria-expanded={moreOpen}
@@ -109,53 +148,54 @@ export function MobileTabBar() {
 
       {/*
        * Bottom sheet, not a side drawer: it opens off the control that spawned
-       * it and lands its list within thumb reach instead of at the top of the
-       * screen.
+       * it, lands its list within thumb reach instead of at the top of the
+       * screen, and can be thrown back down without aiming at anything.
        */}
-      <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent
-          side="bottom"
-          className="flex max-h-[78dvh] flex-col gap-0 rounded-t-2xl p-0 md:hidden"
-          style={{ paddingBottom: "var(--safe-bottom)" }}
-        >
-          {/* Grabber: the one affordance that says "this sheet drags down". */}
-          <div className="mx-auto mt-2.5 h-1 w-9 shrink-0 rounded-full bg-border" aria-hidden />
-          <SheetTitle className="px-5 pt-3 pb-1 font-display text-sm uppercase tracking-[0.18em]">More</SheetTitle>
-          <SheetDescription className="sr-only">Every section that is not in the tab bar</SheetDescription>
-          <nav className="scroll-contain flex-1 overflow-y-auto p-2 pb-4" aria-label="More sections">
-            {OVERFLOW.map((item) => {
-              const active = isActive(pathname, item.href)
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMoreOpen(false)}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "press flex items-start gap-3 rounded-md px-3 py-3 transition-colors",
-                    active ? "bg-accent text-accent-foreground" : "active:bg-muted",
-                  )}
-                >
-                  <item.icon
-                    className={cn("mt-0.5 h-4 w-4 shrink-0", active ? "text-primary" : "text-muted-foreground")}
-                    aria-hidden
-                  />
-                  <span className="min-w-0">
-                    <span className="block text-sm font-medium">{item.label}</span>
-                    <span className="block text-xs text-muted-foreground">{item.description}</span>
-                  </span>
-                </Link>
-              )
-            })}
+      <BottomSheet
+        open={moreOpen}
+        onOpenChange={setMoreOpen}
+        title="More"
+        description="Every section that is not in the tab bar"
+        className="max-h-[78dvh] md:hidden"
+      >
+        {/* No entrance animation on the rows: the sheet is already moving, and
+            content that slides inside a sliding container reads as lag. */}
+        <nav className="scroll-contain min-h-0 flex-1 overflow-y-auto p-2 pb-4" aria-label="More sections">
+          {OVERFLOW.map((item) => {
+            const active = isRouteActive(pathname, item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => {
+                  haptic("tick")
+                  setMoreOpen(false)
+                }}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "press-dim flex items-start gap-3 rounded-md px-3 py-3 transition-colors",
+                  active ? "bg-accent text-accent-foreground" : "active:bg-muted",
+                )}
+              >
+                <item.icon
+                  className={cn("mt-0.5 h-4 w-4 shrink-0", active ? "text-primary" : "text-muted-foreground")}
+                  aria-hidden
+                />
+                <span className="min-w-0">
+                  <span className="block text-sm font-medium">{item.label}</span>
+                  <span className="block text-xs text-muted-foreground">{item.description}</span>
+                </span>
+              </Link>
+            )
+          })}
 
-            {/* Not a destination, so it sits below a rule rather than in the
-                list. The header carries this on tablet and up. */}
-            <div className="mt-2 border-t pt-2">
-              <ThemeToggleRow />
-            </div>
-          </nav>
-        </SheetContent>
-      </Sheet>
+          {/* Not a destination, so it sits below a rule rather than in the
+              list. The header carries this on tablet and up. */}
+          <div className="mt-2 border-t pt-2">
+            <ThemeToggleRow />
+          </div>
+        </nav>
+      </BottomSheet>
     </>
   )
 }

@@ -157,6 +157,36 @@ export/
 `public/img/` is a tracked copy of the gitignored `export/img/` because the build needs the
 assets in the deployment bundle. It is duplication on disk, not in git.
 
+## App shell, motion and offline
+
+The phone build is meant to be indistinguishable from an installed app, which is mostly a
+question of what the shell does rather than what the pages look like:
+
+- **The shell never scrolls.** `html`, `body` and the flex column inside them are a locked
+  full-height frame; only `.app-scroll` between the header and the tab bar moves. Nothing is
+  `position: fixed`, so iOS cannot strand the tab bar mid-screen by disagreeing about the
+  viewport.
+- **Screens push and pop.** `RouteTransition` (`src/components/layout/route-transition.tsx`)
+  keys each route on its pathname — not its query string, which every filter writes to — and
+  animates it in from the right or the left depending on the direction recorded in
+  `src/lib/nav-history.ts`.
+- **Lists come back where you left them.** `ScrollMemory` records the offset of each screen and
+  restores it on a back navigation, holding the position for a beat while the page streams in.
+- **Two gestures the browser stopped providing** once the app is installed
+  (`src/components/pwa/touch-gestures.tsx`): a swipe from the left edge drags the screen away
+  one-to-one and pops it if it carries far or fast enough, and a pull from the top of a list
+  runs `router.refresh()`. Both write transforms straight to the DOM — no React re-render sits
+  between the thumb and the pixels.
+- **Sheets are draggable.** `src/components/ui/bottom-sheet.tsx` is Radix's dialog for the
+  accessibility and a hand-rolled drag for the feel; `vaul` is in the tree but takes over `body`
+  with `position: fixed`, which this layout cannot allow.
+- **Motion is one vocabulary.** Easings, durations and keyframes live in `globals.css`; nothing
+  animates a layout property, and a single `prefers-reduced-motion` block switches all of it off.
+- **It works offline.** `public/sw.js` keeps visited pages and every asset they used, falls back
+  to `/offline` for anything never opened, and deliberately does not `skipWaiting` — a new build
+  takes over on the next cold launch rather than mid-session, when the running page is still
+  holding the previous build's chunks.
+
 ## Derived features
 
 - **Counters** (`src/lib/game/combat.ts`) are computed, not curated: damage per hit is resolved

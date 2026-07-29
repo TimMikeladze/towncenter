@@ -7,8 +7,11 @@ import "./globals.css"
 import { CommandPalette } from "@/components/command-palette"
 import { AppHeader } from "@/components/layout/app-header"
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar"
-import { ScrollReset } from "@/components/layout/scroll-reset"
+import { RouteTransition } from "@/components/layout/route-transition"
+import { ScrollMemory } from "@/components/layout/scroll-memory"
 import { AppChrome } from "@/components/pwa/app-chrome"
+import { ServiceWorker } from "@/components/pwa/service-worker"
+import { TouchGestures } from "@/components/pwa/touch-gestures"
 import { ThemeProvider } from "@/components/theme-provider"
 import { getSearchIndex } from "@/lib/db/queries/search-index"
 
@@ -76,6 +79,7 @@ export default async function RootLayout({
       <body className={`${inter.variable} ${cinzel.variable} ${geistMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AppChrome />
+          <ServiceWorker />
           {/*
             The app shell: a full-height column that cannot scroll. The header
             and the tab bar are flow children of it rather than fixed overlays,
@@ -84,12 +88,20 @@ export default async function RootLayout({
           */}
           <div className="flex h-full flex-col overflow-hidden">
             <AppHeader />
-            <main id="app-scroll" className="app-scroll px-safe">
-              {children}
-            </main>
+            {/*
+              The viewport clips the pane, which the gestures slide around
+              inside it, and gives the pull-to-refresh indicator something
+              stationary to hide behind.
+            */}
+            <div className="app-viewport">
+              <TouchGestures targetId="app-scroll" />
+              <main id="app-scroll" className="app-scroll px-safe">
+                <RouteTransition>{children}</RouteTransition>
+              </main>
+            </div>
             <MobileTabBar />
           </div>
-          <ScrollReset targetId="app-scroll" />
+          <ScrollMemory targetId="app-scroll" />
           <CommandPalette items={searchIndex} />
           <Analytics />
         </ThemeProvider>

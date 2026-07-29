@@ -1,21 +1,48 @@
 "use client"
 
-import { ArrowRight, CornerDownLeft, Search, X } from "lucide-react"
+import { ArrowRight, Building2, Castle, CornerDownLeft, Scroll, Search, Swords, X } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import type { SearchEntry } from "@/lib/db/queries/search-index"
+import { haptic } from "@/lib/haptics"
 import { cn } from "@/lib/utils"
 
 const RESULT_LIMIT = 30
 export const OPEN_PALETTE_EVENT = "open-command-palette"
 
+/** Must match the exit animation on `.palette-panel[data-state="closed"]`. */
+const CLOSE_MS = 140
+
+const KIND_ICONS = {
+  Unit: Swords,
+  Civilization: Castle,
+  Technology: Scroll,
+  Building: Building2,
+} as const
+
 export function CommandPalette({ items }: { items: SearchEntry[] }) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  // Kept mounted for the length of its exit animation. Without this the panel
+  // vanishes on the frame it is dismissed, which is the one moment a search
+  // sheet is being watched closely.
+  const [closing, setClosing] = useState(false)
   const [query, setQuery] = useState("")
   const [activeIndex, setActiveIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  /** Only the keyboard moves the list; a hover or a fresh open must not. */
+  const keyboardMoved = useRef(false)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const close = useCallback(() => {
+    setClosing(true)
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => {
+      setOpen(false)
+      setClosing(false)
+    }, CLOSE_MS)
+  }, [])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -23,9 +50,12 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
         event.preventDefault()
         setOpen((value) => !value)
       }
-      if (event.key === "Escape") setOpen(false)
+      if (event.key === "Escape") close()
     }
-    const onOpen = () => setOpen(true)
+    const onOpen = () => {
+      setClosing(false)
+      setOpen(true)
+    }
 
     window.addEventListener("keydown", onKeyDown)
     window.addEventListener(OPEN_PALETTE_EVENT, onOpen)
@@ -33,17 +63,13 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
       window.removeEventListener("keydown", onKeyDown)
       window.removeEventListener(OPEN_PALETTE_EVENT, onOpen)
     }
-  }, [])
+  }, [close])
 
-  // The page behind a full-screen sheet must not scroll with it.
   useEffect(() => {
-    if (!open) return
-    const previous = document.body.style.overflow
-    document.body.style.overflow = "hidden"
     return () => {
-      document.body.style.overflow = previous
+      if (closeTimer.current) clearTimeout(closeTimer.current)
     }
-  }, [open])
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -68,15 +94,23 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
       .slice(0, RESULT_LIMIT)
   }, [items, query])
 
-  // Keyboard navigation has to drag the list along with it.
+  // Keyboard navigation has to drag the list along with it — and nothing else
+  // does. Scrolling on open would nudge the first result half out of view,
+  // because "nearest" is measured while the panel is still animating into
+  // place and is therefore not yet where it will end up.
   useEffect(() => {
+    if (!keyboardMoved.current) return
+    keyboardMoved.current = false
     listRef.current?.querySelector<HTMLElement>(`[data-index="${activeIndex}"]`)?.scrollIntoView({ block: "nearest" })
   }, [activeIndex])
 
   if (!open) return null
 
+  const state = closing ? "closed" : "open"
+
   const go = (href: string) => {
-    setOpen(false)
+    haptic("select")
+    close()
     router.push(href)
   }
 
@@ -85,8 +119,9 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
       <button
         type="button"
         aria-label="Close search"
-        className="absolute inset-0 cursor-default bg-black/60 backdrop-blur-[2px]"
-        onClick={() => setOpen(false)}
+        data-state={state}
+        className="palette-overlay absolute inset-0 cursor-default bg-black/60 backdrop-blur-[2px]"
+        onClick={close}
       />
 
       {/*
@@ -95,8 +130,9 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
         dialog.
       */}
       <div
+        data-state={state}
         className={cn(
-          "panel relative flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-none border-x-0 border-b-0 shadow-raised",
+          "palette-panel panel relative flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-none border-x-0 border-b-0 shadow-raised",
           "sm:h-auto sm:max-h-[70vh] sm:max-w-xl sm:flex-none sm:rounded-lg sm:border",
         )}
         style={{ paddingTop: "var(--safe-top)" }}
@@ -116,10 +152,12 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
             onKeyDown={(event) => {
               if (event.key === "ArrowDown") {
                 event.preventDefault()
+                keyboardMoved.current = true
                 setActiveIndex((index) => Math.min(index + 1, results.length - 1))
               }
               if (event.key === "ArrowUp") {
                 event.preventDefault()
+                keyboardMoved.current = true
                 setActiveIndex((index) => Math.max(index - 1, 0))
               }
               if (event.key === "Enter" && results[activeIndex]) {
@@ -141,7 +179,7 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
           <kbd className="kbd-shortcut hidden sm:inline-flex">ESC</kbd>
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={close}
             className="press touch-target -mr-1 grid shrink-0 place-items-center text-muted-foreground sm:hidden"
             aria-label="Close search"
           >
@@ -155,38 +193,52 @@ export function CommandPalette({ items }: { items: SearchEntry[] }) {
           style={{ paddingBottom: "var(--safe-bottom)" }}
         >
           {results.length === 0 ? (
-            <p className="px-4 py-12 text-center text-sm text-muted-foreground">No matches for “{query.trim()}”</p>
+            <p className="rise-in px-4 py-12 text-center text-sm text-muted-foreground">
+              No matches for “{query.trim()}”
+            </p>
           ) : (
-            results.map((item, index) => (
-              <button
-                key={item.id}
-                type="button"
-                data-index={index}
-                onClick={() => go(item.href)}
-                onMouseEnter={() => setActiveIndex(index)}
-                className={cn(
-                  "flex w-full items-center gap-3 border-b border-border/50 px-4 py-3 text-left transition-colors last:border-b-0 active:bg-accent",
-                  index === activeIndex ? "sm:bg-accent sm:text-accent-foreground" : "sm:hover:bg-muted/60",
-                )}
-              >
-                {/*
-                  Name and metadata stack in one min-w-0 column and truncate.
-                  Side-by-side with a non-shrinking meta column is what pushed
-                  the row — and the whole page — past the screen edge.
-                */}
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[15px] font-medium leading-tight">{item.name}</span>
-                  <span className="label-caps mt-1 block truncate">
-                    {item.kind}
-                    {item.subtitle ? ` · ${item.subtitle}` : ""}
+            results.map((item, index) => {
+              const KindIcon = KIND_ICONS[item.kind]
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  data-index={index}
+                  onClick={() => go(item.href)}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  className={cn(
+                    "press-dim flex w-full items-center gap-3 border-b border-border/50 px-4 py-3 text-left transition-colors last:border-b-0 active:bg-accent",
+                    index === activeIndex ? "sm:bg-accent sm:text-accent-foreground" : "sm:hover:bg-muted/60",
+                  )}
+                >
+                  {/* The kind is already spelled out below the name; the icon
+                      is there so the eye can group the list without reading
+                      it. */}
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md border bg-muted/40 text-muted-foreground">
+                    <KindIcon className="h-4 w-4" aria-hidden />
                   </span>
-                </span>
-                {index === activeIndex ? (
-                  <CornerDownLeft className="hidden h-3.5 w-3.5 shrink-0 text-muted-foreground sm:block" aria-hidden />
-                ) : null}
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground/50 sm:hidden" aria-hidden />
-              </button>
-            ))
+                  {/*
+                    Name and metadata stack in one min-w-0 column and truncate.
+                    Side-by-side with a non-shrinking meta column is what pushed
+                    the row — and the whole page — past the screen edge.
+                  */}
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[15px] font-medium leading-tight">{item.name}</span>
+                    <span className="label-caps mt-1 block truncate">
+                      {item.kind}
+                      {item.subtitle ? ` · ${item.subtitle}` : ""}
+                    </span>
+                  </span>
+                  {index === activeIndex ? (
+                    <CornerDownLeft
+                      className="hidden h-3.5 w-3.5 shrink-0 text-muted-foreground sm:block"
+                      aria-hidden
+                    />
+                  ) : null}
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground/50 sm:hidden" aria-hidden />
+                </button>
+              )
+            })
           )}
         </div>
       </div>
