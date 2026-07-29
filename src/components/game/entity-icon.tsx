@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { getEntityImagePath } from "@/lib/utils/images"
 
 const SIZES = {
+  xs: { box: "h-6 w-6", px: 24 },
   sm: { box: "h-8 w-8", px: 32 },
   md: { box: "h-11 w-11", px: 44 },
   lg: { box: "h-16 w-16", px: 64 },

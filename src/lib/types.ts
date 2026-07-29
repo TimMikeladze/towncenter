@@ -65,10 +65,23 @@ export interface CivBonus {
   category: "economic" | "military" | "defensive" | "team"
 }
 
+export type TechTreeKind = "unit" | "building" | "tech"
+
+/**
+ * One node of a civ's tech tree, with everything it unlocks nested underneath:
+ * a building's units and technologies, and each upgrade under what it upgrades
+ * from. Serializable so a server page can hand it straight to a client tree.
+ */
 export interface TechTreeNode {
   id: string
-  type: "unit" | "tech" | "building"
-  available: boolean
+  kind: TechTreeKind
+  name: string
+  age: Age
+  /** Secondary line: unit stats, building hit points, technology cost. */
+  detail: string
+  unique: boolean
+  image_path: string | null
+  children: TechTreeNode[]
 }
 
 export interface Civilization {

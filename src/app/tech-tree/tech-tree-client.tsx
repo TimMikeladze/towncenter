@@ -2,66 +2,116 @@
 
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { Chip } from "@/components/game/badges"
+import { Fragment } from "react"
+import { AgeBadge, Chip } from "@/components/game/badges"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AGES } from "@/lib/game/classes"
-import type { Age, CivBonus } from "@/lib/types"
-
-interface TreeEntry {
-  id: string
-  name: string
-  kind: string
-  age: Age
-  image_path: string | null
-  unique?: boolean
-  hp?: number
-  attack?: number
-}
+import type { CivBonus, TechTreeKind, TechTreeNode } from "@/lib/types"
+import { cn } from "@/lib/utils"
 
 interface TechTreeClientProps {
   civs: { id: string; name: string }[]
-  tree: {
-    civ: { id: string; name: string; types: string[]; teamBonus: string; bonuses: CivBonus[] }
-    units: TreeEntry[]
-    buildings: TreeEntry[]
-    techs: TreeEntry[]
-  }
+  civ: { id: string; name: string; types: string[]; teamBonus: string; bonuses: CivBonus[] }
+  roots: TechTreeNode[]
+  counts: { units: number; buildings: number; techs: number }
   selectedAge: string
 }
 
-function EntryGrid({ entries, hrefBase }: { entries: TreeEntry[]; hrefBase: string }) {
-  if (entries.length === 0) {
-    return <p className="text-sm text-muted-foreground">Nothing in this age.</p>
-  }
+const HREF_BASE: Record<TechTreeKind, string> = {
+  unit: "/units",
+  building: "/buildings",
+  tech: "/technologies",
+}
+
+/**
+ * The indent in front of a row, drawn rather than spaced: one lane per
+ * ancestor, carrying a line down only while that ancestor still has siblings
+ * to come, then the elbow joining this row to its parent. Lanes are
+ * full-height, so the lines join up between adjacent rows.
+ *
+ * `guides` holds one "is the last child" flag per level, this row's last.
+ */
+function BranchGuides({ guides }: { guides: boolean[] }) {
+  const last = guides[guides.length - 1]
   return (
-    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-      {entries.map((entry) => (
-        <Link
-          key={entry.id}
-          href={`${hrefBase}/${entry.id}`}
-          className="panel panel-interactive flex items-center gap-2.5 p-2.5"
-        >
-          <EntityIcon src={entry.image_path} alt="" size="sm" />
-          <div className="min-w-0 flex-1">
-            <p className="flex items-center gap-1.5 truncate text-sm font-medium">
-              <span className="truncate">{entry.name}</span>
-              {entry.unique && <Chip tone="var(--type-unique)">UU</Chip>}
-            </p>
-            <p className="tabular truncate font-mono text-[11px] text-muted-foreground">
-              {entry.kind}
-              {entry.hp !== undefined && ` · ${entry.hp} HP · ${entry.attack} atk`}
-            </p>
-          </div>
-        </Link>
+    <span aria-hidden className="flex shrink-0 self-stretch">
+      {guides.slice(0, -1).map((isLast, depth) => (
+        <span
+          // biome-ignore lint/suspicious/noArrayIndexKey: lanes are positional, not identities
+          key={depth}
+          className={cn("w-4 self-stretch border-l", isLast ? "border-transparent" : "border-border")}
+        />
       ))}
-    </div>
+      <span className="relative w-4 self-stretch">
+        <span className={cn("absolute left-0 top-0 w-px bg-border", last ? "h-1/2" : "h-full")} />
+        <span className="absolute left-0 top-1/2 h-px w-2.5 bg-border" />
+      </span>
+    </span>
   )
 }
 
-export function TechTreeClient({ civs, tree, selectedAge }: TechTreeClientProps) {
+/** Drops everything outside the selected age, keeping ancestors of a match. */
+function pruneToAge(nodes: TechTreeNode[], age: string): TechTreeNode[] {
+  if (age === "all") return nodes
+  return nodes.flatMap((node) => {
+    const children = pruneToAge(node.children, age)
+    if (node.age !== age && children.length === 0) return []
+    return [{ ...node, children }]
+  })
+}
+
+function TreeRow({ node, guides, dim, root }: { node: TechTreeNode; guides: boolean[]; dim: boolean; root?: boolean }) {
+  return (
+    <Link
+      href={`${HREF_BASE[node.kind]}/${node.id}`}
+      className={cn(
+        "press flex min-h-7 items-center gap-1.5 rounded-md pr-1 transition-colors md:hover:bg-muted/60",
+        root && "font-medium",
+        dim && "opacity-50",
+      )}
+    >
+      {guides.length > 0 && <BranchGuides guides={guides} />}
+      <EntityIcon src={node.image_path} alt="" size="xs" />
+      <span className={cn("truncate", root ? "text-sm" : "text-[13px]")}>{node.name}</span>
+      {node.unique && <Chip tone="var(--type-unique)">UU</Chip>}
+      <span className="ml-auto flex shrink-0 items-center gap-2 pl-1.5">
+        <span className="tabular hidden font-mono text-[11px] text-muted-foreground sm:inline">{node.detail}</span>
+        <AgeBadge age={node.age} />
+      </span>
+    </Link>
+  )
+}
+
+function TreeRows({ nodes, guides, selectedAge }: { nodes: TechTreeNode[]; guides: boolean[]; selectedAge: string }) {
+  return nodes.map((node, index) => {
+    // Ancestor pipes, then this row's own elbow: last child or not.
+    const ownGuides = [...guides, index === nodes.length - 1]
+    return (
+      <Fragment key={`${node.kind}:${node.id}`}>
+        <TreeRow node={node} guides={ownGuides} dim={selectedAge !== "all" && node.age !== selectedAge} />
+        {node.children.length > 0 && <TreeRows nodes={node.children} guides={ownGuides} selectedAge={selectedAge} />}
+      </Fragment>
+    )
+  })
+}
+
+function Branch({ root, selectedAge }: { root: TechTreeNode; selectedAge: string }) {
+  return (
+    <Panel className="mb-3 break-inside-avoid p-2.5 sm:p-3">
+      <TreeRow node={root} guides={[]} dim={selectedAge !== "all" && root.age !== selectedAge} root />
+      {root.children.length > 0 && (
+        <div className="mt-1 border-t pt-1">
+          <TreeRows nodes={root.children} guides={[]} selectedAge={selectedAge} />
+        </div>
+      )}
+    </Panel>
+  )
+}
+
+export function TechTreeClient({ civs, civ, roots, counts, selectedAge }: TechTreeClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -75,35 +125,35 @@ export function TechTreeClient({ civs, tree, selectedAge }: TechTreeClientProps)
     router.push(query ? `/tech-tree?${query}` : "/tech-tree")
   }
 
-  const ages = selectedAge === "all" ? [...AGES] : [selectedAge as Age]
+  const branches = pruneToAge(roots, selectedAge)
 
   return (
     <PageShell>
       <PageHeader
         eyebrow="Reference"
         title="Tech tree"
-        description={`Exactly what ${tree.civ.name} can train, build and research, by age.`}
+        description={`Exactly what ${civ.name} can train, build and research, by age.`}
         actions={
           <>
             <Button asChild variant="outline">
-              <Link href={`/civilizations/${tree.civ.id}`}>{tree.civ.name} details</Link>
+              <Link href={`/civilizations/${civ.id}`}>{civ.name} details</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href={`/civilizations/compare?a=${tree.civ.id}`}>Compare civs</Link>
+              <Link href={`/civilizations/compare?a=${civ.id}`}>Compare civs</Link>
             </Button>
           </>
         }
       />
 
       <div className="panel flex flex-col gap-2 p-3 sm:flex-row sm:items-center">
-        <Select value={tree.civ.id} onValueChange={(value) => navigate({ civ: value })}>
+        <Select value={civ.id} onValueChange={(value) => navigate({ civ: value })}>
           <SelectTrigger className="h-10 w-full sm:w-64" aria-label="Select civilization">
             <SelectValue placeholder="Select civilization" />
           </SelectTrigger>
           <SelectContent>
-            {civs.map((civ) => (
-              <SelectItem key={civ.id} value={civ.id}>
-                {civ.name}
+            {civs.map((entry) => (
+              <SelectItem key={entry.id} value={entry.id}>
+                {entry.name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -123,9 +173,9 @@ export function TechTreeClient({ civs, tree, selectedAge }: TechTreeClientProps)
         </Select>
       </div>
 
-      <Section title={tree.civ.name} description={`${tree.civ.types.join(" and ")} civilization`}>
+      <Section title={civ.name} description={`${civ.types.join(" and ")} civilization`}>
         <Panel className="space-y-1.5">
-          {tree.civ.bonuses
+          {civ.bonuses
             .filter((bonus) => bonus.category !== "team")
             .slice(0, 4)
             .map((bonus) => (
@@ -134,44 +184,31 @@ export function TechTreeClient({ civs, tree, selectedAge }: TechTreeClientProps)
                 {bonus.description}
               </p>
             ))}
-          {tree.civ.teamBonus && (
+          {civ.teamBonus && (
             <p className="border-t pt-2 text-sm">
               <span className="label-caps mr-1.5">Team bonus</span>
-              {tree.civ.teamBonus}
+              {civ.teamBonus}
             </p>
           )}
         </Panel>
       </Section>
 
-      {ages.map((age) => {
-        const units = tree.units.filter((entry) => entry.age === age)
-        const buildings = tree.buildings.filter((entry) => entry.age === age)
-        const techs = tree.techs.filter((entry) => entry.age === age)
-        if (units.length + buildings.length + techs.length === 0) return null
-
-        return (
-          <Section
-            key={age}
-            title={`${age} Age`}
-            description={`${units.length} units · ${buildings.length} buildings · ${techs.length} technologies`}
-          >
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <p className="label-caps">Units</p>
-                <EntryGrid entries={units} hrefBase="/units" />
-              </div>
-              <div className="space-y-2">
-                <p className="label-caps">Buildings</p>
-                <EntryGrid entries={buildings} hrefBase="/buildings" />
-              </div>
-              <div className="space-y-2">
-                <p className="label-caps">Technologies</p>
-                <EntryGrid entries={techs} hrefBase="/technologies" />
-              </div>
-            </div>
-          </Section>
-        )
-      })}
+      <Section
+        title="Tree"
+        description={`${counts.units} units · ${counts.buildings} buildings · ${counts.techs} technologies. Each building carries what it trains and researches; upgrades sit under what they upgrade from.`}
+      >
+        {branches.length === 0 ? (
+          <Panel>
+            <p className="text-sm text-muted-foreground">Nothing unlocks in this age.</p>
+          </Panel>
+        ) : (
+          <div className="columns-1 gap-3 lg:columns-2">
+            {branches.map((root) => (
+              <Branch key={`${root.kind}:${root.id}`} root={root} selectedAge={selectedAge} />
+            ))}
+          </div>
+        )}
+      </Section>
     </PageShell>
   )
 }
