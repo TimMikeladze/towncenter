@@ -1,0 +1,982 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Standalone = launched from the home screen. Used to reclaim the browser
+   chrome the PWA no longer draws. */
+@custom-variant standalone (&:is([data-display-mode="standalone"] *));
+
+/*
+ * Palette: monochrome. Paper-white in light, ink-black in dark, and every
+ * piece of chrome — surfaces, buttons, borders, focus rings — is a pure
+ * neutral drawn from that one ramp.
+ *
+ * The game's own resource, age and unit-type colours stay hued, because they
+ * carry meaning no grey can: food is not wood, and a tech tree that ages
+ * from grey to grey is unreadable. They are held to a low chroma so they read
+ * as accents on a neutral page rather than a second, competing palette.
+ */
+:root {
+  /* Scrollbars, native controls and the browser's own overscroll surface all
+     follow this. Without it a black page keeps light-mode scrollbars. */
+  color-scheme: light;
+
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --secondary: #f1f1f1;
+  --secondary-foreground: #171717;
+  --muted: #f1f1f1;
+  --muted-foreground: #6e6e6e;
+  --accent: #e8e8e8;
+  --accent-foreground: #171717;
+  --destructive: #8f2620;
+  --destructive-foreground: #fafafa;
+  --success: #3f6b45;
+  --border: #e2e2e2;
+  --input: #e2e2e2;
+  --ring: #171717;
+
+  --resource-food: #9c4a3c;
+  --resource-wood: #4e6b4a;
+  --resource-gold: #85662c;
+  --resource-stone: #566270;
+
+  --age-dark: #6e6e6e;
+  --age-feudal: #7d6244;
+  --age-castle: #566270;
+  --age-imperial: #85662c;
+
+  --type-infantry: #99503f;
+  --type-archer: #4e6b4a;
+  --type-cavalry: #7d6244;
+  --type-siege: #5c6670;
+  --type-monk: #476a80;
+  --type-naval: #3c6d72;
+  --type-economy: #6b6340;
+  --type-unique: #715179;
+
+  --chart-1: #171717;
+  --chart-2: #6e6e6e;
+  --chart-3: #476a80;
+  --chart-4: #99503f;
+  --chart-5: #a8a8a8;
+
+  --radius: 0.5rem;
+
+  /* Layout metrics the shell and its chrome share. */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /*
+   * Zero on a phone. The tab bar owns navigation, search and the overflow
+   * menu, which leaves the header holding nothing — so it collapses to the
+   * status-bar strip and gives the height back to the page.
+   */
+  --header-height: 0rem;
+  --tab-bar-height: 3.5rem;
+
+  /*
+   * Motion. One vocabulary for the whole app, because inconsistent easing is
+   * the single loudest tell that something is a web page.
+   *
+   * `--ease-out-native` is the curve UIKit and Material both settle on for
+   * anything entering the screen: leaves fast, arrives slowly, never
+   * overshoots. `--ease-spring` overshoots on purpose and is reserved for
+   * things that should feel physical — a tab icon taking the selection.
+   */
+  --ease-out-native: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-native: cubic-bezier(0.4, 0, 1, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  --duration-press: 90ms;
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-screen: 300ms;
+  --duration-sheet: 380ms;
+
+  /* How far a screen travels on a push/pop. Short: a long slide reads as slow. */
+  --screen-shift: 1.75rem;
+}
+
+/* Tablet and up: the header comes back to carry the nav rail. Must match the
+   `md` breakpoint the header and tab bar switch on. */
+@media (min-width: 48rem) {
+  :root {
+    --header-height: 3.25rem;
+  }
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #141414;
+  --card-foreground: #fafafa;
+  --popover: #141414;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #fafafa;
+  --muted: #1c1c1c;
+  --muted-foreground: #a1a1a1;
+  --accent: #272727;
+  --accent-foreground: #fafafa;
+  --destructive: #e58a84;
+  --destructive-foreground: #0a0a0a;
+  --success: #8bb890;
+  --border: #292929;
+  --input: #292929;
+  --ring: #d4d4d4;
+
+  --resource-food: #d4907f;
+  --resource-wood: #94b98f;
+  --resource-gold: #c9ab73;
+  --resource-stone: #9aa7b4;
+
+  --age-dark: #a1a1a1;
+  --age-feudal: #c2a17c;
+  --age-castle: #9aa7b4;
+  --age-imperial: #c9ab73;
+
+  --type-infantry: #d59a86;
+  --type-archer: #94b98f;
+  --type-cavalry: #c6ab80;
+  --type-siege: #a3adb8;
+  --type-monk: #8fb4cc;
+  --type-naval: #7fb6bd;
+  --type-economy: #bbb289;
+  --type-unique: #b896c1;
+
+  --chart-1: #fafafa;
+  --chart-2: #a1a1a1;
+  --chart-3: #8fb4cc;
+  --chart-4: #d59a86;
+  --chart-5: #6b6b6b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-food: var(--resource-food);
+  --color-wood: var(--resource-wood);
+  --color-gold: var(--resource-gold);
+  --color-stone: var(--resource-stone);
+
+  --color-age-dark: var(--age-dark);
+  --color-age-feudal: var(--age-feudal);
+  --color-age-castle: var(--age-castle);
+  --color-age-imperial: var(--age-imperial);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cinzel), "Iowan Old Style", Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.06), 0 8px 24px -16px rgb(0 0 0 / 0.25);
+  --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.08), 0 12px 32px -18px rgb(0 0 0 / 0.35);
+  --shadow-sheet: 0 -1px 0 color-mix(in srgb, var(--foreground) 8%, transparent), 0 -16px 48px -12px rgb(0 0 0 / 0.45);
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * Keyframes
+ *
+ * Every one of these animates only `transform` and `opacity`, so the
+ * compositor can run them off the main thread. Anything that animates layout
+ * (height, top, margin) drops frames the moment a list is long, and a phone
+ * notices immediately.
+ * ---------------------------------------------------------------------------
+ */
+
+/* A pushed screen enters from the right; a popped one from the left. Mirrors
+   what the platform does when you drill into a list and come back out. */
+@keyframes screen-push {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--screen-shift), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes screen-pop {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--screen-shift) * -1), 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Lateral moves — a tab switch — do not come from a direction, because neither
+   destination is "inside" the other. */
+@keyframes screen-fade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes sheet-out {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+/* The search sheet rises a little and settles, rather than being switched on. */
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* The selected tab's icon takes the pill with a little overshoot. */
+@keyframes tab-select {
+  0% {
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Skeletons sweep rather than blink: a pulse reads as a broken image, a sweep
+   reads as loading. */
+@keyframes skeleton-sweep {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /*
+   * The document itself never scrolls, and no part of the chrome is
+   * `position: fixed`.
+   *
+   * iOS resolves fixed positioning against the layout viewport, and Safari
+   * gets that viewport wrong often enough — mid rubber-band, while its
+   * toolbars collapse, and outright on iOS 26 — to strand a bottom-fixed tab
+   * bar in the middle of the screen. The only reliable answer is to give it
+   * nothing to get wrong: html and body are a locked full-height frame, the
+   * shell inside them is a flex column, and the header and tab bar are
+   * ordinary flow children of it. Only `.app-scroll` between them moves.
+   */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  html {
+    /* iOS resizes text in landscape unless this is pinned. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Kills the 300ms tap delay and double-tap-to-zoom. */
+    touch-action: manipulation;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    /*
+     * A single neutral wash off the top of the page so the flat monochrome
+     * canvas still has somewhere to fall away to. Tinted from the foreground,
+     * so it darkens paper in light and lifts ink in dark. No image assets.
+     */
+    background-image:
+      radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--foreground) 4%, transparent), transparent 70%);
+    background-attachment: fixed;
+    /* Native apps do not flash a grey box under your thumb. */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*
+   * Safari zooms the page whenever a focused control renders below 16px, and a
+   * zoomed page throws the whole layout out of place. Touch layouts therefore
+   * get a 16px floor on every control, regardless of the utility classes on
+   * it. Desktop keeps the tighter type.
+   */
+  @media (pointer: coarse) {
+    input,
+    select,
+    textarea {
+      font-size: max(16px, 1em);
+    }
+  }
+
+  /*
+   * Chrome is chrome: labels, nav and buttons should not turn into a text
+   * selection when a tap is held. Real content stays selectable.
+   */
+  button,
+  a,
+  label,
+  [role="button"],
+  [role="tab"],
+  nav,
+  .label-caps {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  p,
+  code,
+  pre,
+  dd,
+  input,
+  textarea,
+  [data-selectable] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+    font-weight: 600;
+    /* Long unit names must never widen the page. */
+    overflow-wrap: break-word;
+  }
+
+  /* Numbers line up in tables and stat blocks. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Anchored scrolling clears the sticky section rail instead of hiding under
+     it. The header is outside the scroll pane and no longer overlaps. */
+  :target {
+    scroll-margin-top: 4.5rem;
+  }
+
+  /*
+   * One switch for every animation in the app. Motion here is decoration on
+   * top of a layout that already works, so when the system asks for less of
+   * it, the honest answer is to cut it to nothing rather than to hand back a
+   * slower version of the same movement. Kept to 0.01ms rather than 0 so
+   * anything waiting on `animationend` — Radix unmounts on it — still fires.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * The one element in the app that scrolls. It is a flex child of the shell,
+   * so it takes whatever height the header and tab bar leave — no padding has
+   * to be kept in step with their sizes, and neither can be scrolled away
+   * from its edge.
+   */
+  .app-scroll {
+    flex: 1 1 auto;
+    /* Flex items floor at min-content; without this the pane grows to fit its
+       content and pushes the tab bar off the bottom instead of scrolling. */
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: clip;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    /* The gestures translate this element: an edge swipe slides the whole
+       screen right, a pull drags it down off the refresh indicator. Declared
+       here so the property is always animatable and never jumps from `none`.
+       No `will-change`: this element is the tallest thing in the app, and
+       keeping it in a permanent compositor layer costs memory all the time to
+       save a few milliseconds twice a session. */
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Mid back-swipe: the screen is a layer being slid off the one behind it, and
+     the shadow down its leading edge is what says so. */
+  .app-scroll[data-swiping] {
+    box-shadow: -0.5rem 0 1.5rem -0.25rem rgb(0 0 0 / 0.22);
+  }
+
+  /*
+   * The frame the scroll pane lives in. It exists so the pull-to-refresh
+   * indicator has something to be positioned against that is neither the
+   * viewport (wrong on a phone with a notch) nor the pane itself (which moves).
+   */
+  .app-viewport {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    /* The indicator sits above the pane's top edge and must not be seen until
+       the pull drags the pane down past it. */
+    overflow: clip;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .app-scroll {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /*
+   * A screen. One per route, remounted on navigation, so the animation runs
+   * exactly once per push or pop and never on a filter change — those keep the
+   * same pathname on purpose.
+   */
+  .screen {
+    animation: screen-fade var(--duration-screen) var(--ease-out-native) backwards;
+  }
+
+  .screen[data-direction="forward"] {
+    animation-name: screen-push;
+  }
+
+  .screen[data-direction="back"] {
+    animation-name: screen-pop;
+  }
+
+  /* A gesture-driven pop already moved the screen with the thumb. Animating it
+     again on arrival would play the same movement twice. */
+  .screen[data-direction="none"] {
+    animation: none;
+  }
+
+  /*
+   * Pull to refresh. The spinner is revealed by the pane moving off it, the
+   * way the platform does it — nothing is animated into place, so the
+   * indicator tracks the thumb exactly.
+   */
+  .ptr-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    height: 3.5rem;
+    pointer-events: none;
+    /* Behind the pane, which is opaque and covers it at rest. */
+    z-index: 0;
+  }
+
+  .ptr-spinner {
+    display: grid;
+    place-items: center;
+    height: 1.75rem;
+    width: 1.75rem;
+    border-radius: 9999px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-panel);
+    color: var(--muted-foreground);
+    /* Set by the gesture as the pull winds up; no transition, because it has to
+       track the thumb exactly. */
+    transform: scale(0.72);
+  }
+
+  .ptr-spinner[data-spinning] svg {
+    animation: spin 800ms linear infinite;
+  }
+
+  /* The global reduced-motion rule would run this at 0.01ms — a strobe, not a
+     spinner. A still icon says "working" well enough. */
+  @media (prefers-reduced-motion: reduce) {
+    .ptr-spinner[data-spinning] svg {
+      animation: none;
+    }
+  }
+
+  .panel {
+    @apply bg-card text-card-foreground rounded-lg border;
+    box-shadow: var(--shadow-panel);
+  }
+
+  .panel-interactive {
+    @apply bg-card text-card-foreground rounded-lg border transition-all duration-150;
+    box-shadow: var(--shadow-panel);
+  }
+
+  /* Lift on hover is a mouse affordance. On touch it just leaves a stuck
+     highlight after the tap, so it is gated behind a real hover device. */
+  @media (hover: hover) and (pointer: fine) {
+    .panel-interactive:hover {
+      border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
+      box-shadow: var(--shadow-raised);
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel-interactive:hover {
+      transform: none;
+    }
+  }
+
+  /*
+   * The tab bar's selection pill. The animation is carried by the active class
+   * itself, so it plays the instant the route becomes current and never needs
+   * to be triggered, timed or cleaned up.
+   */
+  .tab-pill-active {
+    animation: tab-select var(--duration-base) var(--ease-spring);
+  }
+
+  /* Section rule in the ink colour, used above every section title. */
+  .rule-accent::before {
+    content: "";
+    display: block;
+    width: 2rem;
+    height: 2px;
+    margin-bottom: 0.5rem;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+
+  /* Signals that the tablet nav rail keeps scrolling past the last visible tab. */
+  .nav-rail-fade {
+    mask-image: linear-gradient(to right, black calc(100% - 2rem), transparent);
+  }
+
+  .kbd-shortcut {
+    @apply inline-flex items-center justify-center rounded border bg-muted px-1.5 font-mono text-[10px] leading-5 text-muted-foreground;
+  }
+
+  .label-caps {
+    @apply font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  /*
+   * Horizontal rail: chips and tabs that scroll sideways *inside* their own
+   * box. `overscroll-contain` stops the swipe from turning into a browser
+   * back-gesture once the rail hits its end.
+   */
+  .rail {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  /*
+   * No scroll snapping. Snap points on a chip rail fight the leading gutter —
+   * the first chip snaps flush to the scrollport and swallows the padding —
+   * and chips are not a carousel, so there is nothing to snap to anyway.
+   */
+  .rail > * {
+    flex-shrink: 0;
+  }
+
+  /*
+   * Edge fades are the only cue a touch user gets that a rail keeps going —
+   * there is no scrollbar on a phone. `Rail` sets the data attributes, so a
+   * fade appears only on a side that actually has more content behind it.
+   */
+  .rail-fade[data-fade-end] {
+    mask-image: linear-gradient(to right, black calc(100% - 2.5rem), transparent);
+  }
+
+  .rail-fade[data-fade-start] {
+    mask-image: linear-gradient(to left, black calc(100% - 2.5rem), transparent);
+  }
+
+  .rail-fade[data-fade-start][data-fade-end] {
+    mask-image: linear-gradient(to right, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
+  }
+
+  /*
+   * Bottom sheet. Slides up on the same curve the platform uses and can be
+   * thrown back down with a drag — see `bottom-sheet.tsx`, which sets
+   * `data-dragging` while a thumb owns the transform so these animations get
+   * out of the way.
+   */
+  .sheet-panel {
+    @apply bg-background fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-2xl border-t;
+    box-shadow: var(--shadow-sheet);
+    animation: sheet-in var(--duration-sheet) var(--ease-out-native) backwards;
+  }
+
+  .sheet-panel[data-state="closed"] {
+    animation: sheet-out var(--duration-base) var(--ease-in-native) both;
+  }
+
+  .sheet-panel[data-dragging] {
+    animation: none;
+    transition: none;
+  }
+
+  /* Released short of the dismiss threshold: springs back to rest. */
+  .sheet-panel[data-settling] {
+    animation: none;
+    transition: transform var(--duration-base) var(--ease-out-native);
+  }
+
+  .sheet-overlay {
+    @apply fixed inset-0 z-50 bg-black/50;
+    animation: fade-in var(--duration-base) var(--ease-standard) backwards;
+  }
+
+  .sheet-overlay[data-state="closed"] {
+    animation: fade-out var(--duration-base) var(--ease-standard) both;
+  }
+
+  /* The one affordance that says "this drags". Sized and padded to be a real
+     44px target rather than the 4px line it looks like. */
+  .sheet-grabber {
+    @apply mx-auto flex h-5 w-full shrink-0 cursor-grab items-center justify-center pt-2.5;
+  }
+
+  .sheet-grabber::before {
+    content: "";
+    display: block;
+    height: 0.3125rem;
+    width: 2.25rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--foreground) 22%, transparent);
+  }
+
+  /*
+   * The search palette. Same curve as the sheet, shorter travel: it is
+   * summoned rather than dragged up, and a full-screen panel sliding the whole
+   * height of the screen reads as slow however fast it actually is.
+   */
+  .palette-panel {
+    animation: palette-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .palette-panel[data-state="closed"] {
+    animation: fade-out 140ms var(--ease-in-native) both;
+  }
+
+  .palette-overlay {
+    animation: fade-in var(--duration-fast) var(--ease-standard) backwards;
+  }
+
+  .palette-overlay[data-state="closed"] {
+    animation: fade-out 140ms var(--ease-standard) both;
+  }
+
+  /*
+   * Skeletons. A sweep across a flat block, so a loading page has the shape of
+   * the page that is coming rather than a spinner in the middle of nothing.
+   */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--foreground) 7%, transparent);
+  }
+
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--foreground) 6%, transparent),
+      transparent
+    );
+    animation: skeleton-sweep 1.6s var(--ease-standard) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton::after {
+      display: none;
+    }
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pb-safe {
+    padding-bottom: var(--safe-bottom);
+  }
+
+  .pt-safe {
+    padding-top: var(--safe-top);
+  }
+
+  .px-safe {
+    padding-left: max(var(--safe-left), 0px);
+    padding-right: max(var(--safe-right), 0px);
+  }
+
+  /* Every interactive target on touch layouts clears 44px. */
+  .touch-target {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+
+  /*
+   * Press feedback. Touch has no hover, so the only way an element can feel
+   * responsive is to react to the press itself.
+   */
+  .press {
+    transition:
+      transform var(--duration-press) var(--ease-out-native),
+      background-color var(--duration-fast) var(--ease-standard),
+      opacity var(--duration-press) var(--ease-standard);
+  }
+
+  .press:active {
+    transform: scale(0.97);
+  }
+
+  /*
+   * Chrome — tab bar, list rows, anything that fills its slot — dims instead of
+   * shrinking. Scaling an element that shares an edge with its neighbours
+   * opens a visible gap on every tap.
+   */
+  .press-dim {
+    transition:
+      opacity var(--duration-press) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .press-dim:active {
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .press:active {
+      transform: none;
+      opacity: 0.7;
+    }
+  }
+
+  /*
+   * Content entrance. A screen animates as one block; the pieces inside it
+   * arrive just behind it, top-first, which is what makes a native screen feel
+   * assembled rather than pasted.
+   *
+   * The stagger is capped at eight children: past that the delay is longer than
+   * anyone waits, and a list of 245 units would spend two minutes arriving.
+   */
+  .rise-in {
+    animation: rise-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .stagger > * {
+    animation: rise-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .stagger > *:nth-child(1) {
+    animation-delay: 20ms;
+  }
+  .stagger > *:nth-child(2) {
+    animation-delay: 60ms;
+  }
+  .stagger > *:nth-child(3) {
+    animation-delay: 100ms;
+  }
+  .stagger > *:nth-child(4) {
+    animation-delay: 140ms;
+  }
+  .stagger > *:nth-child(5) {
+    animation-delay: 180ms;
+  }
+  .stagger > *:nth-child(6) {
+    animation-delay: 220ms;
+  }
+  .stagger > *:nth-child(7) {
+    animation-delay: 260ms;
+  }
+  .stagger > *:nth-child(n + 8) {
+    animation-delay: 300ms;
+  }
+
+  /* Grid cards land as a wave rather than a column, and only the first screenful
+     animates — everything below the fold is already in place by the time it is
+     scrolled to. */
+  .stagger-grid > *:nth-child(-n + 8) {
+    animation: rise-in var(--duration-base) var(--ease-out-native) backwards;
+  }
+
+  .stagger-grid > *:nth-child(1) {
+    animation-delay: 0ms;
+  }
+  .stagger-grid > *:nth-child(2) {
+    animation-delay: 30ms;
+  }
+  .stagger-grid > *:nth-child(3) {
+    animation-delay: 60ms;
+  }
+  .stagger-grid > *:nth-child(4) {
+    animation-delay: 90ms;
+  }
+  .stagger-grid > *:nth-child(5) {
+    animation-delay: 120ms;
+  }
+  .stagger-grid > *:nth-child(6) {
+    animation-delay: 150ms;
+  }
+  .stagger-grid > *:nth-child(7) {
+    animation-delay: 180ms;
+  }
+  .stagger-grid > *:nth-child(8) {
+    animation-delay: 210ms;
+  }
+
+  /*
+   * Motion is a nicety; the content is not. If an animation is interrupted —
+   * a re-render, a filter change mid-flight — nothing may be left invisible,
+   * so entrance animations always use `both` and never a bare `forwards` from
+   * `opacity: 0`.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .rise-in,
+    .stagger > *,
+    .stagger-grid > * {
+      animation: none;
+    }
+  }
+
+  /* Scroll containers inside the page keep their gesture to themselves. */
+  .scroll-contain {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}

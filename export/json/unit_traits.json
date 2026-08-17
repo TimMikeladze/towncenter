@@ -1,0 +1,5 @@
+{"bit": 1, "name": "Garrison Unit", "note": null, "piece_kind": null}
+{"bit": 2, "name": "Ship Unit", "note": null, "piece_kind": null}
+{"bit": 4, "name": "Builds", "note": null, "piece_kind": "building"}
+{"bit": 8, "name": "Transforms into", "note": null, "piece_kind": "unit_or_building"}
+{"bit": 16, "name": "Scout Unit", "note": "has auto-scout behaviour if placed at start", "piece_kind": null}

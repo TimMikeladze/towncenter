@@ -1,0 +1,37 @@
+{"id": 0, "name": "Wonders", "note": null}
+{"id": 1, "name": "Infantry", "note": null}
+{"id": 2, "name": "Heavy Warships", "note": null}
+{"id": 3, "name": "Base Pierce", "note": null}
+{"id": 4, "name": "Base Melee", "note": null}
+{"id": 5, "name": "Elephants", "note": null}
+{"id": 8, "name": "Mounted Units", "note": "except Camels"}
+{"id": 11, "name": "All Buildings", "note": null}
+{"id": 13, "name": "Stone Defense & Harbors", "note": "except Castles and Kreposts"}
+{"id": 14, "name": "Predator Animals", "note": null}
+{"id": 15, "name": "All Archers", "note": null}
+{"id": 16, "name": "Ships", "note": null}
+{"id": 17, "name": "High Pierce Armor Siege Units", "note": null}
+{"id": 18, "name": "Trees", "note": null}
+{"id": 19, "name": "Unique Units", "note": null}
+{"id": 20, "name": "Siege Units", "note": null}
+{"id": 21, "name": "Standard Buildings", "note": "All buildings except Wonders"}
+{"id": 22, "name": "Walls & Gates", "note": null}
+{"id": 23, "name": "Gunpowder Units", "note": null}
+{"id": 24, "name": "Aggressive Huntable Animals", "note": null}
+{"id": 25, "name": "Monastery Units", "note": null}
+{"id": 26, "name": "Castles & Kreposts", "note": null}
+{"id": 27, "name": "Spearmen", "note": null}
+{"id": 28, "name": "Mounted Archers", "note": null}
+{"id": 29, "name": "Shock Infantry", "note": null}
+{"id": 30, "name": "Camels", "note": null}
+{"id": 31, "name": "Unblockable Melee", "note": "Armor-ignoring melee attack against units, but not against buildings"}
+{"id": 32, "name": "Condottieri", "note": null}
+{"id": 34, "name": "Fishing Ships", "note": null}
+{"id": 35, "name": "Mamelukes", "note": null}
+{"id": 36, "name": "Heroes & Kings", "note": null}
+{"id": 37, "name": "Heavy Siege", "note": null}
+{"id": 38, "name": "Skirmishers", "note": null}
+{"id": 39, "name": "Cavalry Resistance", "note": null}
+{"id": 40, "name": "Houses", "note": null}
+{"id": 41, "name": "Fire Ships", "note": null}
+{"id": 60, "name": "Long-Range Warships", "note": null}

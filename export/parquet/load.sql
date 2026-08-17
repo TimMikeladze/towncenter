@@ -1,0 +1,17 @@
+COPY age_names FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/age_names.parquet' (FORMAT 'parquet');
+COPY buildings FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/buildings.parquet' (FORMAT 'parquet');
+COPY building_armours FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/building_armours.parquet' (FORMAT 'parquet');
+COPY building_attacks FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/building_attacks.parquet' (FORMAT 'parquet');
+COPY civilizations FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civilizations.parquet' (FORMAT 'parquet');
+COPY civ_buildings FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civ_buildings.parquet' (FORMAT 'parquet');
+COPY civ_helptexts FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civ_helptexts.parquet' (FORMAT 'parquet');
+COPY civ_names FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civ_names.parquet' (FORMAT 'parquet');
+COPY civ_techs FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civ_techs.parquet' (FORMAT 'parquet');
+COPY civ_uniques FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civ_uniques.parquet' (FORMAT 'parquet');
+COPY civ_units FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/civ_units.parquet' (FORMAT 'parquet');
+COPY node_types FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/node_types.parquet' (FORMAT 'parquet');
+COPY techs FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/techs.parquet' (FORMAT 'parquet');
+COPY units FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/units.parquet' (FORMAT 'parquet');
+COPY unit_armours FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/unit_armours.parquet' (FORMAT 'parquet');
+COPY unit_attacks FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/unit_attacks.parquet' (FORMAT 'parquet');
+COPY unit_upgrades FROM '/Users/tim/workspace/aoe2techtree/db/export/parquet/unit_upgrades.parquet' (FORMAT 'parquet');
