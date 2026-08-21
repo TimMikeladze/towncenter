@@ -1,4 +1,5 @@
 import { ArrowRight, Gauge, Heart, Shield, Swords } from "lucide-react"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { AgeBadge, Chip, TypeBadge } from "@/components/game/badges"
@@ -8,11 +9,52 @@ import { DetailHero } from "@/components/game/detail-hero"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { StatRow, StatTile } from "@/components/game/stats"
 import { BackLink, PageShell, Panel, Section } from "@/components/layout/page-shell"
+import { JsonLd } from "@/components/seo/json-ld"
 import { Button } from "@/components/ui/button"
 import { getAllUnits, getCivilizationById, getUnitById } from "@/lib/data"
 import { BASE_MELEE_CLASS, BASE_PIERCE_CLASS } from "@/lib/game/classes"
+import { entityIdFromParam } from "@/lib/game/ids"
 import { applyUpgrades, resolveUpgrades, upgradeCost } from "@/lib/game/upgrades"
+import { entityParams, technologyHref, unitHref } from "@/lib/hrefs"
+import { breadcrumbList, entityThing, pageMetadata } from "@/lib/seo"
+import { unitSeo } from "@/lib/seo/entities"
 import type { Unit } from "@/lib/types"
+
+/**
+ * Every unit page is prerendered. They are the pages search traffic lands on,
+ * the data behind them only changes when the export is regenerated, and there
+ * are only ~245 of them.
+ */
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const units = await getAllUnits()
+  return units.flatMap(entityParams)
+}
+
+/** The unit, and the civ that owns it if it is a unique — both metadata need it. */
+async function loadUnit(param: string) {
+  const unit = await getUnitById(entityIdFromParam(param))
+  if (!unit) return null
+  const civ = unit.civSpecific ? await getCivilizationById(unit.civSpecific) : null
+  return { unit, civ }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const loaded = await loadUnit(id)
+  if (!loaded) return { title: "Unit not found" }
+
+  const seo = unitSeo(loaded.unit, loaded.civ?.name)
+  return pageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: unitHref(loaded.unit),
+    imageTitle: loaded.unit.name,
+    eyebrow: seo.eyebrow,
+    imageSubtitle: seo.cardSubtitle,
+  })
+}
 
 function MatchupGrid({ units, empty }: { units: Unit[]; empty: string }) {
   if (units.length === 0) {
@@ -21,11 +63,7 @@ function MatchupGrid({ units, empty }: { units: Unit[]; empty: string }) {
   return (
     <div className="grid gap-2 sm:grid-cols-2">
       {units.map((unit) => (
-        <Link
-          key={unit.id}
-          href={`/units/${unit.id}`}
-          className="panel panel-interactive flex items-center gap-2.5 p-2.5"
-        >
+        <Link key={unit.id} href={unitHref(unit)} className="panel panel-interactive flex items-center gap-2.5 p-2.5">
           <EntityIcon src={unit.image_path} alt="" size="sm" />
           <span className="min-w-0">
             <span className="block truncate text-sm font-medium">{unit.name}</span>
@@ -41,7 +79,7 @@ function MatchupGrid({ units, empty }: { units: Unit[]; empty: string }) {
 
 export default async function UnitDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const unit = await getUnitById(id)
+  const unit = await getUnitById(entityIdFromParam(id))
 
   if (!unit) {
     notFound()
@@ -84,8 +122,27 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
     (armour) => armour.id !== BASE_MELEE_CLASS && armour.id !== BASE_PIERCE_CLASS,
   )
 
+  const seo = unitSeo(unit, civ?.name)
+
   return (
     <PageShell width="default">
+      <JsonLd
+        data={[
+          breadcrumbList([
+            { name: "Home", path: "/" },
+            { name: "Units", path: "/units" },
+            { name: unit.name, path: unitHref(unit) },
+          ]),
+          entityThing({
+            name: unit.name,
+            description: unit.description || seo.description,
+            path: unitHref(unit),
+            image: unit.image_path,
+            category: "Unit",
+            properties: seo.properties,
+          }),
+        ]}
+      />
       <BackLink href="/units" label="All units" />
 
       <DetailHero
@@ -315,7 +372,7 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
                 <div key={step.id} className="flex items-center gap-2">
                   {index > 0 && <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />}
                   <Button asChild size="sm" variant={step.id === unit.id ? "default" : "outline"}>
-                    <Link href={`/units/${step.id}`}>{step.name}</Link>
+                    <Link href={unitHref(step)}>{step.name}</Link>
                   </Button>
                 </div>
               ))}
@@ -331,7 +388,10 @@ export default async function UnitDetailPage({ params }: { params: Promise<{ id:
                         key={step.id}
                         label={
                           <Link
-                            href={`/technologies/${step.upgradeResearch?.techId}`}
+                            href={technologyHref({
+                              id: String(step.upgradeResearch?.techId),
+                              name: step.upgradeResearch?.name ?? "",
+                            })}
                             className="underline underline-offset-2"
                           >
                             {step.name}

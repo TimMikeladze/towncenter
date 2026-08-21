@@ -1,6 +1,8 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getAllUnits } from "@/lib/data"
 import { damagePerHit, damagePerSecond, hitsToKill, resourceCost, timeToKill } from "@/lib/game/combat"
+import { pageMetadata } from "@/lib/seo"
 import type { Unit } from "@/lib/types"
 import { CountersClient } from "./counters-client"
 
@@ -24,6 +26,15 @@ function matchupRow(subject: Unit, other: Unit) {
     timeToKill: Number(timeToKill(subject, other).toFixed(1)),
   }
 }
+
+export const metadata: Metadata = pageMetadata({
+  title: "AoE2 counters — what beats what",
+  description:
+    "Counter tables for every Age of Empires II: Definitive Edition unit, computed from attack bonuses, armor classes, rate of fire and resource cost — with the damage numbers behind each matchup.",
+  path: "/counters",
+  eyebrow: "Counters",
+  imageSubtitle: "Damage per hit, time to kill and cost traded, for every matchup.",
+})
 
 export default async function CountersPage({ searchParams }: { searchParams: Promise<{ unit?: string }> }) {
   const params = await searchParams

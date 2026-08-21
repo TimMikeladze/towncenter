@@ -4,6 +4,7 @@ import { Cinzel, Geist_Mono, Inter } from "next/font/google"
 import type React from "react"
 import "./globals.css"
 
+import { UmamiAnalytics } from "@/components/analytics/umami"
 import { CommandPalette } from "@/components/command-palette"
 import { AppHeader } from "@/components/layout/app-header"
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar"
@@ -12,21 +13,70 @@ import { ScrollMemory } from "@/components/layout/scroll-memory"
 import { AppChrome } from "@/components/pwa/app-chrome"
 import { ServiceWorker } from "@/components/pwa/service-worker"
 import { TouchGestures } from "@/components/pwa/touch-gestures"
+import { JsonLd } from "@/components/seo/json-ld"
 import { ThemeProvider } from "@/components/theme-provider"
 import { getSearchIndex } from "@/lib/db/queries/search-index"
+import { REPO_URL } from "@/lib/navigation"
+import {
+  AUTHOR,
+  absoluteUrl,
+  GAME_NAME,
+  GAME_REFERENCE,
+  ogImageUrl,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/seo"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" })
 // Cinzel reads as carved Roman capitals — the game's own headline voice.
 const cinzel = Cinzel({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-cinzel", display: "swap" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" })
 
-const DESCRIPTION =
-  "Complete reference guide for Age of Empires II: Definitive Edition with unit stats, civilizations, tech trees, and competitive data"
-
 export const metadata: Metadata = {
-  title: "Town Center — AoE2:DE Companion",
-  description: DESCRIPTION,
-  applicationName: "Town Center",
+  // Every relative URL in this file and in every page's metadata — canonicals,
+  // social cards, the manifest — is resolved against this. Without it Next
+  // emits relative canonicals, which crawlers ignore.
+  metadataBase: new URL(SITE_URL),
+  title: {
+    // Pages set only their own name; the suffix is added here so it can never
+    // drift between routes or get doubled up.
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  authors: [AUTHOR],
+  creator: AUTHOR.name,
+  publisher: AUTHOR.name,
+  category: "games",
+  keywords: [
+    "Age of Empires II",
+    "AoE2",
+    "AoE2 DE",
+    "Age of Empires II Definitive Edition",
+    "AoE2 unit stats",
+    "AoE2 tech tree",
+    "AoE2 civilizations",
+    "AoE2 counters",
+    "AoE2 build order reference",
+    "Age of Empires 2 units",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Rich results and Discover need permission to show the full card art;
+      // the defaults cap previews at a thumbnail.
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
@@ -44,9 +94,25 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    siteName: "Town Center",
-    title: "Town Center — AoE2:DE Companion",
-    description: DESCRIPTION,
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    locale: "en_US",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: ogImageUrl({ title: SITE_NAME, subtitle: SITE_DESCRIPTION, eyebrow: GAME_NAME }),
+        width: 1200,
+        height: 630,
+        alt: SITE_TITLE,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [ogImageUrl({ title: SITE_NAME, subtitle: SITE_DESCRIPTION, eyebrow: GAME_NAME })],
   },
 }
 
@@ -67,6 +133,39 @@ export const viewport: Viewport = {
   interactiveWidget: "resizes-content",
 }
 
+/**
+ * The site's own identity, stated once. Everything page-level (breadcrumbs, the
+ * entity itself) is declared by the page; this is only the container they sit in.
+ */
+const SITE_JSON_LD = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": absoluteUrl("/#website"),
+    name: SITE_NAME,
+    alternateName: SITE_TITLE,
+    url: SITE_URL,
+    description: SITE_DESCRIPTION,
+    inLanguage: "en",
+    about: GAME_REFERENCE,
+    author: { "@type": "Person", name: AUTHOR.name, url: AUTHOR.url },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: SITE_NAME,
+    url: SITE_URL,
+    applicationCategory: "GameApplication",
+    operatingSystem: "Any",
+    description: SITE_DESCRIPTION,
+    isAccessibleForFree: true,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    codeRepository: REPO_URL,
+    license: "https://opensource.org/licenses/MIT",
+    author: { "@type": "Person", name: AUTHOR.name, url: AUTHOR.url },
+  },
+]
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -77,6 +176,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${cinzel.variable} ${geistMono.variable}`}>
+        <JsonLd data={SITE_JSON_LD} />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AppChrome />
           <ServiceWorker />
@@ -104,6 +204,7 @@ export default async function RootLayout({
           <ScrollMemory targetId="app-scroll" />
           <CommandPalette items={searchIndex} />
           <Analytics />
+          <UmamiAnalytics />
         </ThemeProvider>
       </body>
     </html>

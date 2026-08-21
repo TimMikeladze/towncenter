@@ -1,5 +1,8 @@
+import type { Metadata } from "next"
 import { SecondaryNav } from "@/components/secondary-nav"
+import { JsonLd } from "@/components/seo/json-ld"
 import { getAllUnits } from "@/lib/data"
+import { breadcrumbList, pageMetadata } from "@/lib/seo"
 import { UnitsClient } from "./units-client"
 
 const secondaryNavItems = [
@@ -14,6 +17,17 @@ const secondaryNavItems = [
   { label: "Unique", value: "Unique" },
 ]
 
+export async function generateMetadata(): Promise<Metadata> {
+  const units = await getAllUnits()
+  return pageMetadata({
+    title: "AoE2 unit stats — every unit, cost and counter",
+    description: `Hit points, attack, armor, range, speed and cost for all ${units.length} Age of Empires II: Definitive Edition units, with the matchups each one wins and loses.`,
+    path: "/units",
+    eyebrow: "Units",
+    imageSubtitle: `All ${units.length} units, sortable by hit points, attack, cost and cost efficiency.`,
+  })
+}
+
 export default async function UnitsPage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
   const params = await searchParams
   const activeTab = params.type || "all"
@@ -23,6 +37,12 @@ export default async function UnitsPage({ searchParams }: { searchParams: Promis
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbList([
+          { name: "Home", path: "/" },
+          { name: "Units", path: "/units" },
+        ])}
+      />
       <SecondaryNav items={secondaryNavItems} defaultValue="all" currentValue={activeTab} />
       <UnitsClient allUnits={allUnits} filteredUnits={filteredUnits} />
     </>

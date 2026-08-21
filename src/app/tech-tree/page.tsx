@@ -1,6 +1,17 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getAllCivilizations, getCivTechTree } from "@/lib/data"
+import { pageMetadata } from "@/lib/seo"
 import { TechTreeClient } from "./tech-tree-client"
+
+export const metadata: Metadata = pageMetadata({
+  title: "AoE2 tech tree — what every civilization can build",
+  description:
+    "The full Age of Empires II: Definitive Edition tech tree for any civilization: every unit, building and technology it can reach, and everything it cannot.",
+  path: "/tech-tree",
+  eyebrow: "Tech tree",
+  imageSubtitle: "Pick a civilization and see everything it can train, build and research.",
+})
 
 export default async function TechTreePage({
   searchParams,

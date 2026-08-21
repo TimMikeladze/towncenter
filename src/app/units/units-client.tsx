@@ -8,6 +8,7 @@ import { CostChips } from "@/components/game/cost"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { PageHeader, PageShell } from "@/components/layout/page-shell"
 import { costEfficiency, resourceCost } from "@/lib/game/combat"
+import { unitHref } from "@/lib/hrefs"
 import type { Unit } from "@/lib/types"
 
 interface UnitsClientProps {
@@ -156,7 +157,7 @@ export function UnitsClient({ allUnits, filteredUnits }: UnitsClientProps) {
       },
     ],
 
-    itemLink: (unit) => `/units/${unit.id}`,
+    itemLink: unitHref,
   }
 
   return (

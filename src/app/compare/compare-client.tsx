@@ -11,6 +11,7 @@ import { UnitPicker } from "@/components/game/unit-picker"
 import { PageHeader, PageShell, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { unitHref } from "@/lib/hrefs"
 import type { UnitCost } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -170,7 +171,7 @@ export function CompareClient({ units, selected, maxUnits, age }: CompareClientP
               <div className="p-3" />
               {selected.map((unit) => (
                 <div key={unit.id} className="space-y-1.5 p-3">
-                  <Link href={`/units/${unit.id}`} className="flex items-center gap-2 hover:underline">
+                  <Link href={unitHref(unit)} className="flex items-center gap-2 hover:underline">
                     <EntityIcon src={unit.image_path} alt="" size="sm" />
                     <span className="min-w-0 truncate font-display font-semibold">{unit.name}</span>
                   </Link>

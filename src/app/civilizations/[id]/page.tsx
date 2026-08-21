@@ -1,4 +1,5 @@
 import { Castle, Network, Scroll, Swords, Users } from "lucide-react"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { AgeBadge, Chip } from "@/components/game/badges"
@@ -7,10 +8,43 @@ import { DetailHero } from "@/components/game/detail-hero"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { StatTile } from "@/components/game/stats"
 import { BackLink, PageShell, Panel, Section } from "@/components/layout/page-shell"
+import { JsonLd } from "@/components/seo/json-ld"
 import { Button } from "@/components/ui/button"
-import { getAllTechnologies, getAllUnits, getCivilizationById } from "@/lib/data"
+import { getAllCivilizations, getAllTechnologies, getAllUnits, getCivilizationById } from "@/lib/data"
+import { civilizationHref, technologyHref, unitHref } from "@/lib/hrefs"
+import { breadcrumbList, entityThing, pageMetadata } from "@/lib/seo"
+import { civilizationSeo } from "@/lib/seo/entities"
 
 const MISSING_PREVIEW = 12
+
+/** 53 civs, all prerendered — these are the pages people search by name. */
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const civs = await getAllCivilizations()
+  return civs.map((civ) => ({ id: civ.id }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+  const civ = await getCivilizationById(id)
+  if (!civ) return { title: "Civilization not found" }
+
+  const units = await getAllUnits()
+  const uniqueNames = civ.uniqueUnits
+    .map((unitId) => units.find((unit) => unit.id === unitId)?.name)
+    .filter((name): name is string => !!name)
+
+  const seo = civilizationSeo(civ, uniqueNames)
+  return pageMetadata({
+    title: seo.title,
+    description: seo.description,
+    path: civilizationHref(civ),
+    imageTitle: civ.name,
+    eyebrow: seo.eyebrow,
+    imageSubtitle: seo.cardSubtitle,
+  })
+}
 
 const BONUS_TONE: Record<string, string> = {
   military: "var(--type-infantry)",
@@ -39,8 +73,30 @@ export default async function CivilizationDetailPage({ params }: { params: Promi
   const missingTechs = civ.techTree.missingTechs.map((techId) => techById.get(techId)).filter((tech) => !!tech)
   const bonuses = civ.bonuses.filter((bonus) => bonus.category !== "team")
 
+  const seo = civilizationSeo(
+    civ,
+    uniqueUnits.map((unit) => unit.name),
+  )
+
   return (
     <PageShell width="default">
+      <JsonLd
+        data={[
+          breadcrumbList([
+            { name: "Home", path: "/" },
+            { name: "Civilizations", path: "/civilizations" },
+            { name: civ.name, path: civilizationHref(civ) },
+          ]),
+          entityThing({
+            name: civ.name,
+            description: seo.description,
+            path: civilizationHref(civ),
+            image: civ.image_path,
+            category: "Civilization",
+            properties: seo.properties,
+          }),
+        ]}
+      />
       <BackLink href="/civilizations" label="All civilizations" />
 
       <DetailHero
@@ -105,7 +161,7 @@ export default async function CivilizationDetailPage({ params }: { params: Promi
         <Section title="Unique units" description={`Trained only by ${civ.name}`}>
           <div className="grid gap-3 sm:grid-cols-2">
             {uniqueUnits.map((unit) => (
-              <Link key={unit.id} href={`/units/${unit.id}`} className="panel panel-interactive block p-3.5">
+              <Link key={unit.id} href={unitHref(unit)} className="panel panel-interactive block p-3.5">
                 <div className="flex items-center gap-2.5">
                   <EntityIcon src={unit.image_path} alt="" size="md" />
                   <div className="min-w-0">
@@ -130,7 +186,7 @@ export default async function CivilizationDetailPage({ params }: { params: Promi
         <Section title="Unique technologies" description="Researched at the Castle">
           <div className="grid gap-3 sm:grid-cols-2">
             {uniqueTechs.map((tech, index) => (
-              <Link key={tech.id} href={`/technologies/${tech.id}`} className="panel panel-interactive block p-3.5">
+              <Link key={tech.id} href={technologyHref(tech)} className="panel panel-interactive block p-3.5">
                 <div className="flex items-center justify-between gap-2">
                   <p className="truncate font-display font-semibold">{tech.name}</p>
                   <AgeBadge age={tech.age} />

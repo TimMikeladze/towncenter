@@ -1,12 +1,23 @@
+import type { Metadata } from "next"
 import { getAllUnits } from "@/lib/data"
 import { BASE_MELEE_CLASS, BASE_PIERCE_CLASS } from "@/lib/game/classes"
 import { costEfficiency, resourceCost } from "@/lib/game/combat"
 import { applyUpgrades, resolveUpgrades } from "@/lib/game/upgrades"
+import { pageMetadata } from "@/lib/seo"
 import type { Age } from "@/lib/types"
 import { CompareClient, type CompareUnit } from "./compare-client"
 
 const MAX_UNITS = 4
 const AGES: Age[] = ["Feudal", "Castle", "Imperial"]
+
+export const metadata: Metadata = pageMetadata({
+  title: "Compare AoE2 units side by side",
+  description:
+    "Put up to four Age of Empires II: Definitive Edition units next to each other — hit points, attack, armor, range, speed, cost and cost efficiency, at any age with upgrades applied.",
+  path: "/compare",
+  eyebrow: "Compare",
+  imageSubtitle: "Up to four units, every stat, with age upgrades applied.",
+})
 
 export default async function ComparePage({
   searchParams,

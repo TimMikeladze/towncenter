@@ -1,9 +1,13 @@
 import { ArrowRight } from "lucide-react"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Chip } from "@/components/game/badges"
 import { EmptyState } from "@/components/game/empty-state"
 import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import patchChanges from "@/data/patch-changes.json"
+import { civId } from "@/lib/game/ids"
+import { civilizationHref } from "@/lib/hrefs"
+import { pageMetadata } from "@/lib/seo"
 
 interface FieldChange {
   field: string
@@ -49,6 +53,15 @@ function Delta({ change }: { change: FieldChange }) {
   )
 }
 
+export const metadata: Metadata = pageMetadata({
+  title: "AoE2 patch changes — what the latest data export changed",
+  description:
+    "Stat-by-stat differences between the current Age of Empires II: Definitive Edition game-data export and the previous one: units, buildings and technologies added, removed and rebalanced.",
+  path: "/changes",
+  eyebrow: "Patch changes",
+  imageSubtitle: "Every unit, building and technology stat that moved since the last export.",
+})
+
 export default function ChangesPage() {
   const tables = patchChanges.tables as Record<string, TableDiff>
   const newCivs = patchChanges.civilizations?.added ?? []
@@ -70,7 +83,7 @@ export default function ChangesPage() {
         <Section title="New civilizations" description={`${newCivs.length} added`}>
           <div className="flex flex-wrap gap-1.5">
             {newCivs.map((civ: string) => (
-              <Link key={civ} href={`/civilizations/${civ.toLowerCase()}`}>
+              <Link key={civ} href={civilizationHref({ id: civId(civ), name: civ })}>
                 <Chip tone="var(--primary)" className="px-2 py-1">
                   {civ}
                 </Chip>

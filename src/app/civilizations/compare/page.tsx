@@ -1,8 +1,10 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Chip } from "@/components/game/badges"
 import { EmptyState } from "@/components/game/empty-state"
 import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { compareCivilizations, getAllCivilizations } from "@/lib/data"
+import { pageMetadata } from "@/lib/seo"
 import type { Building, Technology, Unit } from "@/lib/types"
 import { CivComparePicker } from "./compare-client"
 
@@ -50,6 +52,15 @@ function DiffColumn({ diff }: { diff: Diff }) {
     </div>
   )
 }
+
+export const metadata: Metadata = pageMetadata({
+  title: "Compare AoE2 civilizations",
+  description:
+    "Put two Age of Empires II: Definitive Edition civilizations side by side and see exactly which units, buildings and technologies one has that the other does not.",
+  path: "/civilizations/compare",
+  eyebrow: "Compare civilizations",
+  imageSubtitle: "Which units, buildings and technologies one civ has that the other lacks.",
+})
 
 export default async function CivilizationComparePage({
   searchParams,

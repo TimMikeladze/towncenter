@@ -7,6 +7,7 @@ import { AgeBadge, Chip } from "@/components/game/badges"
 import { CostChips } from "@/components/game/cost"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { PageHeader, PageShell } from "@/components/layout/page-shell"
+import { buildingHref } from "@/lib/hrefs"
 import type { Building } from "@/lib/types"
 
 interface BuildingsClientProps {
@@ -138,7 +139,7 @@ export function BuildingsClient({ allBuildings, filteredBuildings }: BuildingsCl
       },
     ],
 
-    itemLink: (building) => `/buildings/${building.id}`,
+    itemLink: buildingHref,
   }
 
   return (

@@ -1,4 +1,5 @@
 import { cache } from "react"
+import { buildingHref, civilizationHref, technologyHref, unitHref } from "@/lib/hrefs"
 import { getAllBuildings } from "./buildings"
 import { getAllCivilizations } from "./civilizations"
 import { getAllTechnologies } from "./technologies"
@@ -28,7 +29,7 @@ export const getSearchIndex = cache(async (): Promise<SearchEntry[]> => {
         name: unit.name,
         kind: "Unit",
         subtitle: `${unit.type} • ${unit.age} Age`,
-        href: `/units/${unit.id}`,
+        href: unitHref(unit),
       }),
     ),
     ...civs.map(
@@ -37,7 +38,7 @@ export const getSearchIndex = cache(async (): Promise<SearchEntry[]> => {
         name: civ.name,
         kind: "Civilization",
         subtitle: civ.types.join(" / "),
-        href: `/civilizations/${civ.id}`,
+        href: civilizationHref(civ),
       }),
     ),
     ...techs.map(
@@ -46,7 +47,7 @@ export const getSearchIndex = cache(async (): Promise<SearchEntry[]> => {
         name: tech.name,
         kind: "Technology",
         subtitle: `${tech.category} • ${tech.age} Age`,
-        href: `/technologies/${tech.id}`,
+        href: technologyHref(tech),
       }),
     ),
     ...buildings.map(
@@ -55,7 +56,7 @@ export const getSearchIndex = cache(async (): Promise<SearchEntry[]> => {
         name: building.name,
         kind: "Building",
         subtitle: `${building.type} • ${building.age} Age`,
-        href: `/buildings/${building.id}`,
+        href: buildingHref(building),
       }),
     ),
   ]

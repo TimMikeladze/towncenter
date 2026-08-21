@@ -2,10 +2,30 @@ import { ArrowRight, Search } from "lucide-react"
 import Link from "next/link"
 import { PageShell, Section } from "@/components/layout/page-shell"
 import { SearchTrigger } from "@/components/search-trigger"
+import { JsonLd } from "@/components/seo/json-ld"
 import { Button } from "@/components/ui/button"
 import { getAllBuildings, getAllCivilizations, getAllTechnologies, getAllUnits } from "@/lib/data"
 import { NAV_ITEMS } from "@/lib/navigation"
+import { absoluteUrl, SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo"
 import { cn } from "@/lib/utils"
+
+/**
+ * The sections, stated as a list. It is the same set the page links to — the
+ * markup is a hint for sitelinks, not a second source of truth.
+ */
+const HOME_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  url: absoluteUrl("/"),
+  hasPart: NAV_ITEMS.map((item) => ({
+    "@type": "WebPage",
+    name: item.label,
+    description: item.description,
+    url: absoluteUrl(item.href),
+  })),
+}
 
 export default async function HomePage() {
   const [units, civs, buildings, techs] = await Promise.all([
@@ -24,6 +44,7 @@ export default async function HomePage() {
 
   return (
     <PageShell>
+      <JsonLd data={HOME_JSON_LD} />
       <section className="panel overflow-hidden">
         <div className="space-y-4 border-b px-4 py-6 sm:space-y-5 sm:px-8 sm:py-12">
           <p className="label-caps">Age of Empires II: Definitive Edition</p>

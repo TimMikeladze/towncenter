@@ -11,6 +11,7 @@ import { StatTile } from "@/components/game/stats"
 import { PageHeader, PageShell, Section } from "@/components/layout/page-shell"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { unitHref } from "@/lib/hrefs"
 
 interface MatchupRow {
   id: string
@@ -72,7 +73,7 @@ function MatchupList({
   return (
     <div className="space-y-2">
       {rows.map((row) => (
-        <Link key={row.id} href={`/units/${row.id}`} className="panel panel-interactive block p-3">
+        <Link key={row.id} href={unitHref(row)} className="panel panel-interactive block p-3">
           <div className="flex items-start justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2.5">
               <EntityIcon src={row.image_path} alt="" size="sm" />
@@ -165,7 +166,7 @@ export function CountersClient({ units, unit, goodAgainst, counteredBy }: Counte
         description={unit.description}
         actions={
           <Button asChild size="sm" variant="outline">
-            <Link href={`/units/${unit.id}`}>Full stats</Link>
+            <Link href={unitHref(unit)}>Full stats</Link>
           </Button>
         }
         stats={

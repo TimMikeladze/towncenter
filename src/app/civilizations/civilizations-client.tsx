@@ -6,6 +6,7 @@ import { DataViewer } from "@/components/data-viewer"
 import { Chip } from "@/components/game/badges"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { PageHeader, PageShell } from "@/components/layout/page-shell"
+import { civilizationHref } from "@/lib/hrefs"
 import type { Civilization } from "@/lib/types"
 
 interface CivilizationsClientProps {
@@ -123,7 +124,7 @@ export function CivilizationsClient({ allCivs, filteredCivs }: CivilizationsClie
       },
     ],
 
-    itemLink: (civ) => `/civilizations/${civ.id}`,
+    itemLink: civilizationHref,
   }
 
   return (

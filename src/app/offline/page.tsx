@@ -1,12 +1,19 @@
 import { CloudOff } from "lucide-react"
+import type { Metadata } from "next"
 import Link from "next/link"
 import { PageShell } from "@/components/layout/page-shell"
 import { RetryButton } from "@/components/pwa/retry-button"
 import { Button } from "@/components/ui/button"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
-  title: "Offline — Town Center",
-}
+export const metadata: Metadata = pageMetadata({
+  title: "Offline",
+  description: "Town Center could not reach the network. Pages already visited on this device still work.",
+  path: "/offline",
+  // A service-worker fallback with no content of its own — nothing to index,
+  // and indexing it would put an error page in the results for the site name.
+  noIndex: true,
+})
 
 /**
  * What the service worker serves for a page that was never visited while the

@@ -7,6 +7,7 @@ import { AgeBadge, Chip } from "@/components/game/badges"
 import { CostChips } from "@/components/game/cost"
 import { EntityIcon } from "@/components/game/entity-icon"
 import { PageHeader, PageShell } from "@/components/layout/page-shell"
+import { technologyHref } from "@/lib/hrefs"
 import type { Technology } from "@/lib/types"
 
 interface TechnologiesClientProps {
@@ -115,7 +116,7 @@ export function TechnologiesClient({ allTechs, filteredTechs }: TechnologiesClie
       },
     ],
 
-    itemLink: (tech) => `/technologies/${tech.id}`,
+    itemLink: technologyHref,
   }
 
   return (

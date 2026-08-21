@@ -9,6 +9,7 @@ import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AGES } from "@/lib/game/classes"
+import { civilizationHref } from "@/lib/hrefs"
 import type { CivBonus, TechTreeKind, TechTreeNode } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -136,7 +137,7 @@ export function TechTreeClient({ civs, civ, roots, counts, selectedAge }: TechTr
         actions={
           <>
             <Button asChild variant="outline">
-              <Link href={`/civilizations/${civ.id}`}>{civ.name} details</Link>
+              <Link href={civilizationHref(civ)}>{civ.name} details</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href={`/civilizations/compare?a=${civ.id}`}>Compare civs</Link>

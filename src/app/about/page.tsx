@@ -1,11 +1,16 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Panel, Section } from "@/components/layout/page-shell"
 import { REPO_URL } from "@/lib/navigation"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "About — Town Center",
-  description: "Who built Town Center, where its Age of Empires II data comes from, and how to get in touch.",
-}
+export const metadata: Metadata = pageMetadata({
+  title: "About",
+  description:
+    "Who built Town Center, where its Age of Empires II: Definitive Edition data comes from, which numbers are computed rather than read from the game files, and how to report a wrong one.",
+  path: "/about",
+  eyebrow: "Colophon",
+  imageSubtitle: "An open-source AoE2: DE reference, generated from the game files.",
+})
 
 const LINK = "font-medium text-foreground underline underline-offset-4 hover:text-primary"
 

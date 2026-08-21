@@ -1,14 +1,18 @@
 import type { Metadata } from "next"
 import { getAllCivilizations, getAllUnits } from "@/lib/data"
 import { getCivUpgradeAvailability } from "@/lib/db/queries/civ-upgrades"
+import { pageMetadata } from "@/lib/seo"
 import type { Unit } from "@/lib/types"
 import { BattleClient, type BattleUnit } from "./battle-client"
 
-export const metadata: Metadata = {
-  title: "Battle simulator — Town Center",
+export const metadata: Metadata = pageMetadata({
+  title: "AoE2 battle simulator — resolve any fight",
   description:
-    "Resolve any Age of Empires II fight: pick two units, set the counts and upgrades, and see who wins, how long it takes and what the trade costs.",
-}
+    "Resolve any Age of Empires II: Definitive Edition fight: pick two units, set the counts, civilizations and upgrades, and see who wins, how long it takes and what the trade costs.",
+  path: "/battle",
+  eyebrow: "Battle simulator",
+  imageSubtitle: "Pick two units, set counts and upgrades, see who wins and what it costs.",
+})
 
 /** Combat maths only needs stats and cost, so the client payload drops the prose. */
 function toBattleUnit(unit: Unit): BattleUnit {
