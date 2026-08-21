@@ -5,7 +5,7 @@
  */
 import type { Metadata } from "next"
 
-const FALLBACK_SITE_URL = "https://towncenter-zeta.vercel.app"
+const FALLBACK_SITE_URL = "https://towncenter.vercel.app"
 
 /**
  * Canonical URLs, `metadataBase`, the sitemap and robots.txt all need one

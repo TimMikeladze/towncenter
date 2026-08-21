@@ -29,10 +29,10 @@ Run them in that order: the diff compares the fresh export against the last comm
 
 Every route sets its own title, description, canonical URL and social card, and the four entity routes prerender one static page per unit, civilization, building and technology. `sitemap.xml` and `robots.txt` are generated from the same data.
 
-Canonicals and the sitemap need one absolute origin. It comes from `NEXT_PUBLIC_SITE_URL`, falling back to Vercel's production hostname and then to the deployed default — so preview deployments point their canonicals at production rather than advertising themselves.
+Canonicals and the sitemap need one absolute origin, and it has to be the same one on every host the deployment answers to. It comes from `NEXT_PUBLIC_SITE_URL`, falling back to Vercel's production hostname and then to `https://towncenter.vercel.app` — so previews and the project's other `.vercel.app` aliases point their canonicals at production rather than advertising themselves as a second copy of the site.
 
 ```bash
-vercel env add NEXT_PUBLIC_SITE_URL production   # once a custom domain is attached
+vercel env add NEXT_PUBLIC_SITE_URL production   # https://towncenter.vercel.app
 ```
 
 Detail URLs carry a slug after the game's numeric id (`/units/38-knight`). The bare id is a permanent redirect to it, generated from the export in `next.config.ts`; `src/lib/hrefs.ts` is the only place that builds these paths. Social cards are drawn on demand by `/api/og` and cached at the edge.
