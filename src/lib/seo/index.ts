@@ -4,6 +4,7 @@
  * JSON-LD — that every route reaches for instead of hand-rolling its own tags.
  */
 import type { Metadata } from "next"
+import { SOCIAL_CARD_SIZE, SOCIAL_CARD_TITLES, type SocialCardSection, socialCardSection } from "./social-card"
 
 const FALLBACK_SITE_URL = "https://towncenter.vercel.app"
 
@@ -49,10 +50,18 @@ export function absoluteUrl(path = "/"): string {
  * time: there are ~530 entity pages, and rendering an image for each one would
  * cost more build minutes than the cards are worth. The CDN caches them.
  */
-export function ogImageUrl(params: { title: string; subtitle?: string; eyebrow?: string }): string {
+export function ogImageUrl(params: {
+  title: string
+  subtitle?: string
+  eyebrow?: string
+  section?: SocialCardSection
+  artwork?: string | null
+}): string {
   const query = new URLSearchParams({ title: params.title })
   if (params.subtitle) query.set("subtitle", params.subtitle)
   if (params.eyebrow) query.set("eyebrow", params.eyebrow)
+  if (params.section) query.set("section", params.section)
+  if (params.artwork) query.set("artwork", params.artwork)
   return absoluteUrl(`/api/og?${query.toString()}`)
 }
 
@@ -66,12 +75,14 @@ export interface PageMetadataInput {
   image?: string
   /** Card eyebrow, e.g. "Unit" or "Civilization". */
   eyebrow?: string
-  /** Card headline; defaults to the page title. Detail pages pass the bare
+  /** Card headline; defaults to the section name. Detail pages pass the bare
    *  entity name, because the keyword tail that helps in a SERP only clutters
    *  a social card. */
   imageTitle?: string
   /** Card second line; defaults to the description. */
   imageSubtitle?: string
+  /** Entity artwork path within public/. */
+  imageArtwork?: string | null
   noIndex?: boolean
 }
 
@@ -83,12 +94,16 @@ export interface PageMetadataInput {
  */
 export function pageMetadata(input: PageMetadataInput): Metadata {
   const url = absoluteUrl(input.path)
+  const section = socialCardSection(input.path)
+  const imageTitle = input.imageTitle ?? (section ? SOCIAL_CARD_TITLES[section] : input.title)
   const image =
     input.image ??
     ogImageUrl({
-      title: input.imageTitle ?? input.title,
+      title: imageTitle,
       subtitle: input.imageSubtitle ?? input.description,
       eyebrow: input.eyebrow,
+      section,
+      artwork: input.imageArtwork,
     })
 
   return {
@@ -102,7 +117,7 @@ export function pageMetadata(input: PageMetadataInput): Metadata {
       url,
       title: input.title,
       description: input.description,
-      images: [{ url: image, width: 1200, height: 630, alt: input.title }],
+      images: [{ url: image, ...SOCIAL_CARD_SIZE, alt: imageTitle }],
     },
     twitter: {
       card: "summary_large_image",

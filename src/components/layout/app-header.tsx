@@ -1,6 +1,6 @@
 "use client"
 
-import { Github, Info, Search } from "lucide-react"
+import { GitFork, Info, Search } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { OPEN_PALETTE_EVENT } from "@/components/command-palette"
@@ -70,7 +70,7 @@ export function AppHeader() {
 
           <Button asChild variant="ghost" size="icon" className="press touch-target">
             <a href={REPO_URL} target="_blank" rel="noreferrer noopener" aria-label="Source on GitHub">
-              <Github className="h-4 w-4" />
+              <GitFork className="h-4 w-4" />
             </a>
           </Button>
 

@@ -13,6 +13,7 @@
 ## Task 1: Install Dependencies and Setup DuckDB
 
 **Files:**
+
 - Modify: `package.json`
 
 **Step 1: Install @duckdb/node-api**
@@ -37,6 +38,7 @@ git commit -m "feat: add @duckdb/node-api dependency"
 ## Task 2: Create DuckDB Connection Module
 
 **Files:**
+
 - Create: `src/lib/db/connection.ts`
 
 **Step 1: Create db directory**
@@ -49,14 +51,14 @@ Expected: Directory created
 Create `src/lib/db/connection.ts`:
 
 ```typescript
-import { DuckDBInstance, DuckDBConnection } from '@duckdb/node-api'
-import path from 'path'
+import { DuckDBInstance, DuckDBConnection } from "@duckdb/node-api"
+import path from "path"
 
 let instance: DuckDBInstance | null = null
 let connection: DuckDBConnection | null = null
 
-const PARQUET_DIR = path.join(process.cwd(), 'export', 'parquet')
-const IMG_DIR = path.join(process.cwd(), 'export', 'img')
+const PARQUET_DIR = path.join(process.cwd(), "export", "parquet")
+const IMG_DIR = path.join(process.cwd(), "export", "img")
 
 export async function getConnection(): Promise<DuckDBConnection> {
   if (connection) {
@@ -64,7 +66,7 @@ export async function getConnection(): Promise<DuckDBConnection> {
   }
 
   // Create in-memory DuckDB instance
-  instance = await DuckDBInstance.create(':memory:')
+  instance = await DuckDBInstance.create(":memory:")
   connection = await instance.connect()
 
   // Load all parquet files into tables
@@ -171,9 +173,9 @@ Create a test script to verify:
 
 ```typescript
 // Test in development console:
-import { getConnection } from './src/lib/db/connection'
+import { getConnection } from "./src/lib/db/connection"
 const conn = await getConnection()
-const result = await conn.runAndReadAll('SELECT COUNT(*) as count FROM civilizations')
+const result = await conn.runAndReadAll("SELECT COUNT(*) as count FROM civilizations")
 console.log(result.getRowObjects())
 ```
 
@@ -189,6 +191,7 @@ git commit -m "feat: create DuckDB connection module with parquet loading"
 ## Task 3: Configure Next.js for Static Assets
 
 **Files:**
+
 - Modify: `next.config.ts`
 
 **Step 1: Add export/img to public access**
@@ -196,7 +199,7 @@ git commit -m "feat: create DuckDB connection module with parquet loading"
 Update `next.config.ts`:
 
 ```typescript
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
@@ -205,14 +208,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/img/:path*',
-        destination: '/export/img/:path*',
+        source: "/img/:path*",
+        destination: "/export/img/:path*",
       },
     ]
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
 ```
 
 **Step 2: Create symbolic link or copy images**
@@ -232,6 +235,7 @@ git commit -m "feat: configure Next.js to serve export/img assets"
 ## Task 4: Create Data Query Functions for Civilizations
 
 **Files:**
+
 - Create: `src/lib/db/queries/civilizations.ts`
 
 **Step 1: Create queries directory**
@@ -244,8 +248,8 @@ Expected: Directory created
 Create `src/lib/db/queries/civilizations.ts`:
 
 ```typescript
-import { getConnection } from '../connection'
-import type { Civilization } from '@/lib/types'
+import { getConnection } from "../connection"
+import type { Civilization } from "@/lib/types"
 
 export async function getAllCivilizations(): Promise<Civilization[]> {
   const conn = await getConnection()
@@ -269,31 +273,28 @@ export async function getAllCivilizations(): Promise<Civilization[]> {
   // Note: This is a simplified mapping - you'll need to enrich with bonuses,
   // strengths, weaknesses, etc. from other tables or JSON data
   return rows.map((row: any) => ({
-    id: row.name.toLowerCase().replace(/\s+/g, '-'),
+    id: row.name.toLowerCase().replace(/\s+/g, "-"),
     name: row.name,
     type: "Archer", // TODO: Derive from civ characteristics
     bonuses: [], // TODO: Query from additional tables or supplement
-    uniqueUnits: [
-      row.castle_age_unique_unit?.toString(),
-      row.imperial_age_unique_unit?.toString()
-    ].filter(Boolean),
+    uniqueUnits: [row.castle_age_unique_unit?.toString(), row.imperial_age_unique_unit?.toString()].filter(Boolean),
     uniqueTechs: {
       castle: row.castle_age_unique_tech?.toString() || "",
-      imperial: row.imperial_age_unique_tech?.toString() || ""
+      imperial: row.imperial_age_unique_tech?.toString() || "",
     },
     teamBonus: "", // TODO: Supplement from additional data
     strengths: [], // TODO: Supplement from additional data
     weaknesses: [], // TODO: Supplement from additional data
     techTree: {
       missingUnits: [],
-      missingTechs: []
-    }
+      missingTechs: [],
+    },
   }))
 }
 
 export async function getCivilizationById(id: string): Promise<Civilization | null> {
   const civs = await getAllCivilizations()
-  return civs.find(c => c.id === id) || null
+  return civs.find((c) => c.id === id) || null
 }
 ```
 
@@ -309,6 +310,7 @@ git commit -m "feat: add DuckDB civilization queries"
 ## Task 5: Create Data Query Functions for Units
 
 **Files:**
+
 - Create: `src/lib/db/queries/units.ts`
 
 **Step 1: Write unit queries**
@@ -316,8 +318,8 @@ git commit -m "feat: add DuckDB civilization queries"
 Create `src/lib/db/queries/units.ts`:
 
 ```typescript
-import { getConnection } from '../connection'
-import type { Unit, UnitType, Age } from '@/lib/types'
+import { getConnection } from "../connection"
+import type { Unit, UnitType, Age } from "@/lib/types"
 
 export async function getAllUnits(): Promise<Unit[]> {
   const conn = await getConnection()
@@ -375,23 +377,23 @@ export async function getAllUnits(): Promise<Unit[]> {
 
 function deriveUnitType(internalName: string): string {
   const name = internalName.toLowerCase()
-  if (name.includes('arch') || name.includes('skirm')) return 'Archer'
-  if (name.includes('knight') || name.includes('camel') || name.includes('cav')) return 'Cavalry'
-  if (name.includes('spear') || name.includes('sword') || name.includes('militia')) return 'Infantry'
-  if (name.includes('monk')) return 'Monk'
-  if (name.includes('ram') || name.includes('onager') || name.includes('treb')) return 'Siege'
-  return 'Unique'
+  if (name.includes("arch") || name.includes("skirm")) return "Archer"
+  if (name.includes("knight") || name.includes("camel") || name.includes("cav")) return "Cavalry"
+  if (name.includes("spear") || name.includes("sword") || name.includes("militia")) return "Infantry"
+  if (name.includes("monk")) return "Monk"
+  if (name.includes("ram") || name.includes("onager") || name.includes("treb")) return "Siege"
+  return "Unique"
 }
 
 export async function getUnitById(id: string): Promise<Unit | null> {
   const units = await getAllUnits()
-  return units.find(u => u.id === id) || null
+  return units.find((u) => u.id === id) || null
 }
 
 export async function getUnitsByType(type: string): Promise<Unit[]> {
-  if (type === 'all') return getAllUnits()
+  if (type === "all") return getAllUnits()
   const units = await getAllUnits()
-  return units.filter(u => u.type === type)
+  return units.filter((u) => u.type === type)
 }
 ```
 
@@ -407,6 +409,7 @@ git commit -m "feat: add DuckDB unit queries"
 ## Task 6: Create Data Query Functions for Buildings
 
 **Files:**
+
 - Create: `src/lib/db/queries/buildings.ts`
 
 **Step 1: Write building queries**
@@ -414,8 +417,8 @@ git commit -m "feat: add DuckDB unit queries"
 Create `src/lib/db/queries/buildings.ts`:
 
 ```typescript
-import { getConnection } from '../connection'
-import type { Building, Age } from '@/lib/types'
+import { getConnection } from "../connection"
+import type { Building, Age } from "@/lib/types"
 
 export async function getAllBuildings(): Promise<Building[]> {
   const conn = await getConnection()
@@ -455,24 +458,24 @@ export async function getAllBuildings(): Promise<Building[]> {
 
 function deriveBuildingType(internalName: string): string {
   const name = internalName.toLowerCase()
-  if (name.includes('barrack') || name.includes('stable') || name.includes('range')) return 'Military'
-  if (name.includes('mill') || name.includes('farm') || name.includes('market')) return 'Eco'
-  if (name.includes('tower') || name.includes('outpost')) return 'Tower'
-  if (name.includes('wall') || name.includes('palisade')) return 'Wall'
-  if (name.includes('gate')) return 'Gate'
-  if (name.includes('university') || name.includes('monastery')) return 'Science'
-  return 'Special'
+  if (name.includes("barrack") || name.includes("stable") || name.includes("range")) return "Military"
+  if (name.includes("mill") || name.includes("farm") || name.includes("market")) return "Eco"
+  if (name.includes("tower") || name.includes("outpost")) return "Tower"
+  if (name.includes("wall") || name.includes("palisade")) return "Wall"
+  if (name.includes("gate")) return "Gate"
+  if (name.includes("university") || name.includes("monastery")) return "Science"
+  return "Special"
 }
 
 export async function getBuildingById(id: string): Promise<Building | null> {
   const buildings = await getAllBuildings()
-  return buildings.find(b => b.id === id) || null
+  return buildings.find((b) => b.id === id) || null
 }
 
 export async function getBuildingsByType(type: string): Promise<Building[]> {
-  if (type === 'all') return getAllBuildings()
+  if (type === "all") return getAllBuildings()
   const buildings = await getAllBuildings()
-  return buildings.filter(b => b.type === type)
+  return buildings.filter((b) => b.type === type)
 }
 ```
 
@@ -488,6 +491,7 @@ git commit -m "feat: add DuckDB building queries"
 ## Task 7: Create Data Query Functions for Technologies
 
 **Files:**
+
 - Create: `src/lib/db/queries/technologies.ts`
 
 **Step 1: Write technology queries**
@@ -495,8 +499,8 @@ git commit -m "feat: add DuckDB building queries"
 Create `src/lib/db/queries/technologies.ts`:
 
 ```typescript
-import { getConnection } from '../connection'
-import type { Technology, Age } from '@/lib/types'
+import { getConnection } from "../connection"
+import type { Technology, Age } from "@/lib/types"
 
 export async function getAllTechnologies(): Promise<Technology[]> {
   const conn = await getConnection()
@@ -512,7 +516,7 @@ export async function getAllTechnologies(): Promise<Technology[]> {
   return rows.map((row: any) => ({
     id: row.id.toString(),
     name: row.internal_name,
-    category: "Blacksmith" as Technology['category'], // TODO: Derive
+    category: "Blacksmith" as Technology["category"], // TODO: Derive
     age: "Castle" as Age, // TODO: Derive from civ_techs
     cost: {
       food: row.cost_food || undefined,
@@ -530,13 +534,13 @@ export async function getAllTechnologies(): Promise<Technology[]> {
 
 export async function getTechnologyById(id: string): Promise<Technology | null> {
   const techs = await getAllTechnologies()
-  return techs.find(t => t.id === id) || null
+  return techs.find((t) => t.id === id) || null
 }
 
 export async function getTechnologiesByCategory(category: string): Promise<Technology[]> {
-  if (category === 'all') return getAllTechnologies()
+  if (category === "all") return getAllTechnologies()
   const techs = await getAllTechnologies()
-  return techs.filter(t => t.category === category)
+  return techs.filter((t) => t.category === category)
 }
 ```
 
@@ -552,6 +556,7 @@ git commit -m "feat: add DuckDB technology queries"
 ## Task 8: Update Main Data Layer with DuckDB Queries
 
 **Files:**
+
 - Modify: `src/lib/data.ts`
 
 **Step 1: Replace imports and functions**
@@ -562,10 +567,25 @@ Update `src/lib/data.ts`:
 import type { Unit, Civilization, BuildOrder, Matchup, Building, Technology, Map } from "@/lib/types"
 
 // Import DuckDB queries
-import { getAllUnits as dbGetAllUnits, getUnitById as dbGetUnitById, getUnitsByType as dbGetUnitsByType } from "./db/queries/units"
-import { getAllCivilizations as dbGetAllCivilizations, getCivilizationById as dbGetCivilizationById } from "./db/queries/civilizations"
-import { getAllBuildings as dbGetAllBuildings, getBuildingById as dbGetBuildingById, getBuildingsByType as dbGetBuildingsByType } from "./db/queries/buildings"
-import { getAllTechnologies as dbGetAllTechnologies, getTechnologyById as dbGetTechnologyById, getTechnologiesByCategory as dbGetTechnologiesByCategory } from "./db/queries/technologies"
+import {
+  getAllUnits as dbGetAllUnits,
+  getUnitById as dbGetUnitById,
+  getUnitsByType as dbGetUnitsByType,
+} from "./db/queries/units"
+import {
+  getAllCivilizations as dbGetAllCivilizations,
+  getCivilizationById as dbGetCivilizationById,
+} from "./db/queries/civilizations"
+import {
+  getAllBuildings as dbGetAllBuildings,
+  getBuildingById as dbGetBuildingById,
+  getBuildingsByType as dbGetBuildingsByType,
+} from "./db/queries/buildings"
+import {
+  getAllTechnologies as dbGetAllTechnologies,
+  getTechnologyById as dbGetTechnologyById,
+  getTechnologiesByCategory as dbGetTechnologiesByCategory,
+} from "./db/queries/technologies"
 
 // Keep mock data for features not yet migrated
 import { buildOrders } from "@/data/build-orders"
@@ -577,7 +597,7 @@ export async function getAllUnits(): Promise<Unit[]> {
 }
 
 export async function getUnitById(id: string): Promise<Unit | undefined> {
-  return await dbGetUnitById(id) || undefined
+  return (await dbGetUnitById(id)) || undefined
 }
 
 export async function getUnitsByType(type: string): Promise<Unit[]> {
@@ -594,7 +614,7 @@ export async function getAllCivilizations(): Promise<Civilization[]> {
 }
 
 export async function getCivilizationById(id: string): Promise<Civilization | undefined> {
-  return await dbGetCivilizationById(id) || undefined
+  return (await dbGetCivilizationById(id)) || undefined
 }
 
 export function getAllBuildOrders(): BuildOrder[] {
@@ -622,7 +642,7 @@ export async function getAllBuildings(): Promise<Building[]> {
 }
 
 export async function getBuildingById(id: string): Promise<Building | undefined> {
-  return await dbGetBuildingById(id) || undefined
+  return (await dbGetBuildingById(id)) || undefined
 }
 
 export async function getBuildingsByType(type: string): Promise<Building[]> {
@@ -634,7 +654,7 @@ export async function getAllTechnologies(): Promise<Technology[]> {
 }
 
 export async function getTechnologyById(id: string): Promise<Technology | undefined> {
-  return await dbGetTechnologyById(id) || undefined
+  return (await dbGetTechnologyById(id)) || undefined
 }
 
 export async function getTechnologiesByCategory(category: string): Promise<Technology[]> {
@@ -667,6 +687,7 @@ git commit -m "feat: integrate DuckDB queries into main data layer"
 ## Task 9: Convert Civilizations Page to Server Component
 
 **Files:**
+
 - Modify: `src/app/civilizations/page.tsx`
 
 **Step 1: Remove "use client" and make async**
@@ -869,6 +890,7 @@ git commit -m "feat: convert civilizations page to server component"
 ## Task 10: Update SecondaryNav for Server Component Support
 
 **Files:**
+
 - Modify: `src/components/secondary-nav.tsx`
 
 **Step 1: Read current SecondaryNav implementation**
@@ -948,6 +970,7 @@ git commit -m "feat: update SecondaryNav for server component support with URL p
 ## Task 11: Convert Units Page to Server Component
 
 **Files:**
+
 - Modify: `src/app/units/page.tsx`
 
 **Step 1: Remove "use client" and make async**
@@ -966,6 +989,7 @@ git commit -m "feat: convert units page to server component"
 ## Task 12: Convert Buildings Page to Server Component
 
 **Files:**
+
 - Modify: `src/app/buildings/page.tsx`
 
 **Step 1: Remove "use client" and make async**
@@ -982,6 +1006,7 @@ git commit -m "feat: convert buildings page to server component"
 ## Task 13: Convert Technologies Page to Server Component
 
 **Files:**
+
 - Modify: `src/app/technologies/page.tsx`
 
 **Step 1: Remove "use client" and make async**
@@ -998,6 +1023,7 @@ git commit -m "feat: convert technologies page to server component"
 ## Task 14: Update DataViewer for Server Component Support
 
 **Files:**
+
 - Modify: `src/components/data-viewer.tsx`
 
 **Step 1: Check if DataViewer uses client-side state**
@@ -1020,6 +1046,7 @@ git commit -m "fix: ensure DataViewer is properly marked as client component"
 ## Task 15: Convert Individual Entity Pages to Server Components
 
 **Files:**
+
 - Modify: `src/app/civilizations/[id]/page.tsx`
 - Modify: `src/app/units/[id]/page.tsx`
 - Modify: `src/app/buildings/[id]/page.tsx`
@@ -1045,16 +1072,19 @@ git commit -m "feat: convert all detail pages to server components"
 ## Task 16: Update Image Paths Throughout Application
 
 **Files:**
+
 - Modify: All pages using placeholder images
 
 **Step 1: Replace placeholder image URLs**
 
 Find all instances of:
+
 ```typescript
 src={`/.jpg?height=...`}
 ```
 
 Replace with actual image paths from database:
+
 ```typescript
 src={`/img/${entityType}/${entity.id}.webp`}
 ```
@@ -1077,6 +1107,7 @@ git commit -m "feat: update image paths to use export/img assets"
 ## Task 17: Add Database Connection Caching and Error Handling
 
 **Files:**
+
 - Modify: `src/lib/db/connection.ts`
 
 **Step 1: Add better error handling**
@@ -1103,6 +1134,7 @@ git commit -m "feat: add error handling and connection caching to DuckDB layer"
 ## Task 18: Performance Optimization - Add React Cache
 
 **Files:**
+
 - Modify: `src/lib/db/queries/civilizations.ts`
 - Modify: `src/lib/db/queries/units.ts`
 - Modify: `src/lib/db/queries/buildings.ts`
@@ -1111,9 +1143,9 @@ git commit -m "feat: add error handling and connection caching to DuckDB layer"
 **Step 1: Wrap query functions with React cache**
 
 ```typescript
-import { cache } from 'react'
+import { cache } from "react"
 
-export const getAllCivilizations = cache(async function(): Promise<Civilization[]> {
+export const getAllCivilizations = cache(async function (): Promise<Civilization[]> {
   // ... existing implementation
 })
 ```
@@ -1132,20 +1164,21 @@ git commit -m "perf: add React cache to DuckDB queries for deduplication"
 ## Task 19: Add Development Database Inspection Tool
 
 **Files:**
+
 - Create: `src/app/api/db-inspect/route.ts`
 
 **Step 1: Create API route for database inspection**
 
 ```typescript
-import { getConnection } from '@/lib/db/connection'
-import { NextResponse } from 'next/server'
+import { getConnection } from "@/lib/db/connection"
+import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const query = searchParams.get('query')
+  const query = searchParams.get("query")
 
   if (!query) {
-    return NextResponse.json({ error: 'Missing query parameter' }, { status: 400 })
+    return NextResponse.json({ error: "Missing query parameter" }, { status: 400 })
   }
 
   try {
@@ -1176,11 +1209,13 @@ git commit -m "dev: add database inspection API route for development"
 ## Task 20: Update README with DuckDB Information
 
 **Files:**
+
 - Modify: `README.md` (if exists) or Create: `docs/ARCHITECTURE.md`
 
 **Step 1: Document DuckDB integration**
 
 Add section explaining:
+
 - How DuckDB is used
 - Parquet file structure
 - How to query the database
@@ -1252,6 +1287,7 @@ The parquet data is normalized database tables with numeric IDs and minimal meta
 ### Image Serving Strategy
 
 Two options:
+
 1. **Symbolic link**: `ln -s ../export/img public/img` (simple, but may not work in all deployment environments)
 2. **Next.js rewrites**: Configure in `next.config.ts` (more robust, works everywhere)
 

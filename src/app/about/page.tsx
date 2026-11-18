@@ -8,7 +8,6 @@ export const metadata: Metadata = pageMetadata({
   description:
     "Who built Town Center, where its Age of Empires II: Definitive Edition data comes from, which numbers are computed rather than read from the game files, and how to report a wrong one.",
   path: "/about",
-  eyebrow: "Colophon",
   imageSubtitle: "An open-source AoE2: DE reference, generated from the game files.",
 })
 

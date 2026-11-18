@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     description: seo.description,
     path: technologyHref(tech),
     imageTitle: tech.name,
+    imageArtwork: tech.image_path,
     eyebrow: seo.eyebrow,
     imageSubtitle: seo.cardSubtitle,
   })

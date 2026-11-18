@@ -68,6 +68,7 @@ export function legacyIdRedirects() {
 }
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   reactCompiler: true,
 
   // External packages for native modules like DuckDB
@@ -77,6 +78,7 @@ const nextConfig: NextConfig = {
   // path) and libduckdb.so (loaded by the native addon, not required by JS).
   // Without both, every server-rendered page 500s in production.
   outputFileTracingIncludes: {
+    "/api/og": ["./public/img/{Buildings,Civs,Techs,Units}/*.webp", "./src/app/api/og/*.ttf"],
     "/**": [
       "./export/parquet/**",
       "./node_modules/@duckdb/node-bindings-linux-x64/**",

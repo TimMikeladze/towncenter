@@ -20,7 +20,6 @@ import { REPO_URL } from "@/lib/navigation"
 import {
   AUTHOR,
   absoluteUrl,
-  GAME_NAME,
   GAME_REFERENCE,
   ogImageUrl,
   SITE_DESCRIPTION,
@@ -28,11 +27,17 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo"
+import { SOCIAL_CARD_SIZE } from "@/lib/seo/social-card"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" })
 // Cinzel reads as carved Roman capitals — the game's own headline voice.
 const cinzel = Cinzel({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-cinzel", display: "swap" })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" })
+const homeCard = ogImageUrl({
+  section: "home",
+  title: SITE_NAME,
+  subtitle: "Unit stats, civilizations, tech trees and battle simulation.",
+})
 
 export const metadata: Metadata = {
   // Every relative URL in this file and in every page's metadata — canonicals,
@@ -101,9 +106,8 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: ogImageUrl({ title: SITE_NAME, subtitle: SITE_DESCRIPTION, eyebrow: GAME_NAME }),
-        width: 1200,
-        height: 630,
+        url: homeCard,
+        ...SOCIAL_CARD_SIZE,
         alt: SITE_TITLE,
       },
     ],
@@ -112,7 +116,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: [ogImageUrl({ title: SITE_NAME, subtitle: SITE_DESCRIPTION, eyebrow: GAME_NAME })],
+    images: [homeCard],
   },
 }
 

@@ -35,7 +35,9 @@ Canonicals and the sitemap need one absolute origin, and it has to be the same o
 vercel env add NEXT_PUBLIC_SITE_URL production   # https://towncenter.vercel.app
 ```
 
-Detail URLs carry a slug after the game's numeric id (`/units/38-knight`). The bare id is a permanent redirect to it, generated from the export in `next.config.ts`; `src/lib/hrefs.ts` is the only place that builds these paths. Social cards are drawn on demand by `/api/og` and cached at the edge.
+Detail URLs carry a slug after the game's numeric id (`/units/38-knight`). The bare id redirects permanently to the URL generated from the export in `next.config.ts`. Use `src/lib/hrefs.ts` to build detail links.
+
+`/api/og` renders a 1200 × 630 PNG for each page on demand. Section cards use their own color and icon. Detail cards add the entity's name, stats or bonus, and game artwork when available. Open Graph and Twitter metadata share the same image URL, which the CDN caches for seven days.
 
 ## Analytics
 

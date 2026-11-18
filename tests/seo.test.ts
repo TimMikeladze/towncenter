@@ -1,8 +1,60 @@
 import { describe, expect, test } from "bun:test"
+import { NextRequest } from "next/server"
+import { GET } from "../src/app/api/og/route"
 import { entityIdFromParam, entityPath, entitySegment, slugify } from "../src/lib/game/ids"
 import { civilizationHref, technologyHref, unitHref } from "../src/lib/hrefs"
+import { pageMetadata } from "../src/lib/seo"
 import { buildingSeo, costSentence, technologySeo, unitSeo } from "../src/lib/seo/entities"
 import type { Building, Technology, Unit } from "../src/lib/types"
+
+describe("social card metadata", () => {
+  test("section cards use a short heading and a section-specific image", () => {
+    const metadata = pageMetadata({
+      title: "AoE2 tech tree with every civilization",
+      description: "Browse the full tech tree.",
+      path: "/tech-tree",
+    })
+    const images = metadata.openGraph?.images as { url: string }[] | undefined
+    const image = new URL(images?.[0]?.url ?? "")
+
+    expect(image.pathname).toBe("/api/og")
+    expect(image.searchParams.get("section")).toBe("tech-tree")
+    expect(image.searchParams.get("title")).toBe("Tech tree")
+    expect(metadata.twitter?.images).toEqual([image.href])
+  })
+
+  test("entity cards carry the display name, stats and artwork", () => {
+    const metadata = pageMetadata({
+      title: "Knight — AoE2 unit stats & counters",
+      description: "Knight stats and counters.",
+      path: "/units/38-knight",
+      imageTitle: "Knight",
+      imageSubtitle: "100 HP · 10 attack",
+      eyebrow: "Cavalry · Castle Age",
+      imageArtwork: "img/Units/38.webp",
+    })
+    const images = metadata.openGraph?.images as { url: string }[] | undefined
+    const image = new URL(images?.[0]?.url ?? "")
+
+    expect(image.searchParams.get("section")).toBe("units")
+    expect(image.searchParams.get("title")).toBe("Knight")
+    expect(image.searchParams.get("subtitle")).toBe("100 HP · 10 attack")
+    expect(image.searchParams.get("artwork")).toBe("img/Units/38.webp")
+  })
+
+  test("different WebP artwork produces different PNG pixels", async () => {
+    const cards = await Promise.all(
+      ["38", "4"].map(async (id) => {
+        const response = await GET(new NextRequest(`https://example.com/api/og?artwork=img/Units/${id}.webp`))
+        expect(response.headers.get("content-type")).toBe("image/png")
+        return Buffer.from(await response.arrayBuffer())
+      }),
+    )
+    expect(cards[0].readUInt32BE(16)).toBe(1200)
+    expect(cards[0].readUInt32BE(20)).toBe(630)
+    expect(cards[0].equals(cards[1])).toBe(false)
+  })
+})
 
 describe("slugify", () => {
   test("lowercases and hyphenates", () => {
